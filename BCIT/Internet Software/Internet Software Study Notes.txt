@@ -1,0 +1,689 @@
+===============================================================
+Internet Software Study Notes
+===============================================================
+
+Good webapp content
+
+	Informative
+	Interesting
+	Exclusive
+
+Good webapp properties
+
+	Dynamic
+	Personalized
+	Scalable
+
+Webapps
+
+	Usecase driven
+	Business logic
+	Data driven, dynamic
+	Autehentication, personalization
+	Scalable
+
+DevOps
+
+	Software development methodology
+	Communication, collaboration, integration
+	Developer & IT staff
+	Automatic, often cloud based
+	Product delivery, quality assurance, feature development, maintenance, and issue tracking
+	Agile
+
+Glue
+	
+	Interface logic
+	Protocol conneting 2 component blocks
+
+Standard Glue
+
+	Transport
+
+		HTTP, HTTPS, AJAX
+
+	Representation
+
+		XML, JSON, RSS
+
+	Application
+
+		RPC, SOA, REST
+
+	Infrastructure
+
+		email, messaging, services
+
+Model
+	
+	Encapsulates application state
+	Responds to state queries
+	Exposes functionality
+	Notifies view changes
+
+View
+
+	Renders the models
+	Requests updates from models
+	Sends gestures to controller
+	Allows to select view
+
+Controller
+
+	Defines application behavior
+	Maps user actions to model updates
+	Selects view for response
+
+Cross Platform
+
+	Webapp is not just for windows
+	Not just IIS...
+	Not just6 Java...	
+
+Controllers
+
+	Classes to handle usecases
+	Use models for data access & business rules
+	Trigger views
+	Goal: unaware of data source or presentation medium
+
+Models
+
+	Classes to handle data collection & abstraction
+	Goal: unaware of invocation or presentation medium
+
+Views
+
+	HTML with embedded "script"
+	Goal: unaware of data source, no PHP
+
+Recommanded Approach
+
+	User Request --> Front Controller --> View 1, View 2, ...
+
+Gitflow Workflow
+
+	Fork a github project
+	Clone your fork locally
+	Create a topic branch
+	Commit changes to your branch
+	Push your changes to your fork
+	Send a pull request to the original project
+
+CI Class Loader
+
+	$this->load->model('customers');
+	$this->customers->get(...);
+
+CI Routing
+
+	The framework will determine the appropriate controller class and method to execute, to satisfy the incoming request.
+
+CI Models	
+
+	extend CI_Model
+	Each model is a class that wraps a data source.
+	CodeIgniter encourages the Active Record design pattern (which says you build CRUD methods into models), but doesn't require it.
+
+CI Controllers
+
+	Handles incomming requests.
+	example.com/class/function/parm1/parm2
+	The index() method is the default handler function
+
+CI Views
+	
+	Components that deal with presentation
+	$this->load->view('showoff',$data);
+
+	Template
+
+		Wraps the "real" webpage body, whose name is passed as a parameter.
+		This is managed by the base controller
+
+	View Fragments
+
+		Portion or piece of a complete page. 
+		It is typically well-formed - a complete <div> with any nested content.
+
+Libraries
+
+	$this->load->library('whatever');
+	Any classes that you would like to use can be put into the application/libraries folder
+	third party classes, possibly component or entity models
+
+Helpers
+
+	$this->load->helper('common');
+	Put your commonly used functions inside a "helper" script
+
+CI Config
+
+	autoload – specify components to load with each request
+	config – specify application parameters
+	database – specify RDB parameters
+	routes – specify default controller
+
+Types of Controllers
+
+	A normal or "regular" controller 
+		expected to return a webpage to the browser.
+
+	A utility controller 
+		expected to return a file or perhaps a specially formatted data structure.
+
+	A service controller 
+		expected to implement the server side of some distributed system protocol (eg. REST).
+
+Segment Based Naming
+
+	URLs are segment based.
+	example.com/class/function/parm1/parm2
+
+Getting Input From a Form
+
+	$this->input->post(fieldname);
+	$item_code = $this->input->post('item');
+
+Stuff
+
+	Any support component that comes with CodeIgniter or that you created includes models, libraries, helpers, drivers, and configuration settings.
+
+Model Stuff
+
+	$this->load->model('products');
+
+	Look for in:
+
+		application/models/Products
+
+		Extends:
+
+			application/core/MY_Model
+			system/core/CI_Model
+
+	Controller:
+
+		$this->products	
+
+Library Stuff
+
+	$this->load->library('supporter');
+
+	Look for in:
+
+		application/libraries/Supporter
+		system/libraries/CI_Supporter
+
+	Controller:
+
+		$this->supporter
+
+Driver Stuff
+
+	Drivers are special libraries.
+
+	Example:
+
+		Providing an implementation for a particular database engine.
+
+	$this->load->driver('session');
+
+	Look for in:
+
+		system/libraries/Session/Session
+		system/libraries/Session/drivers/
+
+	Controller:
+
+		$this->session
+
+Helper Stuff
+
+	$this->load->helper('useful');
+
+	Look for in:
+
+		application/helpers/useful_helper
+		system/helpers/useful_helper
+
+Configuration Stuff
+
+	$this->config->item(...);
+	application/config	
+
+View Parameters
+
+	$parms=array('name'=>'Jim','code'=>'123');
+
+	$parms=array( 'items' => array(
+	    array('itemcode'=>'1','desc'=>'burger'),
+	    array('itemcode'=>'2','desc'=>'fries'),
+	), );
+
+Template Parser
+
+	Simple parser, simple subsitutions
+	$this->parser->parse('template',$parms);
+
+Controller (AGAIN?!)
+
+	Load any needed components
+	Extract input parameters
+	Access your model(s)
+	Validate and process your input, updating any models
+	Build view parameters array
+	Load the proper response view or template
+
+Routing by Concention
+
+	First non-folder name identifying the controller class meant to handle the request
+
+Routing Rules
+
+	The controller folder convention can be over-ridden by specifying routing rules, in application/config/routes.php
+
+	Wildcard:
+
+		(:any)
+
+	Regular:
+
+		$route['([a-z]+)/register'] = 'assimilate/$0';
+
+	Default:
+
+		$route['default_controller'] = 'welcome';
+
+	HTTP Verb Routing:
+
+		$route['products/(:num)']['DELETE'] = 'product/delete/$1';
+
+	Error Routing:
+
+		$route['404_override'] = 'mybad/complain';
+
+Remapping
+
+	Remapping gives you an opportunity to choose a method that would not result from a single routing target.
+
+	choose a method (show/display/chart) based on the discovered file type of an argument (xml/md/csv), because the file type might not be part of the URI choose a method (show/display/chart) based on a user view preference stored as a session variable, eg with combobox in navbar
+	localization with the idiom in the URI instead of stored in a session
+	redirect the request to a landing "page" specific method
+
+Hooks
+
+	CodeIgniter provides "hooks", to let you inject processing before or after each of the milestones below:
+
+		Apply routing rules to determine the controller and method to use
+		Instantiate the controller
+		Invoke the appropriate method, capturing output
+		Return the output to the browser
+
+		pre_controller: 
+			choose from one of several possible databases, hiding this from the controller
+
+		post_controller: 
+			free up resources or cleanup session, if those would normally wait for garbage collection
+
+		post_controller_constructor: 
+			build a menu selection array based on time of day or some other criteria not relevant to the controller
+
+		display_override: 
+			inject glossary tooltips for words in a pre-defined list
+
+URIsMatter
+
+	"SEO-friendly"
+
+CI Routing
+
+	splits the URI into segments
+	if the first segment is a folder identifier, drill down into it and repeat
+	run through the routing rules, looking for a match
+	treat the first segment as a controller name; bail if not
+	if we have a controller, treat the second segment as a method name, defaulting to "index"
+	if no segments, look for a default controller in the "current" folder
+	if still not resolved, trigger a CI 404.
+
+COMPONENT MODELS
+
+	Component models encapsulate entities with classes that follow well-known conventions.
+
+JavaBeans
+
+	No argument constructor
+	Private fields
+	Public accessor methods, a.k.a. getters
+	Public mutator methods, a.k.a. setters
+
+OBJECT-RELATIONAL MAPPING (ORM)
+
+	Object-relational mapping is a programming technique or convention for converting data between an object model/state and a relational database model/state.
+
+	From a database schema, generates an ERD, class diagram, and then code
+
+	From a class diagram, generates code, an ERD and a schema
+
+	From an ERD, generates a schema, and a class diagram and code
+
+CI Database Utilities
+
+	Database Forge
+
+		Create or drop entire databases
+		Create, drop or modify tables
+
+	Database Utilities
+
+		List databases
+		Backup or export databases
+		Repair or optimize databases
+		Extract or convert records (CSV, XML)
+
+	Migrations Library
+
+Model-View-Adapter (AKA Model-view-presenter)
+
+	The model-view-adapter design pattern has the controller handle all interaction with a model, and pass data to a view through parameters.
+
+	The view is unaware of the source of data, and the model is unaware of what will be done with its data!
+
+Model-View-ViewModel
+
+	The model-view-viewmodel design pattern has an explicit component to handle the model and related events, while keeping the view itself unaware of the source of its data.
+
+	Model-View-View-Model is another variation of MVC, chosen because it "solves" the problem of a view being notified of a model state change.\
+
+	Need client side logic.
+
+Active Record Models
+
+	The active record design pattern, common in webapps, suggests that domain models have collection-centric methods in addition to entity property accessor/mutators.
+
+		add, get, update, delete, create, all, some, size
+
+ModelsMatter
+
+	Properties (per class diagrams)
+	aggregation (per ERD relationships)
+	business logic (per usecases)
+	validation (per usecases)
+
+Layout
+
+	$this->data['footer'] = makefooter(...);
+
+ViewsMatter
+
+	Content
+	Structure and Navigation
+	Visual Design
+	Functionality
+	Interactivity
+	Innovation
+	Overall Experience
+
+Construction & Assembly
+
+	Controller methods ... $this->makeCarousel(...);
+	Model methods ... $this->gallery->makeCarousel(...);
+	Library methods ... $this->facebook->makeRecentPostsCarousel()
+
+CI Form Helper
+
+Sessions
+
+	CI uses Session library
+
+	$record = $_SESSION['record']; // use the PHP superglobal, or
+	$record = $this->session->record; // use PHP's magic getter, or
+	$record = $this->session>userdata('record'); // use the Session library
+
+Session Flashdata
+
+	A session property that only exists until the next request
+
+Data transfer buffer
+
+	The data transfer buffer design pattern says that you use a session object to hold field values for form handling.
+
+	You would update this to record in-progress input, so that the user does not have to re-enter a form from scratch if they make a mistake and you reject their input.
+
+Framework	
+
+	In the context of presentation, a framework is a complete set of CSS and/or Javascript files that provide styling and behaviour for your webpages. Examples include BootStrap or jQuery.
+
+Packages
+
+	PHP has no notion of "packages".
+
+	CodeIgniter has a specific notion of a "package", namely a starting point for locating source files, following its standard subfolder naming within.
+
+	Packages are collections of related components organized in a file hierarchy similarly to application/
+
+	$this->load->add_package_path(APPPATH.'third_party', '/some_package');
+
+File Uploading
+
+	Your HTML form will need to use POST for submission
+
+XML
+
+	eXtensible Markup Language - is one of the representational "glue" technologies for building webapps, particularly distributed ones.	
+
+XML vs RDB
+
+	XML supports a rich, tree-like model for data.
+	XML can manage tables as a single document.
+
+Well-formed XML
+
+	it has a root element
+	all elements have a matching closing tag or are self-closing
+	all elements are strictly properly nested
+
+Document Type Definition (DTD)
+
+	A Document Type Definition (DTD) can be used to constrain the structure and some simple content constraints for an XML document.
+
+	order-dtd.xml is meant to be validated against order.dtd
+
+	$doc = new DOMDocument();
+	$doc->validateOnParse = true;
+	$doc->load('abc.xml');
+
+	<!ATTLIST order id CDATA #REQUIRED>
+
+DTD Shortcomings
+
+	no data types
+	enumerated attribute values, but awkward
+	minimal element cardinality (none, one or some)
+	element contents are "text"
+	non-standard syntax
+	can be over-ridden by internal DTD subset
+	
+XML constraints with schema
+
+	order-schema.xml validate against order.xsd
+
+    <xs:simpleType name="Tsize">
+        <xs:restriction base="xs:string">    
+            <xs:enumeration value="small"/>
+            <xs:enumeration value="medium"/>
+            <xs:enumeration value="large"/>
+        </xs:restriction>    
+    </xs:simpleType>
+
+	extensible and user-defined data types
+	enumerated attribute values, more flexible than DTDs
+	rich notion of data constraints    	
+	complex and hard to learn
+	verbose
+
+XMLMatters
+
+	Backbone of distributed systems
+	Used for enterprise services
+	Rich, verifiable data structures
+	Its DOM model and processing have become mainstream patterns
+	Still on employers' skills sought list
+
+JSON 
+
+	JSON supports a rich, tree-like model for data. Data relationships that would require separate tables in the RDB world can be managed through a single JSON document.
+
+	JSON is document-centric rather than record-centric, and would normally be discussed in the context of a non-relational database.
+
+JSONMatters
+
+	It is simple and has multiple platform support
+	Rich data structures
+	Its notation is "modern"
+	On employers' skills sought list
+
+Document Object Model
+
+	What do you do with XML? XML documents are loaded into an in-memory tree structure, called the Document Object Model (DOM).
+
+	It is a platform- and language-neutral interface that will allow programs and scripts to dynamically access/traverse and update the content and structure of documents.
+
+	The Document Object Model (DOM) is an API for accessing and manipulating XML, XHTML and even HTML documents.	
+
+Nodes VS Elements
+
+	Nodes (Navigation):
+
+		"Identity"
+			Name of the node
+			Ohoh - some nodes don't really have a name, eg. #text nodes
+		State
+			What does this node contain?
+		Behaviour
+			The afore-mentioned methods for tree traversal
+	
+	Elements (Semantics):
+
+		"Identity"
+			Name of the element
+		State
+			Value, attributes, children
+		Behaviour
+			Nodes methods + property manipulation
+
+DOM Summary
+
+	Tree structure easy to use
+	Entire content of document available in memory
+	Can find any node "easily"
+	Knowledge transferable from one language to another
+	Memory hog for large documents (whole document loaded)‏
+	Doesn't use all features of all languages
+	DOM has no "cursor"
+	Complex set of rules about getting value on a node
+	Interfaces only
+
+Client Server
+
+	Client -> Application Server -> DB	
+
+Service Oriented Archtecture (SOA)
+
+	A Service Oriented Architecture (SOA) technique is similar to RPC, except that a server needs to register with a naming service, and the client needs to consult the naming service to locate a suitable server to send requests to.
+
+Representational State Transfer (REST)
+
+	It provides for flexible transport protocols, flexible data representation formats, and guidelines for expected client and server behavior.
+
+Microservices
+
+	Microservices are an emerging trend, particularly with cloud computing platforms.
+
+	The notion is to have multiple fine-grained servers rather than fewer coarse-grained servers. The microservices are meant to be small, easy to replace, and independently deployable.	
+
+REST Philosophy
+
+	Map resources (not usecases) to URLs
+	Map CRUD usecases to HTTP types
+	Pass all needed data (representational state)
+	Accept or deliver multiple formats (XML, JSON, JSONP, CSV, XHTML, text)
+
+REST URLs
+
+	Get
+		Gets resource
+
+	Post
+		creates new resource
+
+	Put
+		Update existing resource
+
+	Delete
+		Removes a resource
+
+	Http-get: /product returns a list of products
+	Http-get: /product/123 returns product 123
+	Http-post: /product/123 creates product 123
+	Http-put: /product/123 updates product 123
+	Http-delete: /product/123 deletes product 123
+
+Restful issues
+	
+	Anyone/everyone can claim to be RESTful!
+	No guidance on large data / pagination
+	No guidance on filtering parameters handling
+	“Extensions” to formats (eg “PHP”)
+	Some formats have issues (JSONP, CSV)
+	Seeing through the hype (Web 3.0000...)	
+
+AJAX
+
+	Asynchronous (content loading)‏
+	Javascript (logic & control)‏
+	And
+	XML (request handling)‏
+
+	Set of cross-platform conventions and techniques to load data browser-side, without interfering with the display and behavior of the existing page‏
+	Relies on Javascript & the DOM, assumes XHTML & CSS used‏
+	XMLHttpRequest object in browser
+
+XmlHttpRequest
+
+	Browser object to retrieve content from server page was dished from‏
+	Need a new such object for each request
+	Uses a callback mechanism when the HTTP request state changes	
+
+Security theory
+
+	Authentication - who is this?
+	Authorization - what can they do?
+	Access - enforcing the above
+	Audit - what did they do?	
+
+Security Practice
+
+	Authenticate somehow
+	Extract authorization from the user object or policy configuration
+	Enforce roles on access
+	Log as needed
+
+Access Control Choices
+
+	Declarative (stored as policy or configuration data) vs Programmatic (rules coded into access control points in components)
+	Hook (intercept request and redirect if inappropriate) vs Explicit (make decision as part of request handler)
+	User & authorization data in session - so you don't have to revalidate continuously	
+
+CI Authorization
+
+	Use user roles for authorization.
+	Extract the role from the User object, or determine it using other rules.
+	Store the user role in the session.		
+
+	Guest - not logged in
+	Visitor - logged in using social login (you know they are human, you just don't know who); maybe they can post comments
+	User - someone registered on your site, and who logged in conventionally (you know who they are); maybe they can post or update their own entries and comments
+	Admin - "user" that you trust more than others; maybe they can post, update or delete anyone's entries or comments
+
+	

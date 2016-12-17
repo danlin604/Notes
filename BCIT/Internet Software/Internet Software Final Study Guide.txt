@@ -1,0 +1,702 @@
+===============================================================
+
+Which of the following is considered an “enterprise” webapp framework?
+
+Symfony2
+
+===============================================================
+
+The term routing is used in CodeIgniter to denote
+
+mapping a request to a handling controller class and method
+
+===============================================================
+
+A controller which implemented the server side of a distributed system protocol would be called a(n) _ _ _ controller.
+
+Service
+
+===============================================================
+
+The main reason to use the MVC design pattern is...
+
+Separation of concerns
+
+===============================================================
+
+Which is the correct relationship between CodeIgniter and Github?
+
+CodeIgniter uses a Github repository for its codebase
+
+===============================================================
+
+If you load a view inside your controller using “$this->load->view($a,$b,$c)”, what is passed as the variable $b?
+
+View parameters, as an associative array
+
+===============================================================
+
+Inside a view template, what syntax would be used for an intended substitution variable 'name'?
+
+{name}
+
+===============================================================
+
+Without adding a routing rule, which one of the following methods could handle a request 'order/bigmac/1'?
+
+Order::bigmac($quantity)
+
+===============================================================
+
+Which of the following is true about CodeIgniter helpers?
+
+A helper holds a set of related functions
+
+===============================================================
+
+CodeIgniter is a leading example of what kind of webapp architecture?
+
+MVC
+
+===============================================================
+
+When proposing a change to a team repository, your branch would be the
+
+head
+
+===============================================================
+
+Which of the follow design patterns is not typical in an MVC framework?
+
+Translator
+
+===============================================================
+
+How do you remove the index.php portion of a URL for a CodeIgniter app?
+
+modify an .htaccess file in your document root
+
+===============================================================
+
+Which of the following is not a kind of web application “glue”?
+
+presentation
+
+===============================================================
+
+Which of the following is the most correct way to set a variable $role to the value of a user's authorization role, stored as a string value associated with the session key 'role'?
+
+$role = $this->session->userdata('role');
+
+===============================================================
+
+A controller in CodeIgniter is triggered by which of the following?
+
+An HTTP request
+
+===============================================================
+
+CodeIgniter's helpers...
+
+provide useful functions you can use
+
+===============================================================
+
+The biggest problem with cross-platform compatibility is...
+
+Different platforms enforce case sensitivity inconsistently
+
+===============================================================
+
+The concept of virtual hosting for a webapp means
+
+Mapping incoming requests to document roots based on their domain name
+
+===============================================================
+
+Which of the following is not a standard kind of CodeIgniter component you would use inside a controller?
+
+hook
+
+===============================================================
+
+The generally accepted way to work with a shared repository is to
+
+fork it
+
+===============================================================
+
+The standard tool for managing dependencies in a PHP webapp is...
+
+Composer
+
+===============================================================
+
+Which version of Javascript does CodeIgniter support?
+
+NONE – it does not explicitly support any version
+
+===============================================================
+
+The intended purpose of the Caboose library shared with you is to ...
+
+elegantly manage needed Javascript widgets
+
+===============================================================
+
+Which of the following will get you “fired” if you do it inside your model code?
+
+ Include HTML as part of a method response
+
+===============================================================
+
+Which of the following is not a data source typically encapsulated in a CodeIgniter model?
+
+Image manipulation program
+
+===============================================================
+
+“Forking” on github.com refers to...
+
+Making your own repository from an existing one
+
+===============================================================
+
+Using the template parser, iteration in a view template is done by...
+
+Using a variable pair
+
+===============================================================
+
+The design pattern meant to preserve in-progress form data is known as the _ _ _ pattern.
+
+Data transfer buffer
+
+===============================================================
+
+View templates are located inside which folder?
+
+/application/views
+
+===============================================================
+
+A(n) _ _ _ _ _ _ _ _ _ _ type of variable is used to pass parameters to a view.
+
+associative array
+
+===============================================================
+
+You propose changes to a shared code repository by creating a _ _ _ _ _ _ _ _ _ 
+
+pull request
+
+===============================================================
+
+If you try to synchronize your repository with the team's repository, after incompatible changes have been made, that will result in a …
+
+merge conflict
+
+===============================================================
+
+If your webapp has a PHP script application/core/MY_Model.php, that script would be considered a _ _ _ _ _ _ _ _ _ _.
+
+base model
+
+===============================================================
+
+Given a CodeIgniter webapp, provide the function signature appropriate to handle the URL "www.mycompany.com/directory/staff/jim" if this is mapped to the Directory controller.
+
+function staff($name)
+
+===============================================================
+
+Inside a fresh download of CodeIgniter, which subfolder contains the framework components?
+
+system
+
+===============================================================
+
+Which CodeIgniter library lets you use element tags with braces in a view, thus avoiding or minimizing PHP script in the view?
+
+template parser, "parser"
+
+===============================================================
+
+You have written a class SIN, to encapsulate social insurance numbers (validation, formatting, etc). In order to use this across multiple webapp pages, in the manner that CodeIgniter intends, what should this file be named and where should it be stored?
+
+application/libraries/Sin.php
+
+===============================================================
+
+The two techniques that distinguish proper team collaboration for a shared repository are …
+
+Forking & branching
+
+===============================================================
+
+Good practice dictates that _ _ _ _ _ _ _ _ _ _ should never be referenced directly inside a view.
+
+models
+
+===============================================================
+
+Which XML processing strategy is exhibited by SimpleXML?
+
+XML data binding
+
+===============================================================
+
+When “XML Document” is read by an XML processor, what value is the entity reference “&food;” replaced with? Assume that the XML processor is able to read “food.txt.” <data>I like to eat &food; </data>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<food>pasta</food>
+
+===============================================================
+
+What is the correct string to start an xml file ?
+
+ <?xml version="1.0" encoding="UTF-8"?>
+
+===============================================================
+
+
+===============================================================
+===============================================================
+
+The configuration information for a software application is stored in XML format. The configuration has to be parsed once during the start-up of the application. The loading of the configuration will also require searching across XML constructs. Performance is not a concern. These requirements can be MOST easily accomplished by designing the configuration loader based on which of the following?
+
+DOM
+
+===============================================================
+
+Which of the following is not a valid XML document?
+
+DTD
+
+===============================================================
+
+Which of the following XML documents is well-formed?
+
+<firstElement>some text goes here
+<secondElement>another text goes here
+</secondElement>
+</firstElement>
+
+===============================================================
+
+When is it ok to disregard naming conventions and case sensitivity?
+
+never
+
+===============================================================
+
+Which of the following is correct when a double quote (") is to be included in an attribute value?
+
+Replace the double quote (") with the predefined entity reference “&quot;”
+<Element1 Attribute1="&quot;Value1&quot;" />
+
+Enclose the attribute value in single quotes
+<Element1 Attribute1=' "Value 1"' />
+
+===============================================================
+
+XML uses
+
+user-defined tags
+
+===============================================================
+
+Which file needs to be modified to specify the location of the CodeIgniter framework folder?
+
+index.php
+
+===============================================================
+
+An XML document that conforms to a DTD is said to be ...?
+
+valid
+
+===============================================================
+
+Which of the following is a directly-supported XML-RPC data type?
+
+array
+
+===============================================================
+
+What translation does XML-RPC do?
+
+Parameters (eg list to structure)
+
+===============================================================
+
+An XML document is bound to a CSS stylesheet using which of the following?
+
+XML is not bound to a CSS stylesheet
+
+===============================================================
+
+A webapp framework is considered “lightweight” if it...
+
+Doesn't come bundled with any third-party plugins
+
+===============================================================
+
+Which of the following is the correct value for the ATT attribute when the following XML document is read by an XML processor?
+
+<?xml version="1.0"?>
+<!DOCTYPE config [
+<!ELEMENT config (name, user)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT user (#PCDATA)>
+<!ATTLIST config ATT CDATA "FALSE">
+]>
+<config ATT="TRUE">
+<name>test.ini</name>
+<user>taro</user >
+</config>
+
+"TRUE"
+
+===============================================================
+
+Which of the following is not a fundamental design pattern used in modern webapps?
+
+active record
+
+===============================================================
+
+Which of the following shows the correct way to specify the name attribute of a person?
+
+<person name="Jim">...</person>
+
+===============================================================
+
+Which of the following is true with XML …
+
+an element can have multiple attributes
+
+===============================================================
+
+The W3C specifies the DOM as …
+
+interfaces
+
+===============================================================
+
+Incorporating most of your business logic in model classes is referred to as a(n) _ _ _ approach.
+
+Heavy model
+
+===============================================================
+
+The core CodeIgniter component responsible for sending output to a browser is the...
+
+Output class
+
+===============================================================
+
+Which of the following is not an XML node type?
+
+parameter
+
+===============================================================
+
+According to “gitflow workflow”, a repository's “master” branch should be
+
+always deployable
+
+===============================================================
+
+Consider the following content models:
+
+<!ELEMENT doc (title?, chap*)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT chap (sect+)>
+<!ELEMENT sect (para+)>
+<!ELEMENT para (#PCDATA)>
+Which one of the following XML instances would be successfully validated against this DTD?
+
+<doc>
+<title>Text</title>
+</doc>
+
+===============================================================
+
+For security, passwords are stored in a users table as (a)
+
+password hash
+
+===============================================================
+
+The potential advantages of XML over HTML are
+(i) It provides for processing of data stored in web-pages
+(ii) It uses meaningful tags which aids in understanding the nature
+of a document
+(iii)Is simpler than HTML
+(iv)It separates presentation and structure of document
+
+(ii),(iii) and (iv)
+
+===============================================================
+
+Classes provided in an MVC framework...
+
+Provide useful encapsulations to use building a webapp
+
+===============================================================
+
+Which HTTP verb is intended to denote a REST request which modifies an existing resource?
+
+put
+
+===============================================================
+
+Adding snippets of code to your restricted controllers to enforce security is an example of which kind of access control?
+
+programmatic
+
+===============================================================
+
+Which element is nested immediately inside the methodResponse if an XML-RPC call does not complete successfully?
+
+fault
+
+===============================================================
+
+Given <!ELEMENT Root (Description | Machine | Name)+> which of the following is true?
+
+you need at least one of Description, Machine or Name
+
+===============================================================
+
+Which of the following is not a typical AJAX issue?
+
+rich user interface
+
+===============================================================
+
+Which of the following is a core CodeIgniter framework class?
+
+CodeIgniter
+
+===============================================================
+
+XML stands for
+
+Extensible Markup Language
+
+===============================================================
+
+The purpose of an autoloader in an MVC framework is to...
+
+Locate the program sources for previously unreferenced components
+
+===============================================================
+
+What translation does XML-RPC do?
+
+Parameters (eg list to structure)
+
+===============================================================
+
+<!ELEMENT Root (Description | Machine | Name)+> which of the following is true?
+
+you need at least one of Description, Machine or Name
+
+===============================================================
+
+An XML-RPC server built using CodeIgniter cannot handle clients built using which of the following?
+
+PHP, Java, C#, AJAX
+
+===============================================================
+
+Which of the following is not a fundamental design pattern used in modern webapps?
+
+active record
+
+===============================================================
+
+Before you can submit a source file in a local project to a github repository, it must be ...
+
+committed
+
+===============================================================
+
+A development team has moved an XML application from the development server to the staging server. While testing the XML application on the new server, the application returns a message indicating that there is an "invalid entity reference" error in the DTD. The MOST likely cause of this error is:
+
+The DTD references external entities that were not migrated.
+
+===============================================================
+
+The root element of an XML document is which of the following?
+
+outermost
+
+===============================================================
+
+The concept of routing means...
+
+Determining the proper handler for an incoming request
+
+===============================================================
+
+A CodeIgniter controller would retrieve the value of an HTML form field named 'product' using...
+
+$this->input->post('product')
+$this->input->get('product')
+
+===============================================================
+
+Which of the following is the most important real-world use of XML at the moment?
+
+Data storage
+Data transfer within an application
+
+===============================================================
+
+Which of the following is a core CodeIgniter framework class?
+
+CodeIgniter
+
+===============================================================
+
+Working with github.com, your local webapp project is properly called a...
+
+Clone
+
+===============================================================
+
+Which of the following is not addressed in conventional webapp access control?
+
+accreditation
+
+===============================================================
+
+Which of the following is true for an XML element?
+
+Only one root element may be described in a single XML document
+
+===============================================================
+
+Which of the following is the most basic infrastructure technology to support an MVC application?
+
+email
+
+===============================================================
+
+Finding and instantiating previously unreferenced classes in a webapp is done by a(n)
+
+autoloader
+
+===============================================================
+
+CodeIgniter “packages” can hold all but which of the following?
+
+Controllers
+
+===============================================================
+
+The configuration information for a software application is stored in XML format. The configuration has to be parsed once during the start-up of the application. The loading of the configuration will also require searching across XML constructs. Performance is not a concern. These requirements can be MOST easily accomplished by designing the configuration loader based on which of the following?
+
+DOM
+
+===============================================================
+
+Which is the best DTD definition body to fulfill the “Requirements” below?
+
+<!ELEMENT BookList ( BookInfo )+>
+<!ELEMENT BookInfo ( BookName | ISBN )>
+<!ELEMENT BookName (#PCDATA)>
+<!ELEMENT ISBN (#PCDATA)>
+<!ATTLIST BookInfo BookID CDATA #IMPLIED>
+
+===============================================================
+
+The Caboose class that we worked with is an example of a...
+
+Library
+
+===============================================================
+
+Which of the following is correct with respect to an XML parser.
+
+An XML parser checks whether an XML document is a well-formed document 
+
+===============================================================
+
+Social login is best considered
+
+out-of-band authentication
+
+===============================================================
+
+In a RESTful framework, a controller/URI should most closely match ...
+
+a resource name
+
+===============================================================
+
+Which of the following is the assumed output from a CodeIgniter view?
+
+HTML in browser
+
+===============================================================
+
+If an XML attribute is declared more than once, its value is determined by ...?
+
+the first declaration
+
+===============================================================
+
+Which of the following XML fragments is well-formed?
+
+<myElement myAttribute="value1'value2"/>
+
+===============================================================
+
+The purpose of an autoloader in an MVC framework is to...
+
+Locate the program sources for previously unreferenced components
+Load all needed components before handling a request 
+
+===============================================================
+
+An XML-RPC server built using CodeIgniter cannot handle clients built using which of the following?
+
+All of these are valid client implementation technologies
+
+===============================================================
+
+Entities are expanded when a document is processed by an XML _ _ _ _
+
+parser
+
+===============================================================
+
+The _ _ _ _ _ _ _ _ _ _ kind of component in an MVC webapp maps user actions to model updates. 
+
+controller
+
+===============================================================
+
+Which of the allowed REST data formats is considered a security risk? 
+
+JSONP
+
+===============================================================
+
+Provide a PHP statement to save a user's “province” preference, “BC”, in a CodeIgniter session 
+
+$this->session->set_userdata('province','bc');
+$this->session->province = 'bc';
+
+===============================================================
+
+Following CodeIgniter conventions, how would you specify the use of a package 'tools' in your application, showing its preferred locaiton?
+
+APPPATH.'third_party/tools'
+application/third_party/tools
+
+===============================================================

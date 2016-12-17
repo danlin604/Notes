@@ -1,0 +1,75 @@
+//Git Flow
+===========================================
+/*
+Fork a github project
+Clone your fork locally
+Create a topic branch
+Commit changes to your branch
+Push your changes to your fork
+Send a pull request to the original project
+*/
+===========================================
+git config --global user.name "Daniel Lin"
+git config --global user.email danlin604@gmail.com
+
+git config --list
+===========================================
+
+//clone
+cd [dest url]
+git clone [src url]
+
+
+//current configured remote repository
+git remote -v
+
+//add upstream
+git remote add upstream [upstream url]
+git remote -v //verify upstream added
+
+//remove upstream
+git remote rm upstream
+
+//syncing a fork
+git fetch upstream
+git checkout master
+git merge upstream/master //merge upstream/master to local master branch
+
+//sync repo
+git checkout master
+git pull upstream master
+git push origin master
+git checkout [topic branch]
+
+//pulling
+git pull [remote-name] [src-branch]
+
+//checkout a branch
+git checkout [branch name]
+
+//create a branch
+git checkout -b [new branch]
+
+//list branches
+git branch
+
+//delete a branch
+git branch -d [branch name]
+
+//stage & commit & push
+git add .
+git commit -s -m "comment"
+git push
+
+//merge
+git checkout [feature branch]
+git merge develop
+
+//push from feature branch
+git push origin feature
+
+//stash and pull
+git stash
+git stash show stash -p
+git pull upstream develop
+git stash pop

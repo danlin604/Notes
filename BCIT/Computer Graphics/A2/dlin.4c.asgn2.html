@@ -1,0 +1,130 @@
+<!DOCTYPE html>    
+<head>
+    <meta charset="utf-8">
+    <title>[Daniel Lin] COMP 4560 - Assignment 1</title>
+	<style>
+		html, body {
+			width: 100%;
+			height: 100%;
+			margin: 0px;
+			border: 0;
+			overflow: hidden; /*  Disable scrollbars */
+			display: block;  /* No floating content on sides */
+		}
+	</style>
+</head>
+ 
+<body>
+ 
+	<canvas id='c' style = 'position: absolute; left: 0px; top: 0px;' >
+	</canvas>
+	
+	<script>
+		(function() {
+			var 
+				// Obtain a reference to the canvas element
+				// using its id.
+				windowCanvas = document.getElementById('c'),
+			
+			  	// Obtain a graphics context on the
+			  	// canvas element for drawing.
+			  	context = windowCanvas.getContext('2d');
+				
+				// *** You may want to define some other variables here... ***
+				var width, height, center;
+				var swap = 0;		//0=black, 1=white				
+				var s = 10;
+				var g = 5;
+				var border = (2 * s + g);
+				var innerWidth, usedHeight, lhs, rhs;
+				var yPos = border;			
+
+			// Start listening to resize events and
+			// draw canvas.
+			initialize();
+ 
+			function initialize() {
+				// Register event listeners to
+				// call the resizeWindow() function each time the window is resized, 
+				// and the toggle() function every time the user clicks on the window. 
+				window.addEventListener('resize', resizeWindow, false);
+				window.addEventListener('click', toggle);
+								
+				// Draw background and squares for the first time.
+				resizeWindow();
+			}
+				
+						
+			function redraw() {				
+				// This function is called at initialization, and when the window is resized
+				// Draw the background
+				if(swap == 0) {
+					context.fillStyle = "rgb(0, 0, 0)";
+					context.fillRect(0, 0, center, height);
+					context.fillStyle = "rgb(255, 255, 255)";
+					context.fillRect(center, 0, center, height);
+				} else {
+					context.fillStyle = "rgb(0, 0, 0)";
+					context.fillRect(center, 0, center, height);
+					context.fillStyle = "rgb(255, 255, 255)";
+					context.fillRect(0, 0, center, height);
+				}
+
+				innerWidth = s * 2;
+				usedHeight = s;
+				yPos = border;
+
+				// Draw tiny squares
+				while(height-usedHeight >= 2*border) 
+				{
+					lhs = center - s; 
+					rhs = center;
+
+					while(width-innerWidth >= 2*border)
+					{
+						context.fillStyle = "rgb(190, 255, 0)";
+						context.fillRect(lhs, yPos, s, s);
+						context.fillRect(rhs, yPos, s, s);
+
+						innerWidth = innerWidth + (g*2) + (s*2);
+						lhs = lhs - g - s;
+						rhs = rhs + g + s;
+					}
+
+					usedHeight = usedHeight + g + s;
+					yPos = yPos + g + s;
+					innerWidth = s * 2;
+				}		
+			}
+		
+			function resizeWindow() 
+			// Runs each time the window is resized.
+			// Resets the canvas dimensions to match window, then redraws the background and squares.
+			{				
+				width = window.innerWidth;
+				height = window.innerHeight;
+
+				windowCanvas.width = width;
+				windowCanvas.height = height;
+
+				center = width/2;
+				redraw();
+			}
+			
+			function toggle()
+			{		 
+			// This function is called when the user clicks on the window.
+				if(swap == 0) { 
+					swap = 1; 
+				} else { 
+					swap = 0; 
+				}
+				redraw();				
+			}  
+			
+		})();
+	</script>
+	
+</body>
+ 
+</html>

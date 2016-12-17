@@ -1,0 +1,197 @@
+Apache Storm
+=======================================================
+Apache Storm
+
+	Distributed Stream Processing framework written in Clojure and Java
+
+	Created by Nathan Marz and acquired by Twitter (occasionally refered to as twitter Storm)
+
+	Custom logic to define information source and process stream data
+
+	Developed under the Apache Liscense, availiable to most companies to use
+
+	general topology is superficially similar to MapReduce job, main difference is that data is being processed in realtime as opposed to batches
+
+	Stable Release: (1.0.0) April 12, 2016
+
+	Incubation Since: September, 2013
+
+=======================================================
+Apache Storm vs Hadoop
+
+	Both are distributed application solutions
+
+	Apache Storm is more like a pipline for processing data as it comes
+
+	Apache Storm connects various computing nodes that receive data, compute and deliver output
+
+	Apache Storm's complex topology (n-stages) can be re-engineered unlike MapReduce (2-stages)
+
+		Realtime computation can be bottlenecked by processing power, so more stages are needed to reduce bottlenecks
+
+	Apache Storm processes data as it comes
+
+	Hadoop HDFS is a solution geared to distributed storage and tolerance to outage of many scales (disks, machines, racks)
+
+	MapRecuce is slow for realtime data processing
+
+	Hadoop and Apache Spark are complementry, data can persist from storm into HDFS	(trickle down)
+
+		Why do this? Since you get "better" data in HDFS and can run more complex analysis. Probably as filter, sensors with too much data (TMI)
+
+=======================================================
+Real Time
+
+What is real-time?
+
+	Gives visibility right away.
+		approx 5%-10% of the actual value
+
+Why real time?
+
+	real time Trends
+		Emerging breakouts
+	real time conversations
+		Twitter
+	real time recommandations
+		impulse buying
+		ads
+	real time search
+		context to real time incidents
+		all tweets that happened in the last second
+	Sensors
+
+
+How data is proccessed in real-time
+
+	At least once
+		Highest cost
+
+	At most once
+		Least cost
+
+	Exactly once
+		Higher cost
+
+	Results would be different, but this depends on your need. Hardware vs accuracy.
+
+What do we need for real time?
+
+	Gauaranteed message processing
+	Horizontal scalability
+	Robust fault tolerance
+	Concise code - focus on logic
+		Not infrastructure
+
+=======================================================
+Concepts
+
+Topologies
+	
+	Logic of realtime application (think MR job).
+
+	MR job finishes, topology runs forever until killed.
+
+	Graph of spouts and bolts connected by stream groupings. Literally a graph, directed acylic graph (DAG).
+
+
+Streams
+	
+	A stream is an unbounded sequence of tuples that is processed and created in parallel in a distributed fashion
+
+	By default, tuples can contain integers, longs, shorts, bytes, strings, doubles, floats, booleans, and byte arrays.
+
+	Every stream is given an id when declared. 
+
+	Convience methods defaults to the id "default"
+
+Spouts
+
+	A spout is a source of streams in a topology
+
+	Generally spouts will read tuples from an external source and emit them into the topology (Twitter API)
+
+	Spouts can either be reliable or unreliable:
+
+		Reliable spout is capable of replaying a tuple if it failed to be processed by Storm
+
+		Unreliable spout forgets about the tuple as soon as it is emitted.
+
+	Spouts can emit more than one stream
+
+		Main method is nextTuple, returns a tuple or returns no tuples. Must not block.
+
+		Other methods are ack and fail, ack returns on success on completion through topology or fail when failed to be completed. These are for reliable spouts only.
+
+
+Bolts
+	
+	All processing in topologies is done in bolts
+
+	Bolts can do anything from filtering, functions, aggregations, joins, talking to databases
+
+	Doing complex stream transformations often requires multiple steps and thus multiple bolts
+
+		For example, transforming a stream of tweets into a stream of trending images requires at least two steps: a bolt to do a rolling count of retweets for each image, and one or more bolts to stream out the top X images
+
+	Bolts can emit more than one stream
+
+		To do so, declare multiple streams using the declareStream method of OutputFieldsDeclarer and specify the stream to emit to when using the emit method on OutputCollector.
+
+	Takes in tuples and emits tuples
+
+	Its perfectly fine to launch new threads in bolts that do processing asynchronously. OutputCollector is thread-safe and can be called at any time.
+
+
+Cont. Stream Groupings
+
+=======================================================
+
+Stream groupings
+
+	A stream grouping defines how that stream should be partitioned among the bolt's tasks
+
+	There are eight built-in stream groupings in Storm:
+
+	    Shuffle grouping: Tuples are randomly distributed across the bolt's tasks in a way such that each bolt is guaranteed to get an equal number of tuples
+
+	    Fields grouping: The stream is partitioned by the fields specified in the grouping. For example, if the stream is grouped by the "user-id" field, tuples with the same "user-id" will always go to the same task, but tuples with different "user-id"'s may go to different tasks
+
+	    Partial Key grouping: The stream is partitioned by the fields specified in the grouping, like the Fields grouping, but are load balanced between two downstream bolts, which provides better utilization of resources when the incoming data is skewed
+
+	    All grouping: The stream is replicated across all the bolt's tasks
+
+	    Global grouping: The entire stream goes to a single one of the bolt's tasks (funnel)
+
+	    None grouping: Pending updates, currently same as shuffle grouping
+
+	    Direct grouping: A stream grouped this way means that the producer of the tuple decides which task of the consumer will receive this tuple
+
+	    Local or shuffle grouping: If the target bolt has one or more tasks in the same worker process, tuples will be shuffled to just those in-process tasks. Otherwise, this acts like a normal shuffle grouping.
+
+=======================================================
+
+
+
+Tasks
+
+	Each spout or bolt executes as many tasks across the cluster. 
+
+	Each task corresponds to one thread of execution, and stream groupings define how to send tuples from one set of tasks to another set of tasks. 
+
+	You set the parallelism for each spout or bolt in the setSpout and setBolt methods of TopologyBuilder.
+
+Workers
+
+	Topologies execute across one or more worker processes. 
+
+	Each worker process is a physical JVM and executes a subset of all the tasks for the topology. 
+
+		For example, if the combined parallelism of the topology is 300 and 50 workers are allocated, then each worker will execute 6 tasks (as threads within the worker). Storm tries to spread the tasks evenly across all the workers.
+
+	Note that in Storm’s terminology "parallelism" is specifically used to describe the so-called parallelism hint, which means the initial number of executor (threads) of a component.
+
+=======================================================
+Demo
+
+Credit to Udacity

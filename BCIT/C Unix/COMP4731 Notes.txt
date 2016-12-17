@@ -1,0 +1,2437 @@
+Name: Albert Wei
+Email: Instructor to provide
+Location: DTC - 382
+May 31, 2016 - Jul 29, 2016
+Class 5:30 pm - 8:50 pm
+=========================================
+Requirements
+	Exam
+		Main Algorithms
+	Labs
+		C
+	Presentation
+		10-15 minutes on a topic
+
+
+
+
+=========================================
+WEEK 1
+=========================================
+2 ways to study OS, implement or interface
+
+We will use interface through C.
+
+POSIX
+	Portable Operating System Interface
+ 
+Algorithms
+	Scheduling
+		Concurrent process (e.g. 1 core)
+	Memory
+
+What is OS?
+	More fundemental than the UI
+	Manage resources
+		CPU
+			Schedule multiple processes (AKA paging)
+		Memory
+			Schedule multiple processes (AKA paging)
+	Services
+		Service Calls
+
+	Provides Abstractions	
+		Extended Machine
+			Sectors -> File Abstraction
+	Orderly Allocation of Resources
+
+Multi-programming
+	Having more than one program (job) in memory
+		The machine can switch between jobs.
+
+Timesharing
+	Multiple user logging into the machine
+	MULTICS (60s)
+		Using a computer as a service
+
+Pipeline
+	To increase the speed of the processes
+		Like an assembly line
+	Stages
+		Core i7 has 14 stages
+			Like an assembly line with 14 stages
+	Pipeline Stalls
+		Speculative execution
+			Guess if true or false
+	Super Scalar CPU
+		Multiple execution units
+			ALUs
+
+Faster speed
+	Faster clock speed
+	Parallelism
+	Caches
+	2004 - They opted to use multiple cores instead of one big core
+		Multi-threading are introduced
+
+i7
+	d-cache
+		data cache
+	i-cache
+		instruction cache
+	Unified cache
+
+Memory
+	Registers (controlled by compiler)
+	Cache (cannot be accessed, controlled by hardware)
+	Main Memory
+	Devices (controlled by OS)
+
+Caching
+	Totally controlled by the hardware
+	Cache hit or miss
+	Algorithms controls eviction of caches
+
+I/O
+	CPU keep on polling if IO (inefficient)
+	Interrupt Controller
+		If there is signal on interrupt, it will stop what it is doing
+		Interrupt Handler
+			Once finished, it goes back to finish previous instructions
+
+Real-Time OS
+	Hard - Must meet deadline (breaking your car)
+	Soft - You won't die
+
+To Run Linux
+	Share Folder
+	PUTTY
+		142.232.17.17
+		Pass: Student ID with CAP A
+		
+ls
+.hidden files
+	
+	Command mode i
+	Insert mode Esc
+	:w hello.c
+	ls
+	gcc -W -Wall hello.c 
+	vim .vimrc (or vi .vimrc)
+
+colorscheme koehler
+filetype plugin on
+filetype indent on
+syntax on
+set background=dark
+set shiftwidth=2
+set shiftround
+set expandtab
+set smartindent
+set number
+set relativenumber
+
+passwd
+
+:w
+:q
+:rm filename (remove)
+:wq (save)
+
+vim .bash aliases
+alias rm='rm -i'
+
+la -a
+
+.profile
+	executes on login
+	configs the shell enviroment
+.bashrc
+	
+.bashhistory
+	Current session will write to this file on logout
+
+Main ls
+	man 1
+	man 2 (system calls)
+	man 3 printf (standard C library)
+
+In VIM
+	3K
+	K
+	:! gcc -W -Wall %
+
+./a.out <hello> world
+gcc  hello.c 2> error.txt
+	0 - std in
+	1 - std out
+	2 - std err
+char buffer [BUFSIZE];
+read(0, buffer, BUFSIZE)
+	check for 0 for end of file (check documentation)
+	return -1 on error
+ssize_t
+
+
+sudo apt-get install build-essential
+
+=========================================
+
+Special Registers:
+
+	PC - Program Counter
+
+	PSW - Program Status Word
+
+		CPU has different privilege levels 
+
+	2 Modes: 
+
+		Supervisor/Kernal Mode
+
+			can execute any CPU instructions
+
+		User mode
+
+			can only execute a subset of instructions
+
+		*The operating system is operating on behalf of the user. In order to do this CPU must support different modes.
+
+	Kernal
+
+		Heart of the operating system, lowest level
+
+		*Shell is NOT part of OS
+
+		Kernal is ALWAYS in memory
+
+Interrupt surface routine jumps CPU back to OS, OS regains control.
+
+System Calls vs Regular Functions
+
+	System calls go back into the kernal.
+
+	OS regains control.
+
+	Switching is done by kernal.
+
+	Regular function doesn't switch to kernal mode.
+
+Timer Interrupt
+
+	Interrupts the CPU, surfaces the interrupt it can descide to give the CPU to another process.
+
+Switches
+
+	The switches are controlled.
+
+	A table is created when OS starts up.
+
+	System call = interface between user and kernal
+
+	fopen() calls open(), open is the system call
+
+Trap Instruction
+
+	Switch from user to kernal (interrupt)
+
+SSH
+
+	PuTTY uses the SSH (secure shell)
+
+		Allows you to securely log into a remote system.
+
+	SSHD - daemon
+
+		server version
+
+	SSH 
+
+		client version
+
+Even when no one logs in, there are a lot of processes being ran.
+
+Processes
+	An executing program.
+	Assocated with an address space.
+	Associated with a set of resources.
+	A container that holds all information needed to run a program.
+
+	A process can start another process.
+
+	System call is created by the FIRST process.
+
+	They keep on forking fork()
+		The only system call to create a new process.
+
+root directory /
+
+bin 
+	
+	Binary, which includes the ls program
+
+	etc
+	dev - devices
+		sda - drive
+		tty - terminal
+		pts - pseudo-terminal
+
+	lib - dynamic shared library
+	var - log files
+
+UNIX
+	Everything is a file.
+	Represent even your harddisk as a file.
+		If it is a file, you can open, read, and write.
+
+write [username]
+mesg n or y
+
+Permissions
+	0666
+		crw-w-----
+		crw-rw-rw-
+		0666 (permission/mode)
+			Can use octo number
+	crw-w-----
+		c - type of device, character based
+		rw- - user
+		w-- - group
+		--- - others
+
+	rwx - read, write, execute
+
+Superuser (name: root)
+	Superuser is not restricted by the permission
+
+chmod g-w file
+chmod g+w file
+chmod g=rw file
+chmod ugo=rw
+chmod 0666 file
+
+What is not shown as a file?
+	Ethernet interface
+	Network interface
+
+Files
+	Mount drives under root
+
+System Calls
+	Switches to kneral mode
+	User mode request to kernal
+	read(fd, buffer, nbytes)
+		C convention, push last param first to stack (nbytes, buffer, fd)
+
+	.dll (share library/object in UNIX)
+
+System Calls
+	pid = fork() 
+		create exact copy of the object
+
+	init = first process (pid = 1)
+		specially created by the os
+	
+	ppid (parent process id)
+
+fork() in C
+	We call it once, but it returns twice (if succeeds it returns 2 processes)
+
+	A forks to A AND B
+		Child (B) return 0
+		Returns the PID of the child in parent process.
+		Returns -1 on failure
+
+pid_t pid;
+switch(pid) {
+	case -1: 
+		perror("fork");
+		exit(1);
+	case 0: /*child*/
+		...
+	default:
+		wait(0); // don't want to call too early or too late
+} 
+
+If parent dies, init becomes the child's parent.
+If child dies, what happens to parent?
+	Child becomes a zombie process.
+		A process that is dead, but parent is alive.
+		Haven't been reaped.
+
+		wait() - parent calls wait, retrieves statistics
+		waitpid
+
+		Paren't haven't called wait() yet, the process is in a zombie state.
+
+What if child creates more child? We need something else to handle their deaths.
+
+exec family
+	execl	
+	execlp // easier
+	exece
+	execv
+	execvp //easier
+	execvpe
+
+	l - list
+	v - vector
+	p - path
+	e - enviroment variable
+
+gcc -W -Wall hello.c
+execlp("gcc", "gcc", "-W", "-Wall", "hello.c", (char*)0);
+	If it succeeds it  will replace the calling process.
+
+char* args[] = {"gcc", "gcc", "-W", "-Wall", "hello.c", 0};
+	0 = null pointer for char*
+
+execvp("gcc", args);
+
+
+=========================================
+WEEK 2
+=========================================
+
+System calls
+
+wait(0); waitpid() is slower
+exec 
+	calling process replaced by a new program that will be loaded, pid does not change.
+stat 
+	gives information about a file, permission
+	e.g. ls -l calls stat
+
+rmdir
+	calls system call
+mkdir
+	calls system call
+
+link
+unlink
+	In linux, you cannot delete a file
+	hard link
+	symbolic (soft) link
+	when all links to file are gone, file is deleted
+
+mount
+unmount
+	mount/unmount file system
+	user needs to be root
+	mount /dev/sda1 /mnt -t auto
+
+s = chdir
+s = chmod
+
+Memory Layout of a process
+	(process address space = virtual address)
+		stack
+		..
+		mmap
+		..
+		heap
+		data
+		text
+	virtual abstracts memory from 0 to 999...
+	actually cut up into pages
+
+Linking
+	i-number
+	i-node number
+	Multiple names referring to the same file
+
+OS types
+	Monolithic kernal
+		Everything is in one program, all functionailities (can still have extensions and modules).
+		A main program that handles service procedures.
+		Large kernal
+		Originally every new driver requires recompiling kernal
+
+	Microkernal
+		Only the most important function is in kernal
+		Everything else can be ran as user-space-processes
+		If there is some bug, the whole system doesn't go down (safer)
+
+Multiprogramming
+	Multiple processes in cpu, gives illusion of concurrency
+	Abstract to think of program to run concurrently
+		Virtual cpus
+
+Process Creation
+	Init
+		pid 1
+	Run program that calls fork()
+
+Process Termination
+	Normal execution
+		main() finishes
+		dies peacefully
+	Fatal error
+		seg fault
+		division error
+	Error exit
+		exit on error
+	Killed by another process
+		kill system call
+		concept behind kill is called signals
+			singals are a form of notification, notify a process that something has happened.
+
+			Signals
+				generated (event happened)
+				pending (between)
+				delivered (notified and action takened)
+
+				signal disposition
+					process can ignore the signal
+					process can catch the signal
+					process is terminated
+
+				When a child dies the parent is sent a signal
+				Signals are given a name
+					SIGCHLD signal
+
+				Parent needs to catch SIGCHLD signal
+					The parent can catch this signal by installing a signal handler.
+
+				$ ./a.out& (run in background)
+				$ ./a.out& make > file
+
+				You can only run 1 process in the foreground
+
+Process states
+	Running
+	Ready
+		can run, but not running
+	Blocked
+		waiting on user input
+		waiting for disk io to finish
+	Zombie (linux)
+
+	Once a process runs, there must be a way for OS to regain control.
+	Timer interrupts provides a mechanism.
+		We abstract interrupt as a scheduler (policy).
+		policy VS mechanism
+
+Inplementation of Processes
+	Process table (process list)
+	Each entry will be info about a process
+	In order to reschedule a process, we need to remember something about it.
+		Register (program counter)
+		Program status word
+		...
+		The system nees to store a lot of info about a process so that it can be rescheduled.
+			When we switch a prossess to another, we call it a context switch.
+
+How to model processes
+	p = fraction of time waiting for I/O to complete
+	n = number of processes
+	CPU utilization = 1 - p^n
+
+	Should we add more memory to the system?
+		512 MB RAM
+		OS : 128 MB
+		each user process: 128 MB
+		80% I/O wait
+
+		we can only have 3 processes (50% utilization)
+
+Look at processes:
+
+ps axj
+
+	Processes can be grouped together as a process group PGID
+
+	Sessions ID SID
+		When you login you start the session.
+		
+		$ make > out& (background process group)
+		$ cat | wc -l (foreground process group; 2 processes connected by a pipe)
+
+fg - bring process back to foreground
+
+cat | tr a A
+
+cd /proc (show all linux processes)
+	System has proc file system
+	ps command = ls in /proc
+
+cat | tr a A&
+
+ 
+
+=========================================
+Quiz This Friday
+	Chapter 1 & 2 
+	Processes
+		mono/micro
+=========================================
+
+Threads
+	A sequence of executions (Like processes)
+	A small sequence of execution that can be scheduled by the OS.
+		We want a process to do multiple things. Multiple independent things you want to do.
+
+	They share a document (share an address space); easier to share things.
+		If 2 processes had to share, they require IPC (Interprocess Communication).
+
+	It's easy to share, we need to make sure they shared item is accessed and updated correctly.
+
+	Webserver
+		Sequential
+			Handle requests one by one ( not very responsive for multiple requests).
+
+		Concurrent Server
+			Can handle rquests concurrently
+			Can use multiple processes.
+				Option 1: Every client gets a fork().
+				Option 2: Threads
+					Light-weight processes
+					Process fork() takes up more memory.
+					Thread is just one process.
+					Main thread dispatches to one of many worker threads (inside the idle pool).
+
+				Pre-forking
+				Pre-threading
+
+	Every process have at leats 1 thread, which is called the main thread.
+
+	Process table
+	Thread table
+		Register content
+		If we switch between threads, we need infomration about that thread
+		Program counter, registers, address space, global variables, child processes, pending alarms, singals and signal handlers, 
+		Process are more about resources, threads are a sequence of the executions.
+
+	Each thread has a stack
+
+POSIX Threads
+	
+	Pthread_create 
+
+	errno is a global variable, if 2 threads try to store into errno... there is a problem. So pthread directly return errno. Success return 0, else they directly return the errno.
+
+pthread_t tpid; // thread id type
+pthread_create(&tid, 0, f, arg); 
+	1. reference to id
+	2. thread attribute
+		joinable vs detached
+			0 - use default attribute (joinable)
+			joinable - another thread has to join with it.
+				needs to call Pthread_join
+			detached - we don't need to join with it. 
+
+	3. function to execute
+	4. argument passed to f
+
+f (function) 
+	void *f(void *arg) {	// void star is default pointer, can pass and return anything
+		...
+		pthread_detach(pthread_self());
+		pthread_exit(0);	// if exit(0) is called, whole process exits
+	}
+
+Pthread_join
+	
+	pthread_join(tid, void**); 
+		1. type pthread_t
+		2. return value of the function, which is void*
+
+	void *result; // to get return value
+	
+	pthread_detach(pthread_self());
+
+	When main() returns, the whole process is finished, main should not exit.
+	Call pthread_exit(0); instead.
+
+User level threads
+	threads are implemented as a library in the user space, the kernal is unaware of the existence of the threads in the process. Purely a user level thing.
+	Switching between threads does not require switching to kernal mode, may be more efficient. Switching may be faster.
+	If one thread calls the blocking system call (read), it may block the process.
+	Cannot make use of the multiprocessor
+
+Kernal level threads
+	Kernal is aware of threads and performs scheduling.
+	Can schedule on any CPU, take advantage of multicore.
+
+Hybrid
+	Combine both
+	Kernal provides threads, but those threads can be split into more  threads at user level.
+	
+Single threaded program to multithreaded
+	Any global variable would be problematic
+	Errno is a problem
+	Static variable are NOT thread safe.
+		ctime
+		rand()
+		if 2 tried to call the static at same time, it is not safe.
+
+Per thread global variable
+	Global vaiable for specific threads
+	We want common var to be shared between functions executed by the thread.
+
+	thread-specific data
+		global for the thread
+=========================================
+tsd.c
+
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+
+void *print(void *arg) {
+	char *s = arg;
+	pthread_detach(pthread_self());
+	write(STDOUT_FILENO, s, strlen(s));
+	return 0;
+}
+
+int main(void) {
+	pthread_t tid1, tid2;
+
+	pthread_create(&tid1, 0, print, "hello\n");
+	pthread_create(&tid2, 0, print, "world\n");
+
+	pthread_exit(0);
+}
+
+-gcc -pthread -W -Wall tsd.c
+=========================================
+tsd.c
+
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+
+pthread_key_t key;
+
+void destroy(void *p) {
+	free(p);
+	write(STDERR_FILENO, "-\n", 2);
+}
+
+void *print(void) {
+	char *s = pthread_getspecific(key);	
+	write(STDOUT_FILENO, s, strlen(s));
+}
+
+void *init(void *arg) {
+	char *s = malloc(strlen(arg) + 1);
+	pthread_detach(pthread_self());
+	strcpy(s, arg);
+	pthread_setspecific(key, s);
+	print();
+	return 0;
+}
+
+int main(void) {
+	pthread_t tid1, tid2;
+
+	pthread_key_create(&key, destroy);
+	pthread_create(&tid1, 0, init, "hello\n");
+	pthread_create(&tid2, 0, init, "world\n");
+
+	pthread_exit(0);
+}
+
+-gcc -pthread -W -Wall tsd.c
+=========================================
+
+2 processes want to access shared memory at the same time (concurrently)
+	We call this race condition, the out-come depends on the speed
+	We don't know what the outcome is
+
+Critical Region
+	The region of code that try to access in and out is called critical region.
+	Region that only 1 thread or 1 process can execute that region.
+
+	We need MUTUAL EXCLUSION
+		If one process is accessing, the other should not be accessing.
+		If A is reading in, B should not have access.
+
+	Unfair if we block A and let B to run
+		Not a good solution
+
+	No process should wait forever
+		Starvation free => deadlock free
+
+	Possibility...
+		Disable interrupts
+			If don't have interrupt, then a process cannot be ran
+			What if you don't reenable interrupt
+		0/1 - one process test, and marks 1 to lock when in use.
+			Loop until it is unlocked, and mark it locked when used
+			What if 2 process both mark it locked and go in critical region
+		Wait for Turn
+			Strict Alternation
+			What if one never entered, and never sets turn back 
+		Peterson's Solution (algorithm)
+			Before you enter critical region, you run this function...
+			When done, call leave region.
+
+Mutual Exclusion Problem
+
+	Peterson's Algorithm
+		change...
+			turn = other;
+			while(turn==other...)
+
+		The process that enters, sets flag to "interested in entering".
+
+		victim = process; // victim waits
+
+		interested[process] = true;
+		victim = process;
+		while(interested[other] == true && victim == process)
+
+	Lamport's Bakery Algorithm
+
+	Mutual Exclusion in Hardware Solution
+		Atomic Instructions
+			TSL - Test and set lock
+				Get lock value and set the lock to 1 (locked)
+				Atomic operation
+				If locked, we loop back
+			XCHG - Intel's exchanges the content with 2 locations in 1 atomic operation
+
+Current issue is that mutual exclusion keeps on testing.
+	Busy Waiting
+	Spinning
+	Spin Lock
+
+	It is better if we put the process to sleep.
+
+	Sleep and Wakeup
+		The producer-Consumer Problem
+		Bounded-buffer problem
+			producer -> buffer -> consumer
+			consumer cannot consume empty buffer
+			producer cannot produce if buffer is full
+
+			semaphores
+				used = 0
+				unused = 100
+					producer
+						down(unused)
+						up(used)
+
+					consumer
+						down(used)
+						up(unused)
+
+
+
+Interprocess Communication IPC
+	Mechanisms 
+	Process dont interfere eachother (mutual exclusion)
+	Proper sequencing
+
+	Mutex (mutual exclusion, a lock)
+	Condition Variable
+
+		
+
+
+=========================================
+WEEK 3
+=========================================
+
+Semaphores
+	Counters
+	value of s is semaphsore is a non-negative integer
+	counting the number of wakeups
+
+	2 operations
+		both operations are atomic
+
+		up(s)
+			increments by 1
+
+		down(s)
+			decrement the value of s by 1
+			test and put to sleep
+			if already zero, put to sleep
+
+Counting semaphores
+	We give a higher original value, decrement until we reach max resource, and wait until someone increments again.
+
+binary semaphors
+	intention is 0 or 1 (locked or unlocked)
+
+Message Passing
+	Send a message and can receive a message
+
+	Solves producer consumer problem
+
+		consumer sends 100 boxes to producer
+		producer fills the boxes and send to consumer
+		As long as we start with 100 boxes in beginining, we will never overflow.
+
+Barriers
+	Sometimes we want multiple threads or processes to finish before we can begin.
+
+	Example, we need 100 processes to finish before we can proceed.
+
+Avoiding Locks: Read-Copy-Update
+	Changing tree pointers so threads are unaffected by changes until termination.
+
+The Dining Philosophers Problem
+
+	5 philosophers, 5 chopstick
+
+Reader and Writers Problem
+	
+	Can have multiple readers
+	Only 1 writer at once
+	Readers must stop when there is a writer
+
+	Only first reader locaks db, last reader closes db
+
+#include <semaphore.h>
+
+sem_t s;
+sem_init(&s, 0, initial_value);
+	0 means we are using this semaphore between threads
+	1 means we are using this semaphore between processes
+sem_wait(&s)	//decroment
+sem_post(&s)	// increment
+
+=========================================
+Midterm July 5
+Quiz: Next Tues
+	Round Robin
+=========================================
+
+Scheduling Process Behavior
+	CPU bound
+		CPU bursts are longer
+		Pre-empted by OS
+
+	IO bound
+		CPU bursts are shorter
+
+Categories of Scheduling Algorithms
+	Think intentions
+
+	1. Batch
+		Turn-around time, time you submit and time until you get result
+	2. Interactive
+		What want to minimize the waiting time or response time
+	3. Real time
+		Real-time requirement
+		Something that needs to be done within certain time constraints
+
+Scheduling algorithms goals
+	Fairness
+		Each process should get a fair share of CPU
+	Policy Enforcement
+		System should enforce the policy
+	Balance
+		All system parts should be kept busy
+
+Batch Systems
+	Throughput
+		Max job per hour
+	Turnaround time
+		Min time between submission and termination
+	CPU utilization
+		Keeps busy
+
+Interactive system
+	Response
+		responds quickly
+	Proportionality
+		Things that user expect to be fast should be fast, things that should take more time should take more time.
+
+wget... to download stuff
+
+Real-time Systems
+	Meet deadlines
+	Predictability
+		Avoid quality degradation in media, have degradation be consistent
+
+Scheduling in Batch Systems
+	We assume all jobs arrive at the same time.
+	Once a job is scheduled, it will run to the end.
+	All CPU bound, because we do not know when I/O happens.
+
+	First come first served
+	Shortest jobs first
+
+	What if one of the process have a longer turn-around time?
+		Shortest job first to reduce turn-around time.
+
+	Just shortest job first is not sufficient since longest job will get pushed back and was never ran.
+		Shortest remaining time - preemptive
+
+
+A 	20
+B   20
+C   60
+
+	A   B   C
+0	20	40	100	  = 160/3
+
+0	100	120	140   = 360/3
+
+Round-Robin Scheduling
+	each process is given a Timeslice/quantum
+	When timeslice expires, process is moved back to queue
+
+Priority Scheduling
+	Processes are assigned a priority
+	Highest level is ran
+	There may be algorithms that cna lower or increase priority dynamically
+
+	Round-robin with different priorities
+
+Fair-share scheduling
+	50/50
+
+Lottery Scheduling
+	Randomly assign % of likelihood
+
+Thread Scheduling
+	User-level
+	Kernal-level
+
+	Arrival Time 		Service Time
+A 	0					3
+B 	2					6
+C 	4					4
+D 	6					5
+E 	8					2
+
+
+1. FCFS (FIFO)
+
+0-A-3-B-9-C-13-D-18-E-20
+
+avg waiting time = (0 + (3-2) + (9-4) + (13-6) + (18-8)) / 5 = 4.6
+avg turnaround time = ((3 - 0) + (9 - 2) + (13 - 4) + (18 - 6) + (20 - 8)) / 5 = 8.6
+
+2. SJF / Shortest process next (SPN) (non-preemptive)
+	once a job is scheduled, we wait until it is finished
+
+0-A-3-B-9-E-11-C-15-D-20
+
+avg waiting time = 0 + (3-2) + (11-4) + (15-6) + (9-8) /  5 = 3.6
+avg turnaround time = (3-0) + (9-2) + (15-4) + (20-6) + (11-8) / 5 = 7.6
+
+3. SRT shortest remaining time (preemptive)
+	
+0-A-3-B-4-C-8-E-10-B-15-D-20
+
+	Everytime a process has arrived, we need to compare the surface time to the remaining time.
+
+avg waiting time = 0 + (3-2) + (4-4) + (15-6) + (8-8) / 5 = 2
+avg turnaround time = (3-0) + (15-2) + (8-4) + (20-6) + (10-8) = 7.2
+
+4. Round-robin q=1 (1 time unit)
+	
+
+
+0-A-2-B-3-A-4-B-5-C-6-B-7-D-8-C-9-  -13-B-14-E-15-D-16-C-17-B-18-D-20
+
+A B A B C B D C B E D
+3 6 1 5 4 4 6 3 3 2 5
+
+avg waiting time = 0 + (2-2) + (5-4) + (7-6) + (10-8) / 5 = 0.8
+avg turnaround time = (4-0) + (18-2) + (17-4) + (20-6) + (15-8) / 5 = 10.8
+
+5. RR q=4
+
+0-A-3-B-7-C-11-D-15-B-17-E-19-D-20
+
+BCDBED
+645221
+
+avg waiting time = 3.6
+avg turnaround time = 10
+
+=========================================
+Lab 6
+
+Mutex and Condition variable as alternative to Semaphores
+
+TSL = tests and sets lock
+mutex_lock
+mutex_unlock
+
+	If 0, we can go in, otherwise we yield
+	If 1, mutex is locked
+
+thread_yield
+
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;	//global variable; instead of init
+
+pthread_mutex_lock(&mutex);
+	//critical section
+pthread_mutex_unlock(&mutex);
+
+Condition variables (consumer to wait on producer)
+	Condition variable must be used with MUTEX
+	associated with a condition
+
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+pthread_cond_wait
+pthread_cond_signal
+
+=========================================
+
+1 mutex and 2 cond variable for producer consumer problem
+
+producer wait for notfull
+consumer wait for notempty
+
+
+=========================================
+WEEK 4
+=========================================
+
+Memory Management
+
+	Register > L1 > L2 > RAM 
+
+	Trend programs expand to fit the memory to hold them.
+
+	Programs keep on getting larger and larger.
+
+No memory abstraction.
+
+	Only deal with physical memory.
+
+	OS and US in RAM
+
+		Danger of OS being overwritten. Early days it is a danger.
+
+	OS in ROM
+
+		Used in samll devices.
+
+How do we run multiple programs concurrently?
+
+	We'd have to write to image.
+
+Problem of running multiple programs without memory abstraction.
+
+	Protection
+
+		Every 2KB block had a protection bit, protection bits.
+
+		PSW, see if bits match then it can be edited by matching program.
+
+	Relocation
+
+		Mempry addres can change when program is loaded. it needs to relocate. Go through the program and change all addresses, which require help of compiler.
+
+		Static relocation, when the loader load the program into memory it needs to convert the addresses. It is done once, which is called static.
+
+Base and Limit Registers
+	
+	Base register = contain starting address of program
+
+	Limit register = size of the program
+
+		Everytime a jump is requested, it changes the limit register. If it is out of limit bounds, then program traps into OS (crash).
+
+Swapping
+
+	There can be many processes, so some processes can be swapped. If a process haven't finished running, it swaps to disk space.
+
+	Memory compaction.
+
+	Room may be needed for program to grow.
+
+	C has Stack and Heap, growing down and up. The room for growth must be inbetween stack and heap.
+
+	Virtual memory doesn't allocate the program as one block of memory. We divide memory into chunks.
+
+Overlay
+
+	What happens when your program is bigger than avail memory.
+
+	We have a overlay manager. Program is divided into overlays. The Overlay manager is responsible for swapping.
+
+Memory Management
+
+	Bitmaps
+		Divide memory into blocks.
+		Keep track of which part of memory is free.
+
+		example:
+			block 4 bytes
+			4 bytes -> 1 bit
+			32 bits -> 1 bit
+			1/33 = overhead
+
+			Advantage is small size
+			Difficult to search for block of sonsecutive memory
+
+			Use linked list (process-hole-process-hole...)
+				If a process terminates, then it is easy to put 2 holes together.
+
+Mem Management Algorithms
+	First Fit
+		Find the first hole that fits
+	Best
+		Go through whole thing and find best one that fits
+		It may leave a lot of holes.
+	Worst Fit
+		Solution is to use worst fit instead of best to prevent many holes.
+
+Where can the system get free memory quickly.
+
+Virtual Memory
+	Run program too large for memory.
+	Old solution is overlays.
+	Each program has its own address space, broken into chunks called pages.
+	
+	Program are divided to pages, pages typically are 4 KB 
+
+	Physical memory are also divided, called page-frame
+
+	hardware maps page to page-frame
+		Done by the MMU Memory Management Unit inside the CPU.
+
+	Program and internals use virtual, which needs to be translated to physical by the MMU.
+
+Paging
+
+	virtual = page
+
+	physical = page frame
+	
+	When program tried to access a virtual memory without a page-frame assigned (physical memory), it will be a page fault, which traps to kernal.
+
+	demand paging
+
+	Paging-in
+	Paging-out
+
+2^10 = 1K
+2^12 = 4K = 12 bits
+
+Structure of Page Table Entry
+
+	Present/absent bit
+	Protection Bit
+	Modified Bit
+		If written, then modified is set
+		If unchanged, it means we don't have to write back to disk.
+	Reference Bit
+		Page replacement algorithm
+		If set, then recently used. If not, it may be evicted
+	Cashing Disable
+		If we want latest value, then we don't want cache.
+
+Speeding Up Paging
+	
+	Mapping from virtual to physical must be fast
+	If virtual is large, then physical is large ~~ 2^20 = 1 million
+
+=========================================
+
+Lab 7
+
+Interprocess communication
+
+Pipes
+
+$ cat abc | tr [a-z] [A-Z]
+
+| is a pipe that connects 2 programs
+
+system call = pipe
+
+int fd[2];
+
+fd[0] //open for reading
+fd[1] //open for writing
+
+if(pipe(fd)==-1) {
+	//handle error
+}
+
+if((pid=fork())==-1) {
+	...
+}
+
+Parent
+	has fd0 and fd1
+
+
+Child
+	has fd0 and fd1
+
+Child writing to parent
+	child fd1 to parent fd0
+	child should close fd0
+	parent should close fd1
+		*close the end of pipe that is not going to be used.
+
+		As long as 1 unclosed write or read end isopen there cannot get an EOF
+
+I/O redirection
+
+	dup2
+		copy old file descriptor to new fd
+		dup2(fd[1], 1)
+
+pipe.c
+// cat argv[i] | tr '[a-z]' '[A-Z]'
+//parent execute tr
+//child execute cat
+
+#include <stdio.h>
+#include <unistd.h>
+
+int main(int argc, char * argv[]) {
+	int fd[2];
+	pid_t pid;
+	
+	if(argc == 1) {
+		//print error msg
+		return 1;
+	}
+
+	if(pipe(fd) == -1) {
+		//perror("pipe");
+		return 2;
+	}
+
+	if ((pid = fork()) == -1) {
+		//perror
+		return 3;
+	}
+	
+	if (pid > 0) { //parent
+		close(fd[0]);
+		dup2(fd[1], 1);
+		close(fd[0]);
+		execlp("tr", "tr", "[a-z]", "[A-Z]", (char*) 0);		
+	} else { // child
+		close(fd[1]);
+		dup2(fd[0],0);
+		close(fd[1]);
+		execlp("cat", "cat", argv[1], (char*) 0);
+	}
+	return 0;
+}
+
+=========================================
+
+Virtual Memory
+
+	Pages
+
+Physical Memory
+
+	Page Frames
+
+Physical memory typically smaller.
+
+Page Fault
+
+	When accesing a page not in physical memory. Traps and runs page-replacement-algorithms.
+
+Page Table Entry Structure
+	Reference Bit
+		Set when read or write to that page
+	Modified Bit
+		If process tries to write that page
+
+	Used in page replacement algorithms, if set it means that the page have recently been used.
+
+Page replacement algorithm
+	Optiml algorithm
+		Theoretical, cannot be implemented
+		Benchmark to compare with other algo
+		Replace the page that will be used furtherest in the future.
+
+	Not Recently used Algorithms
+		4 classes
+		Look at reference bit
+		Bit is periodically cleared (cleared every interrupts, clock tick).
+		If set, then it must be set within the last tick, it is recently used.
+			class0: 0 ref 0 mod 
+			class1: 0 ref 1 mod 
+			class2: 1 ref 0 mod
+			class3: 1 ref 1 mod 
+		If a modified page is written back to disk then it is no longer modified.
+
+	FIFO
+		Simple to implement
+		Not very good
+		May throw away feq used page
+
+	Second-Chance Algo
+		Esentially FIFO, we have a queue of all the pages.
+		Look at 1st, if it has been referenced we clear its reference bit and put at back.
+		Every bit gets a second chance.
+		Complicated because we need to move nodes to back of queue.
+		Better than FIFO
+
+	Clock Page Replacement Algo
+		Implementation of 2nd chance algo
+		Instead of putting to queue, put in a circular list.
+		Most realistic implementation of 2nd chance
+
+	Least Recently Used Algo
+		Need hardware support, remember when each page is last referenced
+		64-bit counter counts instruction
+		If referenced, that counter is copied
+		Smallest counter is the least recently used.
+		Difficult to implement because of hardware counter
+
+	Simulating LRU is Software
+		Each page has a counter
+		Shift right everytime there is a new page to be referenced
+		Bigger the patter the more recently referenced
+		R-bits
+		Aging = simulated LRU in software
+
+	Working Set Algorithm
+		Set of pages used by k most recent memory references
+		k = instructions
+		w(k, t)
+		Looking back w(500, t) 500 instructions, it is likely that we will continue to use these pages. Locality of reference.
+
+		Thrashing - system will be very slow
+
+		When k is small, we likely need to bring in more pages, so working set increases faster in the begining.
+
+		Virtual time = duration of the execution of the program
+
+		Scan all pages, examin R-bit and store virtual time.
+		If R-bit is 0, then look at age. If too old, then remove the page and remember the smallest.
+		Oldest = smallest time.
+
+		Working set = pages currently needed
+			We need to define what is currently needed (example: used in last 500 instructions (k))
+			Instruction is hard to measure, so we used a timer (t = tile). 
+
+	WSClock Working Set Clock Algorithm
+		Combine clock and working set.
+
+
+Assuming only 3 page frames, but we have at leats 7 pages (0-7)
+Reference Stream 0,1,2,3,0,2,1,3,0,3,1,4,2,6,5,7 (page numbers)
+
+Optimal algorithm
+
+	0		1		2		3		0		2		1		3		0		3		1		4		2		6		5		7
+0   0*		0		0		0		0		0		0		0		0		0		0		4*		2*		6*		5*		7*
+1			1*		1		3*		3		3		3		3		3		3		3		3		3		3		3		3
+2					2*		2		2		2		1*		1		1		1		1		1		1		1		1		1
+10 page faults
+
+
+FIFO 
+
+	0		1		2		3		0		2		1		3		0		3		1		4		2		6		5		7
+0	0*		0		0		3*		3		3		3		3		3		3		3		4*		4		4		5*		5	
+1			1*		1		1		0		0		0		0		0		0		0		0		2*		2		2		7*
+2					2*		2		2		1*		1		1		1		1		1		1		1		6*		6		6
+11 page faults
+
+
+LRU Least Recently Used
+
+	0		1		2		3		0		2		1		3		0		3		1		4		2		6		5		7
+0	0*		0		0		3*		3		3		1*		1		1		1		1		1		1		6*		6		6	
+1			1*		1		1		0*		0		0		3*		3		3		3		3		2*		2		2		7*
+2					2*		2		2		2		2		2		0*		0		0		4*		4		4		5*		5
+13 page faults
+
+
+Workign Set (window size = 3)
+
+	0		1		2		3		0		2		1		3		0		3		1		4		2		6		5		7
+0	0*		0		0		3*		3		3		1*		1		1				1*		1		1		6*		6		6
+1			1*		1		1		0*		0		0		3*		3		3		3		3		2*		2		2		7*
+2					2*		2		2		2		2		2		0*		0		0		4*		4		4		5*		5
+14 Page fault
+
+Only keep the working set in the last 3 references
+
+
+Working Set (window = 4)
+
+	0		1		2		3		0		2		1		3		0		3		1		4		2		6		5		7
+0	0*		0		0		0		0		0		0		0		0		0		0		0		2*		2		2		2	
+1			1*		1		1				1*		1		1		1		1		1		1		1		1		5*		5
+2					2*		2		2		2		2		2		2						4*		4		4		4		7*
+3							3*		3		3		3		3		3		3		3		3		3		6*		6		6
+10 page faults
+
+=========================================
+WEEK 5
+=========================================
+
+Speeding Up Paging
+	Paging can be slow.
+	Mapping from virtual to physical need to be fast.
+	If virtual address space is large, the page table will be large.
+	32-bit 4GB = 2^32
+	#Page Table Entry (PTE) = (2^32)/(2^2 * 2^10) = 2^20
+	A way to speed up would be using Translation Lookaside Buffers (TLB)
+	
+	Multilevel Page Table
+		Divide the table into different level
+		1. 1st level give location of 2nd level
+		2. 2nd Index of current table
+		3. 3rd Gives offset
+			0x00403004 (32-bit address)
+				004 = 12 bits = offset
+				4 = 0100 0000 0011
+					Start-01 = PT1
+					00 0000 0011 = PT2
+
+			2^6 = 64K, 2^16 = 64K
+				Too much!
+				Use Inverted Page Table
+				Instead of matching page number to page frame, inverted actually go back, mapping page frame to page table.
+
+Page Replacement for Multiple Process
+	Local verses Global Allocation
+
+	Local 
+		Replace one process, it's own memory may be replced
+	Global
+		Look at all pages in memory, other process's memory may be replaced
+
+Working Set
+	Measure Page Fault frequency
+		If many page faults, then workset should be increased (memory increased)
+		If little page faults, maybe decrease memory
+
+Calculate the Overhead
+
+	How large should a page size be?
+
+		s - average process size
+		p - page size
+		e - size of each PTE (page table entry)
+
+		Overhead = (se/p) + p/2
+
+					Each entry, and half of last page is wasted.
+
+			Choose p to minimize overhead.
+	
+			p = sqrt(2se) = 4KB
+
+			s = 1MB
+			e = 8bytes
+
+Separate Instruction and Data Spaces
+	Instruction gets its own data space
+	Data gets its own data space
+
+		If something needs to grow, it is simplier
+
+Shared Pages
+	Program should be shared (all students using vim)
+	Program is shared, but each have own copy of data
+
+	fork(), don't need to make a copy immediately, this is called copy-on-write (we only need to copy when we are writing, not reading).
+
+Shared Libraries (dll)
+	We want to use relative address.
+	When we compile, we use absolute virtual.
+		We need position independent code on compile. Everything must be relative.
+		Need to map library to process. To use, we must use position indepedent code.
+
+=========================================
+
+cat square.c
+
+gcc -c square.c (-c = compile only, generates .o file)
+
+gcc -c cube.c
+
+pack both .o files into a library
+
+ar cr libcalc.a square.o cube.o
+
+ls -l
+
+main.o (calls square)
+
+Link with library
+
+gcc -L. main.c -lcalc
+	L = Look for library
+	. = current directory
+	-l = link with this library
+
+ls
+
+gcc main.o libcalc.a (static, not a dll)
+
+Remove .o files
+Remove libcalc.a
+
+gcc -c -fPIC square.c
+gcc -c -fPIC cube.c
+gcc -shared -o libcalc.so *.o
+ls
+
+gcc main.c -L. -lcalc
+ls
+
+expert LD LIBRARY_PATH=`pwd` (tell system where the dynamic library is)
+ldd a.out
+unset LD_PIBRARY_PATH
+
+=========================================
+
+Page Fault
+
+	Hardware trap to kernal, save program counter to stack
+	Assembly code will execute, and save current values to register
+
+	System checks if protection are consistent
+	Page if it is, if there is no free frame then it needs to select a frame to replace.
+
+Backing Store
+
+	Swapping to Disk
+	If too much thrashing, system may descide to swap to swap partition.
+
+	1. Each page # has a corrosponding swap area.
+
+	2. Disk map that maps pages that are not in memory, and only pages not in memory will have a swap area.
+
+Separation of Policy and Mechanism
+
+	Low-level MMO handler
+
+Segmentation
+
+	Used when memory was tight
+
+	A program can have multiple growing components. If we put them in different segments, they can grow independetly
+
+	Global Distributor Table
+	Local Dist Table
+
+Segmentation with Paging
+	
+	Page Directory
+	Page table
+	Page frame
+		10-10-12 (dir, page, offset)
+		Still need to setuo global distributor table when system starts
+
+		
+=========================================
+Chapter 4
+
+File Systems
+
+	We need some long term information storage.
+	Limited amount memeory.
+
+	1. Store very large amnount of infomation.
+	2. Survice termination of process.
+	3. Access memory concurrently.
+
+Disk 
+	Linear sequence of blocks.
+	Read block k
+	Write block k
+
+How do we find information?
+	Which block # is data stored.
+
+How to keep one user to view another user?
+
+File Extensions
+	Unix allow multiple extensions
+	exam.zip.gpg (gpg program to encrypt the file)
+
+	zip -r exam exam
+	find -name "*.txt"
+
+File Structures
+	Byte Sequence
+		Not impose structure on content of file. Up to the program.
+		More flexible.
+	Record Sequence
+		Common in days of punch cards, 80 columns. Sequence of records, like sequence of cards. 
+	Tree
+		Easier and quicker to look for records.
+
+	Nowadays, we impose b-tree structure.
+
+File Types
+	Executable file
+		text segments
+		data segments
+			global variable stored
+		relocation bits
+		simple variable
+		magic number
+			/etc/MAGIC
+			indentify type of file
+	An archive
+		output module might just be .o file
+		we pack multiple .o into one big file
+		think .dll
+		header
+			describe .o file
+
+File Attributes
+	Protection
+		rwx - in unix
+	password
+	creator
+	owner
+	read-only flag
+	hidden flag
+		unix .file are all hidden
+	archive flag
+	ascii/binary
+	random access
+	temporary
+	lock
+	record length
+	key position
+	key length
+	creationt ime
+	last access time
+	last changed time
+		unix doesnt have creation time
+		a time
+		m time
+		c time
+		last accessed, last modified, status changed
+	current size
+	maximum size
+
+File Operation
+	Create
+	Delete
+	Open (has max number of open)
+	Close
+	Read
+		Read from current location/position
+		To jump, we need to call Seek
+	Write
+	Append
+	Seek
+	Get attributes
+		fstat - gets all attributes of a file
+	Set attributes
+		chmod
+	Rename
+
+Directory 
+	Path Names
+		absolute pathname
+		relative pathname	
+		cp -a lab1 tmp (copies to tmp)
+
+Directory operation
+	Create
+	Delete
+	Opendir
+	Closedir
+	Readdir
+	Rename
+	Link
+		hard link
+			essentially the same file
+			same file size
+		soft link
+			different file size
+			points to the original file
+			content of the file is the name of another file
+			follow link to name contained in file
+	Unlink
+
+What identifies the file is called the i number
+	ls -i
+	uniquely identitifies the data for the file
+
+File System Layout
+	Disk Partition
+		Boot Block
+		Superblock
+			tells where root dir is located
+		Free Space Management
+		i-nodes
+			each i-node contains information about 1 file
+			what fstat returns
+			user id
+			grp id
+			file size
+			permission
+			meta about the file, where data blocks are located
+			each i-node is identified by the i-number
+			file name are not stored in the i-node, name are stored in the directories
+			contains attributes and location of data
+
+			look up i-number, go to i-node, which cotnains details about file
+
+		Root Directory
+
+Implementing Files
+	All files are allocated contiguously
+		fast sequential access
+		less information to be stored
+		only need where it starts, and how large
+	Downside is that there are gaps and need defrag
+
+	Alternative linked list allocation
+		Each block will have a number to the next data block
+		Data block can be scattered
+		Difficult to have random access within the same file
+
+	File Allocation Table
+		Links are in a table that can loaded to memory
+		The table only contains links
+		If in main memory, we can follow blocks a lot faster
+
+	i-nodes
+		Number of pointers to data blocks
+		Fixed size
+		Last block contains double pointers to another datablock
+
+Shared File
+	If hard linked
+	As long as there is still a link to the file, the file is not deleted.
+	Link count need to reach 0.
+
+Journaling File Systems
+	Steps to Remove a file in Unix:
+		1. Remove file form its directory
+			Remove its directory entry
+		2. Release the i-node, saying it is not used.
+		3. Return all disk blocks to pool of free disk blocks
+
+	Use a lock or journal
+		If all 3 are done, then file is erased
+		Is there an entry in the journal to show that it is not done
+		idempotent - program to be redoable
+		Rephrase operations to be idempotent
+
+Virtual File Systems
+	2 interfaces:
+		user
+
+	VFS interface
+	Translate POSIX code to VFSs
+	VFS provides interface for file system to implement
+		VFS points to functions
+			VFS -> v-node -> Function Pointers -> Read Function
+
+
+=========================================
+Sunday 1:00 - 4:20
+DTC Same room
+=========================================
+
+=========================================
+MIDTERM (20 marks)
+Exam starts 6:00 PM
+80 minutes
+
+Quiz 1-3
+Threads
+
+Page Replacement
+Process Scheduling
+	Round Robin, etc
+
+How do we create pipes?
+
+Synchronization
+	Semaphores
+	Mutex & Conditional Variable
+
+2^10 = 1K
+2^20 = 1M
+2^30 = 1G
+
+Calculation(?)
+	Answer to lab exercise
+
+Unix Concepts
+	ls -l
+	Common System Calls
+
+=========================================
+WEEK 6
+=========================================
+
+File Systems
+
+Disk Space Management 
+	What would be a good block size if we want to split data?
+		Need to find out how much tiem it takes to read certain number of bytes.
+		
+		Time needed to read k bytes from disk:
+			1MB/track
+			rotation time 8.33 ms (1 rotation)
+			average seek time = 5 ms (get to track)
+			time needed = (5ms + (8.33/2) + (k/1000000)*8.33)ms
+						= 9.165 + (8.33k/1000000)
+
+Keeping Track of Free Blocks
+	Used a block to store the number of blocks that are free.
+
+	500 GB Disk
+	1 KB-blocks with 32-bit block number
+
+	Blocks needed to store the free block numbers assuming all blocks are free?
+		1 block can store 255 -> (500000000/255)
+
+Consider writing to disk only when half full to avoid situation of writing to disk and bringing back to memory.
+
+Disk Quotas
+	You are allowed max amount of disk space.
+	Soft Limit = can tmp be exceeded
+		If you log out when exceeded, you get a warning.
+		There is a limit to the warning. At warning 0 you can no longer login.
+		Limited on the number of files you can create (limited inodes)
+
+	hard Limit = cannot be exceeded
+
+System Backups
+	rm -fr / (delete all file systems)
+
+	1. Physical Backup
+		Copy every block. Block 0 to Block n
+		Physical Dump (not a good idea)
+		There may be bad blocks, disk controler will remap the bad blocks.
+			Later on, OS may deal with bad blocks.
+	2. Logical Backup
+		File and Directory
+
+	1. Marked files that have been changed or contain.
+	2. Mark files that don't contain things that have been changed.
+
+
+File System Consistentcy Check
+	Traverse the inodes, either used or free
+	Neither used nor free = mark as free
+	Free twice = dec and keep as free
+	Used twice = corrupted, 2 files are using it
+
+File System Performance
+	Hash Table: LRU -> MRU
+
+	1. Is the block likely to be needed again? Keep in memory.
+	2. Is the block essential to the consistency to the file system? i-node is important.
+
+Reducing Disk Arm Motion
+	Keep data in the same cylinder.
+
+inode
+	single indirect block
+	double indirect block
+	triple indirect block
+		address of data blocks
+
+UNIX V7 File Sytem
+	/usr/ast/mbox
+	It loops for usr, ast, mbox
+	It needs to loop for each path component
+
+=========================================
+WEEK 7
+=========================================
+
+7 Types of File
+	ordinary file
+	directories
+	symbolic links
+
+
+	block special files (block I/O)
+		sda, different partition on disk drives
+		sdb, the next disk drive
+		brw, block special device
+
+	character special files
+
+tty = terminal
+	pts = pseudo terminals
+		crw - the c is character special files
+
+	named pipes (FIFOs)
+		prw
+
+	sockets
+		Internet Domain socket
+		Unix domain socket
+
+		srw, socket type
+
+=========================================
+Chapter 5 I/O
+
+Disk Drive
+
+	Magnetic Disks
+		Tracks, Cylinders, Sectors
+		There may be different platters
+		The track is all cylinders
+		A disk can have different zones, the outer edge can have more sectors than inner
+		Physically sectors are different size, but logically they are all approx 512 bytes
+
+Disk Formatting
+	Preamble
+		Indentify the sectors
+	Data
+		512 bytes
+	ECC
+		Error Correcting Code
+
+	Typically there are gaps between sectors
+	ECC size determines more or less errors
+
+	The controller has a buffer that can store data. We may want to interleave the sector so that the system can have some time to transfer data.
+	No interleave, single interleave, double interleave.
+
+
+Cylinder Skew
+	Different track do not have aligned starting points 0
+
+
+Example:
+	10000 RPM
+	300-Sector Track
+	Track-to-track seek time = 800 usec (microsec)
+
+	Find the cylinder skew?
+
+		(10000 * 300)/x = 6*10^6usec/800usec
+		= 40 sectors
+
+	Data Rate?
+		If each sector is 512-bytes sectors.
+
+		(300*10*0.5)/60 MB/sec
+		= 24.4MB/sec
+
+Disk Arm Scheduling Algorithm
+	Seek Time
+		Disk Scheduling algo tried to min disk seek time.
+
+	Rotational Delay
+		On average 1/2 rotation
+
+	Actual Data Transfer time
+
+	FCFS
+		The request are queued
+
+	Shortest Seek First (SSF)
+		Tendency for the head to remain in the middle
+
+	Elevator Algorithm
+		Go in one direction, then go back down.
+
+	Error Handling
+		Bad sectors
+		There are spare sectors (ususally not 100% defect free)
+		Low level formmating willr emat bad sectors
+
+Clock Hardware
+	Crystal Oscillator
+		Counter decremented with each pulse
+		When counter reach 0 then system interrupt
+		Holding register is used to load the counter
+
+	Maintaining the time of day
+	Preventing processes from running longer than allowed
+	Accounting for CPU usage
+	Handling alarm system from user processes
+
+
+	Providing watchdog timer for parts for system itself
+		When timer expires, it will execute the process that restarts the function
+
+	Profiling, monitoring, statistics gathering
+
+Soft Timers
+	Software timers
+	Not interrupts
+		Limited use:
+			System Calls
+			TLB misses
+			Page Faults
+			I/O interrupts
+			The CPU going idle
+
+Keyboard drivers
+	Interrupts is generated every time you press or release a key
+	Scan code
+	Remember state, like holding down shift-key
+
+Canonical Mode
+	Sends in one go
+
+Raw Mode
+	Reads everything
+
+X Windows System
+	Window manager can change system look and feel
+	gnu
+	XServer gets remote application, but draws on your screen locally. Think Lab computers.
+	X Protocal
+
+	Drawing Commands from program to workstation
+	Replies by workstation...
+
+Power is proportional to V^2
+	Cutting voltage by half, it will take 2 times as long to finish the job, but power consumption by 4
+
+
+=========================================
+Quiz Disk Path
+Disk Arm Scheduling Algorithm
+
+40 Cyliners
+0-39
+Requests for these tracks: 11,1,30,16,34,9,12
+	11 is starting location, the follow are the requests.
+
+
+FCFS
+
+next track 			11		1		36		16		34		9		12
+#tracks traversed	0		10		35		20		18		25		3
+total = 111
+
+SSF
+next tracks 		11		12		9		16		1		34		36
+#tracks traversed 	0		1		3		7		5		33		2
+total = 61
+
+Elevated Algorithm (LOOK) Assume intital direction is up (increasing track number.
+next tracks 		11		12		16		34		36		9		1
+#tracks traversed 	0		1		4		18		2		27		8
+total: 60
+Ususally worse than SSF
+
+SCAN (go to very top and bottom)
+next tracks 		11		12		16		34		36		39		9		1
+#tracks traversed 	0		1		4		18		2		3		30		8
+total = 66
+
+C-LOOK (Circular Look)
+next tracks 		11		12		16		34		36		1		9
+#tracks traversed 	0		1		4		18		2		35		8
+total = 68
+
+C-SCAN
+next tracks 		11		12		16		34		36		39		0		1		9
+#tracks traversed 	0		1		4		18		2		3		39		1		8
+Total =
+
+
+=========================================
+
+Input/Output
+
+	Block Devices
+		Data transfered in blocks
+		Can seek
+		transfers in units of entire blocks
+
+	Character Devices
+		In streams of characters
+		Can't seek, not addressable
+
+	Not all devices do not fall under these 2 groups, but many can be categoried to fit these 2 groups.
+
+Memory-Mapped I/O
+	
+	Access devices on register called ports.
+		Ports are given numbers.
+
+	Map register to memory space.
+		Memory-mapped I/O
+
+	Hybrid
+		Some accessed through port, some mapped to memory.
+
+	in out instruction
+		inb (b for bytpe)
+		outb
+
+			To deal with IO ports.
+
+
+Direct Memory Access (DMA)
+
+	Instead the CPU transfering bytes from disk controller to main memory, the DMA does this job instead. CPU programs the DMA controller.
+
+	Program IO (PIO)
+
+Interrupts Revisited
+
+	Interrupt Controller
+		Issues the interrupt to the CPU
+		There can be multiple interrupts, so interrupts have priority
+		Identifies the device that generated the interrupts
+		Index into the array of interrupt surface routine
+
+	CPU needs to ack the interrupt
+
+Precise Interrupt
+
+	Can be precise or imprecise
+
+	State needs to be saved.
+
+	1. PC is saved in a known place.
+	2. All instruction before are executed.
+	3. No instruction beynd have not been executed.
+	4. 
+
+	How do the system figure out what to save? 
+
+Program IO
+	
+	keep on looping and check if receviving device (printer) is ready to recieve. Loop until printer is ready to accept character. Return to user once complete. This would tie up the CPU.
+
+	Interrupt Driven IO
+		Interrupts everytime
+
+
+	IO using DMA
+		CPU only need to setup the DMA controller.
+		When DMA controller is done, it will generate interrupt.
+
+IO Software Layers
+	
+	Device Independent Software
+	Device Drievrs
+	Interrupt Handlers
+	Hardware
+
+Interrupt Handlers
+	Save register on interrupt
+	Interrupt handler software need to save what isn't already saved by hardware.
+	Run interrupr surface routine.
+
+Device Drivers
+	Uniform interfacing for device drivers
+	Interface for character, for block
+		Array of function pointers
+		Register functions that are going to be executed
+			Read a block or write a block
+
+Buffering
+	Modem
+		Transfer data to user space
+	If there is no data in modem, yo are blocked. You need to wake it.
+		Store data in kernal buffer.
+			Transfer to user space buffer when full.
+			If there are more data, we need a double buffer.
+			Think triple buffer for graphics.
+
+User Space IO Software
+	
+Deadlocks
+	If each process is waiting for event that can only be caused by another event within the same set.
+
+	Preemptible and Nonpreemptible Resources
+		Request Resource
+		Use
+		Release
+
+	Preemptiable
+		Can take resource from process without ill effects
+		Memory
+
+	Nonpremptible
+		Bad effects, taking away cd during write
+		We are interested because of deadlock.
+
+Resource scquisition
+	Interleaved semaphore/locks would cause deadlocks.
+
+Mutual Exclusion
+	Only one process can use resource at any one time.
+
+Circular wait condition
+	A waiting for B, B waiting for A
+
+Deadlock Modeling
+	If there is a cycle in the resource allocation graph
+	Acquire and Wait
+
+	Ignore
+	Detect
+	Dynamic Avoidance, careful resource allocation
+	Preventation, structurally negating 1 of 4 required deadlock conditions
+
+
+=========================================
+WEEK 8
+=========================================
+Deadlocks
+
+	Mutual Exclusion
+	Hold and wait
+	No Preemption
+	Circular wait condition
+
+
+If there is a cycle in the process resource model, then it has a deadlock.
+
+Dealing with Deadlock
+
+	Ignore the problem
+		Ostritch, deadlock does not occure that frequently. 
+
+	Detection and Recovery
+		Allowdeadlock to happen. If CPU usage is low when several processes are running. We can detect it by killing, preempting, one of the processes. Or kill one of the required processes.
+
+
+	Dynamic Avoidance
+		By carefulyl allocating the resource
+
+	Prevention
+		Void 1 of 4 deadlock conditions
+
+Detection
+
+	Process A hold R, wants S
+	...
+
+	Algorithm to detect cycles
+		traverse graph, if a node is traversed more than once.
+
+	Resources in exisitence
+		matrix
+
+Preemption = take resource from one of the process
+Rollback = go back to earlier state
+Kill processes = release some resources
+
+Deadlock Avoidance
+	
+	How should we allocate resource so that deadlock should not accure.
+
+	We should not go in the shaded region.
+
+	Theoretical, since we do not know what resoureces is needed at start.
+
+Safe and Unsafe
+
+	Do we have resource to finish the processes by allocating and freeing one by one
+
+
+Banker's Alogirhtm
+	
+	A 0	6
+	B 0	5
+	C 0	4
+	D 0	7
+	free: 10
+
+	Safe
+
+	A 1	6
+	B 1	5
+	C 2	4
+	D 4	7
+	free: 2
+
+	Safe
+
+
+Banker's Algorithm for Multiple Resources
+
+E=<8,5,9,7>
+
+max. claim table
+		r0 		r1 		r2 		r3
+p0		3		2		1		4
+p1 		0		2		5		2
+p2 		5		1		0		5
+p3 		1		5		3		0
+p4 		3		0		3 		3
+
+
+allocation table
+		r0 		r1 		r2 		r3
+p0		2		0		1		1
+p1 		0		1		2		1
+p2 		4		0		0		3
+p3 		0		2		1		0
+p4 		1		0		3 		0
+total 	7		3		7		5
+avail.	1		2		2		2  = E-total
+
+...p2 can finish in needs
+avail. 5		2		2		5
+...p0 can finish in needs
+avail. 7		2		3		6
+...p1 can finish...
+avail. 7		3		5		7
+...p3 can finish
+avail. 7		5		6		7
+...p4 can finish
+avail. 8		5		9		7  = E = <8,5,9,7>
+	ergo, safe
+
+needs
+		r0 		r1 		r2 		r3
+p0		1		2		0		3
+p1 		0		1		3		1
+p2 		1		1		0		2
+p3 		1		3		2		0
+p4 		2		0		0 		3
+
+
+Deadlock Prevention
+	To negate one of the 4 conditions.
+
+	Mutual Exclusion
+		Instead of directly to printer, use daemon. Unlikely for file to be full when writing.
+
+	Hold and Wait
+		Release, request all resources initially
+
+	No preemption
+		Make resources preemptable
+
+	Circular Wait
+		Number your resources and acquire resources in increasing number.
+
+		If you always lock resources in increasing order. Semaphore consistency.
+
+		Livelock, can do inital execute in loop, but nothing useful results.
+
+Reuseable Resource Graphs
+
+	
+
+Resource Allocation Graph
+
+
+
+
+
+
+=========================================
+	
+=========================================	
+PRESENTATION
+July 22, Friday
+
+Malware
+
+
+
+=========================================

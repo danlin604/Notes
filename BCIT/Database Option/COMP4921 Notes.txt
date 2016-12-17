@@ -1,0 +1,2866 @@
+=======================================
+COMP4921 Database Systems
+=======================================
+
+=======================================
+Week 1 Discussion
+=======================================
+Pick one of the key concepts from chapter 2 and write about it. Here are some topics you can consider: What is mapreduce? Provide a simple data set from another source and show how a mapreduce program can be used to process the data.  What is scaling up compared to scaling out? What are the differences between mapper, combiner, partitioner, sort, shuffle, and reduce phases?
+
+What is MapReduce?
+	
+	Processes and generates datasets with a parallel, distributed algorithm on a cluster. The name originally refers to proprietary Google technology, but has since then been genericized.
+
+MapReduce is broken into 2 phases:
+
+	Map phase:
+		Pull out infomration that is needed for the Reduce phase and drop irrevelant data. Map phase is also known as the data preparation phase.
+
+	*The output from map function is processed by the MapReduce framework before sending to the Reduce phase. The process sort the key-values pairs by their key, in ascending order.
+
+	Reduce phase:
+		Iterate through the aggregated kay-values pairs and perform the necessary calculation, such as finding the sum or finding the maximum value.
+
+What is shuffle?
+
+	Shuffling is the process of transfering data from the mappers to the reducers. 
+
+	Shuffle is generally coupled with sorting, shuffle and sort.
+
+	Sorting saves times for the reducer, making it faster to iterate through the reducer task. Keys are sorted in ascending order, making it clear when a new reduce task should start.
+
+	Shuffle and sort are performed locally by each reducer for their own input data.
+
+What is partitioning?
+
+=======================================
+Week 1
+=======================================
+
+Hadoop infrastructure/framework
+	Big data analytics
+	R with Spark module
+	NoSQL
+
+Midterm
+Final
+Lab
+Forum Participation
+
+Text book
+	Hadoop, the definitive guide
+
+=======================================
+
+Hadoop (Cloudera)
+	OpenSource
+	
+Hadoop MapReduce
+	Java based
+
+Hive
+	Close to SQL
+
+PIG
+
+Hadoop HBase
+	NoSQL equilivent
+
+R and R Studio
+	How likely is something going to occur
+	Descision trees
+	Neural network
+
+Apache Spark
+	
+Database Project
+	Individual Project
+	Explore one of the areas inside the hadoop system
+	Mostly only demo
+		Data storage HDFS
+		MapReduce Processing
+	Post powerpoint online
+	30 minutes
+	Concept and Demo
+	What this technology is all about
+
+Multi-node cluster
+	What is the advantage? 
+	Is it faster?
+
+VoltDB
+	Fast data
+
+=======================================
+
+Hadoop
+	Opensource framework
+	Stores a lot of data
+	Developed from Google
+		Google File Systems
+		Yahoo, Facebook
+	High Scalable
+		Just add more racks of storage
+		Just add more CPU
+
+	Allows clusters of computers
+		Process data
+
+Hadoop Cluster
+	Multiple computers
+	Multi-node cluster
+	Can even have multiple clusters
+
+Job Tracker
+	Tracks job in a cluster
+
+Name Node
+	Access the actual data given a name
+	Manage all the names of different files
+	Files are distrubuted across different nodes
+	By default each piece of data is replicated 3 times
+
+MapReduce
+	Map
+		Get data from HDFS
+		Return data into key-value pair
+
+	Reduce
+		Aggregate and reduce to essential information
+
+	Job Tracker
+		Keep track of all jobs submitted to cluster
+
+	Task Tracker
+		Tell job tracker that the node is still processing jobs
+		If a task dies, then job tracker will assign a new task
+
+MR1
+	Job tracker is the bottleneck
+
+MR2 Yarn
+	Redistrubting jobs
+
+
+
+cat French.txt >> fulldictionary.txt
+	
+	concat and append to fulldictionary.txt
+
+./hadoop fs -put /home/cscarioni/Documentos/hadooparticlestuff/fulldictionary.txt /tmp/hadoop-cscarioni/dfs/name/file
+
+... java code
+
+Mounting VM
+	.ovf
+
+HDFS
+	Knows where your data is
+	Moving data is expensive
+	Health
+		Checking the pulse between dtaa nodes, job tracker knows when nodes go down. Data is then replicated.
+
+	Rollback
+		Has its own log, almost like a raid.
+		Restored to latest version.
+
+Namenode
+	Bottleneck
+
+HDFS1 vs HDFS2
+	Single namenode vs multiple namenodes
+	HDFS2 multiple namespaces, can have different types of storage.
+
+	HDFS Federation
+		Multiple nodes to help resolve the name.
+
+Yarn
+	Resource manager will allocate job and tasks into different nodes.
+
+	Resource manager is not a job tracker, it merely allocates job and tasks.
+
+Pig
+	Data manipulation in Apache Hadoo
+	Script language: pig script
+		Used in ETL: extraction, translation, load
+	Procedural language (Like Java, Data flow) as opposed to declarative language (Hive/SQL).
+	Does not require a schema.
+
+	Where to use pig?
+		Fast
+		Analysis as you import data
+		Insights needed through sampling
+
+	Where NOT to use?
+		Time constraints
+
+	Put data in, and take data out.
+	Pig Latin, can be entered through cloudera terminal
+
+Hive
+	SQL-like
+	Allows data to be stored like relational database
+	For online transaction processing
+
+Pig	–ETL
+Hive	–for	database	developers,	similar	to	SQL
+Storm	–real	time	data	capturing
+Spark	–in-memory	cluster	computingHBase–NoSQL	databaseSolr–search	to
+
+
+hadoop fs -ls /
+
+hadoop fs -ls /user/cloudera
+
+hadoop fs -put myfile.txt /user/cloudera/
+
+hadoop fs -cat /user/cloudera/myfile.txt
+
+=======================================
+
+External Browser
+	Port:8888
+	Hue
+
+mysql -u root -p
+	cloudera
+
+show databases;
+use retail_db;
+show tables;
+
+DONT INSTALL THE CLOUDERA MANAGER
+
+
+sqoop import-all-tables -m 1 --connect jdbc:mysql://quickstart:3306/retail_db --username=retail_dba --password=cloudera --compression-codec=snappy --as-parquetfile --warehouse-dir=/user/hive/warehouse --hive-import
+
+hadoop fs -ls /user/hive/warehouse/
+hadoop fs -ls /user/hive/warehouse/categories/
+
+invalidate metadata;
+show tables;
+
+
+
+=======================================
+Week 3
+=======================================
+
+=======================================
+Week 3 Discussion
+=======================================
+
+Pick one of the key concepts from chapter 4 and write about it.  Here are some topics you can consider: What is YARN? Why is it needed? How does YARN fit in with other frameworks in the Hadoop architecture? How does scheduling work in YARN? What is involved in writing a YARN application? Are there other comparable frameworks like YARN?
+
+What is Hadoop YARN?
+
+	YARN stands for "Yet Another Resource Negotiator", which is introduced in Hadoop 2 as its cluster resource management system.
+
+	Originally Apache described YARN as a redesigned resource manager, YARN is now described as a distributed operating system for big data applications.
+
+Why bother with Hadoop YARN?
+
+	YARN provides API for requesting and working with resources, which is used by the applications built on top of the YARN layer. Resource management details are hidden from users.
+
+	Unlike MapReduce, it is possible for YARN to run other computing models while running MapReduce in a single cluster, which leads to higher usage of the cluster.
+
+
+
+=======================================
+
+	MapReduce
+
+		Bring computation to data.
+		Hadoop can be pretty slow. 
+		MR can have slow updates.
+
+Cloudera:
+create a file using 
+	
+	cat > file
+	hadoop fs –mkdir /files
+		create root dfirectory in HDFS
+	hadoop fs –put file /files
+
+	hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples-2.6.0-mr1-cdh5.8.0.jar wordcount /files /files_out
+		
+		input folder, output folder
+
+	hadoop fs -ls /files_out
+
+	hadoop fs -cat /files_out/part-r-00000
+
+
+HDFS automatically decompresses files
+Cloudera VM:
+	create a file using cat > file
+	bzip2 file
+	hadoop fs –mkdir /compressed
+	hadoop fs –put file.bz2 /compressed
+
+	hadoop jar /usr/lib/hadoop-0.20-mapreduce/hadoop-examples-2.6.0-mr1-cdh5.8.0.jar wordcount /compressed /files_out
+
+	hadoop fs -rm -r /files_out
+
+	hadoop fs -put file.bz2 /files
+
+Consdier:
+Modify the word count so that it will count more accurately.
+
+Mapper
+	key/value
+	key - file position (offset)
+	value line in file
+
+Reducer
+	2 stage, to maintain parallel
+
+Winscp
+	
+	Tell cloudera to listen to port 22
+	Host Port 22
+	Guest Port 2222
+
+hadoop fs -put [src] [dest]
+
+
+hadoop fs -put /home/cloudera/Documents/hadoop-book/input/ncdc/sample.txt /ncdc
+hadoop jar ch02-mr-intro-4.0.jar MaxTemperature /ncdc /output
+hadoop fs -ls /output
+hadoop fs -cat /output/part-r-00000
+
+=======================================
+lab02
+
+Find files
+
+	sudo find / -name hadoop-common.jar
+
+	/usr/lib/hadoop/hadoop-common.jar
+
+Create DIR
+
+
+	hadoop fs -mkdir /logs
+
+PUT files into DIR
+
+	hadoop fs -put web.log /logs
+
+
+Remove old /output
+
+	hadoop fs -rm -r /output
+	
+Run MapReduce
+
+	hadoop jar lab2.jar PageViewCounter /logs /output
+
+
+Check output
+
+	hadoop fs -ls /output
+
+	hadoop fs -cat /output/part-r-00000
+
+
+Linux Manual
+
+	man [item]
+	man tcpdump
+
+sudo tcpdump -i eth0
+=======================================
+
+Pick one of the key concepts from chapter 16 and write about it. Here are some topics you can consider: What is Pig? Why the choice of the name? What is needed before Pig was invented? What other frameworks does Pig require or work with? Give an example outside from the book on the use of Pig? What is Pig Latin? Can Pig be used other languages like Java, Python, Ruby?
+
+Pig UDF (User-Defined Functions)
+
+It is crucial for users to have the ability to plug in their own custom code for data processing jobs. Pig will allow for Java, Python, and Javascript. There are extensive support for Java functions, and limited support for Python and JavaScript functions. 
+
+An example of Pig as mentioned in the text for filtering weather records that do not have a temperature quality reading of satisfactory (or better):
+
+filtered_records = FILTER records BY temperature != 9999 and isGood(quality);
+
+isGood(quality) contains the logic: quality IN (0,1,4,5,9).
+
+Similar other programming languages, UDF benefits from reusable code and encapsulated logic.
+
+=======================================
+Week 4
+=======================================
+
+Hive
+
+	Impala doesn't use mapreduce
+
+	Hive and Pig are slower
+
+	Pig (Pig Latin)
+		uses dataflow, procedural language
+
+	HiveQL
+		SQL like language
+
+	Hive is best for structure data
+		Excel spreadsheets
+
+	Hive can ru faster with multiple data nodes
+		Hive scales really well with multiple data nodes
+
+	Pig
+		Semi-structured data
+		Parse different rows, lines
+		Inject different data
+		Pig is more flexible
+
+Running Hive
+
+	Hive console
+		Deprecated, hive server 1
+		Hive server 2 uses beeline
+
+	Beeline
+
+	Hue (cloudera)
+		Interface to Hive data
+
+Hive Sever 2
+	
+	Has the nice transaction benefits like traditional databases.
+
+Thrift Service
+
+	Connects different languages to HiveServer2
+	Cross-language service development
+	Remote procedure call (RBC)
+		Calling a function that is located remotely on another machine.
+
+	IDL (Interface definition language)
+
+		Publish what interface to call for RBC.
+		Expose to other modules/machines to use.
+		Thrift pushlish the functions into different languages.
+
+	Java Code
+		Compiles to Java stub
+	Python Code
+		Compiles to Python Stub
+	IDL facilitates the communication
+		IDL runtime library
+		Network messages
+
+=======================================
+Store hive data in textfile format
+
+
+	sudo find / -name "employee.dat"
+
+	create table employee (id int, name string)
+	row format delimited
+	fields terminated by '|'
+	stored as textfile;
+
+	File Browser
+		user/hive/warehouse/employee table
+
+	Hive Editor
+		load data local inpath '/usr/share/doc/hive-1.1.0+cdh5.8.0+610/examples/files/employee.dat'
+		into table employee;
+
+	select * from employee;
+
+		Should return employee.id and employee.name
+
+	hadoop fs -cat /user/hive/warehouse/employee/employee.dat
+
+=======================================
+Store hive data in default format
+
+	create table employee_def(id int, name string);
+
+	insert into employee_def
+	select * from employee;
+
+	hadoop fs -cat /user/hive/warehouse/employee_def/000000_0
+
+=======================================
+Store hive data in sequential format
+
+	create table employee_seq(id int, name string)
+	row format delimited
+	fields terminated by '|'
+	stored as SEQUENCEFILE;
+
+	insert into employee_seq
+	select * from employee;
+
+	select * from employee_seq;
+
+	hadoop fs -cat /user/hive/warehouse/employee_seq/0000000_0
+
+Store Hive data in RC format
+
+	create table employee_rc(id int, name string)
+	row format delimited
+	fields terminated by '|'
+	stored as RCFILE;
+
+	insert into employee_rc
+	select * from employee;
+
+	select * from employee_rc;
+
+	hadoopfs –cat /user/hive/warehouse/employee_rc/0000000_0
+
+Store Hive Data in ORC File format
+
+	create table employee_orc(id int, name string)
+	row format delimited
+	fields terminated by '|'
+	stored as ORC;
+
+	insert into employee_orc
+	select * from employee;
+
+	select * from employee_orc;
+
+	hadoopfs –cat /user/hive/warehouse/employee_orc/0000000_0
+
+Store Hive data in PARQUET file format
+
+	create table employee_par(id int, name string)
+	row format delimited
+	fields terminated by '|'
+	stored as ORC;
+
+	insert into employee_par
+	select * from employee;
+
+	select * from employee_par;
+
+	hadoop fs –cat /user/hive/warehouse/employee_par/0000000_0
+
+=======================================
+
+Avro
+	Store metadata with data
+	Allow specification of an independent schema for reading the file
+	Can rename, add, delete, and change data types of fields with new schema
+	Splittable, support lock compression
+
+RC
+	Record Columnar
+	No schema evolution - need to rewrite entire file
+	Requires more memory and computation than non-columnar file formats
+	Significant compression
+	Splittable
+
+	Efficient to get analysis, just get one column, which is transofrmed into just one row of data.
+
+ORC
+	Optimized RC
+	Better compression than RC
+	Enables faster queries
+	Still no schema evolution
+
+Parquet
+	Another columnar file format
+	Great compression and query performance
+	Slower to write than non-columnar file formats
+	Support limited schema evolution - can add new columns at end
+
+Partition
+	How your data can be split up?
+
+	Partition specified by user: employee by hired years.
+
+	Partition VS Buckets
+		
+		Partition 
+			useful with WHERE clause matches partition condition
+
+		Buckets
+			Hashed into the same bucket
+			Fast lookup
+			Get all specific info on specific ID
+
+
+=======================================
+
+beeline
+
+!connect jdbc:hive2://
+
+	cloudera
+	cloudera
+
+CREATE TABLE employee
+(
+	name string,
+	work_place ARRAY<string>,
+	sex_age STRUCT<sex:string,age:int>,
+	skills_score MAP<string,int>,
+	depart_title MAP<STRING,ARRAY<STRING>>
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+COLLECTION ITEMS TERMINATED BY ','
+MAP KEYS TERMINATED BY ':';
+
+cd to file
+chmod go+rw employee.txt
+
+LOAD DATA LOCAL INPATH '/home/cloudera/Documents/lab3/employee.txt' OVERWRITE INTO TABLE employee_lab;
+
+SELECT * FROM employee_lab;
+
+SELECT work_place FROM employee_lab;
+
+SELECT work_place[0] AS col_1, work_place[1] AS col_2, work_place[2] AS col_3 
+FROM
+employee_lab;
+
+SELECT sex_age FROM employee_lab;
+
+SELECT sex_age.sex, sex_age.age FROM employee_lab;
+
+SELECT skills_score FROM employee_lab;
+
+SELECT name, skills_score['DB'] AS DB,
+skills_score['Perl'] AS Perl, skills_score['Python'] AS Python,
+skills_score['Sales'] as Sales, skills_score['HR'] as HR FROM employee_lab;
+
+SELECT depart_title FROM employee_lab;
+
+SELECT name, depart_title['Product'] AS Product, depart_title['Test'] AS Test,
+depart_title['COE'] AS COE, depart_title['Sales'] AS Sales
+FROM employee_lab;
+
+SELECT name,
+depart_title['Product'][0] AS product_col0,
+depart_title['Test'][0] AS test_col0
+FROM employee_lab;
+
+
+
+8. Create a table that will store the following complex structure using HQL:
+
+
+CREATE TABLE customer_2
+(
+	customer_key int,
+	last_name string,
+	first_name string,
+	phone string,
+	account_balance float,
+	order ARRAY<STRUCT<
+		order_key:int,
+		order_status:string,
+		totalprice:float,
+		lineitem:ARRAY<STRUCT<
+			part_key:int,
+			suppler_key:int,
+			quantity:int,
+			discount:float,
+			tax:float,
+			shipdate:string>>>>
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+COLLECTION ITEMS TERMINATED BY ','
+MAP KEYS TERMINATED BY ':';
+
+9. Add a MAP type field called rating on the customer. A customer can be rated with credit
+score, upsale score, cross-sale score, etc.
+
+ALTER TABLE customer_2
+ADD COLUMNS (rating MAP<string,int>);
+
+10. Create a data file that you can populate the table with.
+
+
+1|Lin|Daniel|(604)501-4891|1000|
+	[{10,Pending,33,
+		[{100,200,5,0,10,Oct4}]}]|
+good:55
+
+LOAD DATA LOCAL INPATH '/home/cloudera/Documents/lab3/daniel.txt' OVERWRITE INTO TABLE customer_2;
+
+11. Insert into the table using the HiveQL command in the form of insert … select …
+(Hint: research on named_struct, array( .. ), and to_map in HiveQL)
+
+CREATE TABLE new_customers
+(
+	customer_key int,
+	last_name string,
+	first_name string,
+	phone string,
+	account_balance float
+);
+
+INSERT INTO new_customers VALUES
+(
+	25,
+	'Saggot',
+	'Bob',
+	'777 8849',
+	1900
+);
+
+INSERT INTO new_customers VALUES
+(
+	26,
+	'John',
+	'Elton',
+	'393 9889',
+	2000
+);
+
+INSERT INTO customer_2
+SELECT 
+	new_customers.customer_key,
+	new_customers.last_name,
+	new_customers.first_name,
+	new_customers.phone,
+	new_customers.account_balance,
+	ARRAY
+	(
+		NAMED_STRUCT
+		(
+			'order_key', 400,
+			'order_status', 'WAITING',
+			'totalprice', CAST(401 AS FLOAT),
+			'lineitem', ARRAY
+			(
+				NAMED_STRUCT
+				(
+					'part_key', 500,
+					'suppler_key', 501,
+					'quantity', 502,
+					'discount', CAST(1.5 AS FLOAT),
+					'tax', CAST(2.5 AS FLOAT),
+					'shipdate', 'JAN'
+				)
+			)
+
+		)		
+	),
+	MAP('KEY', 13)
+FROM new_customers
+WHERE
+	new_customers.first_name = 'Bob';
+
+
+INSERT INTO customer_2
+SELECT 
+	new_customers.customer_key,
+	new_customers.last_name,
+	new_customers.first_name,
+	new_customers.phone,
+	new_customers.account_balance,
+	ARRAY
+	(
+		NAMED_STRUCT
+		(
+			'order_key', 700,
+			'order_status', 'WAITING',
+			'totalprice', CAST(701 AS FLOAT),
+			'lineitem', ARRAY
+			(
+				NAMED_STRUCT
+				(
+					'part_key', 702,
+					'suppler_key', 703,
+					'quantity', 704,
+					'discount', CAST(1.7 AS FLOAT),
+					'tax', CAST(2.4 AS FLOAT),
+					'shipdate', 'OCT'
+				)
+			)
+
+		)		
+	),
+	MAP('KEY', 34)
+FROM new_customers
+WHERE
+	new_customers.first_name = 'Elton';
+
+12. Create 3 different queries to show how you can extract contents from Array, Map, Struct
+values from your table.
+
+SELECT
+    rating["KEY"]
+FROM customer_2
+
+SELECT
+    order[0] as col_1
+FROM customer_2
+
+SELECT
+    order[0].order_key
+FROM customer_2
+
+
+
+=======================================
+Week 5
+=======================================
+Projection
+	Getting the columns
+
+Selection
+	Getting the rows
+
+Pig
+	Case sensitive
+		Names of relations and fields
+	Comments
+		/* ... */
+		--
+
+Example Case
+	grunt> A = LOAD 'data' USING PigStorage() AS (f1:int, f2:int, f3:int);
+	grunt> B = GROUP A BY f1;
+	grunt> C = FOREACH B GENERATE COUNT ($0);
+	grunt> DUMP C;
+
+Relation
+	Relation is a bag, an outer bag
+Tuples
+	(3,8,9) (4,5,6)
+
+	DUMP A; (select * from A)
+
+	X = FOREACH A GENERATE t1.t1a, t2.$0
+		1st column for t1 and t2
+
+Execution Mode
+	Can be executed in local or mapreduce mode
+
+	PIG -X LOCAL
+		ls
+		fs -ls /
+	PIG -X HADOOP...
+
+DESCRIBE (oracle sql)
+	
+drivers = load 'path.../drivers.csv' using PigStorage(',')
+AS (DRIVERID:INT, TRUCKID:INT, EVENTTIME:CHARARRAY...);
+
+describe drivers;
+
+=======================================
+Pick one of the key concepts from chapter 20 and write about it.  Here are some topics you can consider: What is HBase? When is HBase most suitable for its use?  How to design database for HBase? Give an example outside from the book and show how HBase can be used.  What are some newer and / or comparable technologies as HBase?
+
+Apache Cassandra
+
+Cassandra is an open Source, distributed database manement system. It also supports clusters that span multiple datacenters. 
+
+Cassandra and HBase are NoSQL databases. Cassandra has implemented CQL (Cassandra Query Language) to allow for SQL-like queries. Like HBase, clients can connect to any node in the cluster and access data. Both are designed to be highly scalable (big data).
+
+Cassandra can automatically build links between Hive table schemas and Cassandra column-families, but HBase will require user intervention.
+
+Cassandra is a fully distributed system with no "special" nodes or processes, this simpler to setup and operate. Cassandra can hide the complexities of a distributed database management system better.
+
+Cassandra is more availiable to non-Java clients.
+
+
+=======================================
+//Load data
+
+	truck_events = LOAD '/user/cloudera/truck_event_text_partition.csv' USING PigStorage(',');
+
+	dump truck_events;
+
+//start pig, navigate to file
+
+	pig -x local
+
+	truck_events = LOAD 'truck_event_text_partition.csv' USING PigStorage(',');
+
+	dump truck_events;
+
+	selected_columns = FOREACH truck_events GENERATE $0, $3;
+
+	dump selected_columns;
+
+//Loading data with schema
+
+truck_events = LOAD '/user/cloudera/drivers/truck_event_text_partition.csv'
+USING PigStorage(',') AS (driverId:int, truckId:int, eventTime:chararray,
+eventType:chararray, longitude:double, latitude:double, eventKey:chararray,
+correlationId:long, driverName:chararray,
+routeId:long,routeName:chararray,eventDate:chararray);
+
+DESCRIBE truck_events;
+
+//Filter data
+
+	truck_events = LOAD 'truck_event_text_partition.csv'
+	USING PigStorage(',') AS (driverId:int, truckId:int, eventTime:chararray, eventType:chararray, longitude:double, latitude:double, eventKey:chararray, correlationId:long, driverName:chararray, routeId:long,routeName:chararray,eventDate:chararray);
+
+	//filtered_truck_events = FILTER truck_events BY eventTime != 'eventTime';
+
+	filtered_truck_events = FILTER truck_events BY $0 == 10;
+
+	DUMP filtered_truck_events;
+
+//Group by
+
+	truck_events = LOAD 'truck_event_text_partition.csv' USING PigStorage(',') AS (driverId:int, truckId:int, eventTime:chararray, eventType:chararray, longitude:double, latitude:double, eventKey:chararray, correlationId:long, driverName:chararray, routeId:long,routeName:chararray,eventDate:chararray);
+
+	filtered_events = FILTER truck_events BY NOT (eventType MATCHES 'Normal');
+
+	grouped_events = GROUP filtered_events BY eventType;
+
+	--DESCRIBE grouped_events;
+
+	grouped_events_count = FOREACH grouped_events GENERATE group, COUNT(filtered_events.driverId);
+
+	--DUMP grouped_events_count;
+
+
+	grouped_all_events = GROUP truck_events all;
+
+	grouped_all_events_count = FOREACH grouped_all_events GENERATE drivers.COUNT(driverId);
+
+	DUMP grouped_all_events_count;
+
+=======================================
+
+//Cogroup
+
+drivers = LOAD 'drivers.csv' USING PigStorage(',') AS (driverId:int, name:chararray, ssn:chararray, location:chararray,
+certified:chararray, wage_plan:chararray);
+
+timesheets = LOAD 'timesheet.csv' USING PigStorage(',') AS (driverId:int, week:int, hours:int, miles:int);
+
+cogroup_data = cogroup drivers by driverId, timesheets by driverId;
+
+dump cogroup_data;
+
+output1 = FILTER cog_group_data BY group == 10;
+dump output1;
+
+
+=======================================
+Lab 4
+
+--Use HiveQL to find the highest temperature of each of the years between 1990 and 2010
+
+sudo bash ./ncdc.sh
+sudo rm -r ncdc_dump
+
+CREATE TABLE ncdc_1
+(
+    line string
+);
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+COLLECTION ITEMS TERMINATED BY ','
+MAP KEYS TERMINATED BY ':';
+
+LOAD DATA INPATH '/user/cloudera/ncdc' OVERWRITE INTO TABLE ncdc_1;
+
+0029029070999991901010106004+64333+023450FM-12+000599999V0202701N015919999999N0000001N9-00781+99999102001ADDGF108991999999999999999999
+
+--Highest temperature of each year
+--HiveQL
+CREATE TABLE ncdc_clean (year INT, temp INT);
+
+INSERT INTO TABLE ncdc_clean
+select 
+	CAST(substr(line, 16, 4) as INT), 
+	CAST(substr(line, 88, 4) as INT) 
+from ncdc_1;
+
+select 
+    year,
+    max(temp)
+from ncdc_clean
+where temp < 999
+group by year
+
+--PIG
+A = LOAD '/user/cloudera/ncdc' USING PigStorage() AS (line:chararray);
+B = GROUP A BY year;
+C = FOREACH B GENERATE MAX ($0);
+DUMP C;
+
+
+
+select 
+    year,
+    max(temp) as temp
+from ncdc_clean
+where temp < 999
+group by year
+sort by temp desc
+limit 1
+
+
+
+
+CREATE TABLE ncdc_pig2 (data string);
+
+INSERT INTO TABLE ncdc_pig2
+select 
+	concat(year, ',', temp)
+from ncdc_clean;
+
+A = LOAD '/user/hive/warehouse/ncdc_pig2' USING PigStorage(',') AS (year:int, temp:int);
+X = FILTER A BY (temp < 900);
+B = GROUP X BY year;
+C = FOREACH B GENERATE group, MAX(X.temp) AS temp;
+D = ORDER C BY temp DESC;
+E = LIMIT D 1;
+dump E;
+
+=======================================
+
+Research on the R language and its use in big data analytics.  What are the advantages and disadvantages of using R in big data analytics?  How does it compare with using R on smaller data sets?  What is involved in integrating R with Hadoop? What are other tools / platforms / frameworks to conduct big data analytics?
+
+R has little trouble processing data up to one million records with standard R. The limits of standard R begins to show when the record grows to one billion. Data sets beyond one billion need to be analyzed by map reduce algorithm, which can be designed in R and processed with connectors to Hadoop.
+
+There are 5 strategies to tackle big data with R:
+
+1. Sampling
+
+	Model performance should still be acceptable, but sample size must be large enough, must not be a small porortion of the full dataset, and the sampling must be unbiased.
+
+2. Bigger Hardware
+
+	R stores data in-memory, one way is to inncrease the amount of RM on a machine.
+
+3. Store Object on Disk and Analyze Chunkwize
+
+	Chunking leads naturally to parallelization, if the algorithms allow parallel analysis of the chunks in principle.
+
+4. Integrate with Higher Performing Languages like C++ or Java
+
+	Move parts of the program from R ro other languages to avoid bottlenecks and performance expensive procedures.
+
+5. Alternative Interpreters
+
+	Some options are pqR, Renjin, TERR, Oracle R.
+
+
+=======================================
+Week 6
+=======================================
+
+MapReduce
+	Mapper
+	Combiner
+	Reducer
+
+Hive
+
+Pig
+
+Impala
+
+HDFS != Database
+	Hiveserver2
+		Added multiple users, transactions, security
+		Not OLTP
+
+HBase
+	Scalable, consistence, high availbility, sharding data store
+	Non-relational distributed database
+	Run on top of HDFS
+	Provides compression
+	In-memory operations available using MemStore (edits) and Block Cache (reads)
+
+HBase Table
+	Define column families
+		Within a family, you can define as much columns as you want
+
+ACID
+	Atomicity
+		Whole operation done entirely or not
+	Consistency
+		No corruption in entity, and all relationships have FK and PK intact
+	Isolation
+		Operation isolated from other users
+		Operations are not overwritten by other users
+	Durability
+		Successful operations will not be lost
+	Visibility
+		If you updated, you will see it
+
+ACID in HBase (Almost)
+	Atomicity
+		Gaurenteed multiple columns, but not multiple rows
+		Requires a check for multiple rows
+	
+	Consistency and Isolation
+		Atomicity gaurenteed operation is done, but the row may change after.
+
+	Durability
+		All visible data is durable data
+
+Scaling Out
+	Add more nodes
+	Sharding
+		putting rows in different databases
+	RDBMS
+		Is not designed for sharding
+
+Sharding is not limited to HDFS, traditional database can also benefit from sharding
+
+HBase
+	No join
+	column based
+
+	Key-Id	
+		Can have meaning
+		Can say something about the column
+			Consider delete and insert if information changed for keys dependent on the column
+
+
+
+=======================================
+Research on the topic of Bayesian Methods.  What is it?  What is classical method and how does it differ from Bayesian method? How can Bayesian Methods be used in R?
+
+All classical statistical procedures are constructed using statistics which depend only on observable random vectors. 
+
+Generalized estimators, tests, and confidence intervals in Bayesian approach take advantage of the observable random vectors and the observed values both.
+
+Classical approaches generally posit that the world is one way, such that a parameter has one particular true value, and try to conduct experiments whose resulting conclusion, no matter the true value of the parameter, will be correct with at least some minimum probability.
+
+As a result, to express uncertainty after an experiment, the frequentist approach uses a "confidence interval", a range of values designed to include the true value of the parameter with some minimum probability, say 95%. A frequentist will design the experiment and 95% confidence interval procedure so that out of every 100 experiments run start to finish, at least 95 of the resulting confidence intervals will be expected to include the true value of the parameter. The other 5 might be slightly wrong, or they might be complete nonsense, formally speaking that's ok as far as the approach is concerned, as long as 95 out of 100 inferences are correct.
+
+Bayesian approaches formulate the problem differently. Instead of saying the parameter simply has one unknown true value, a Bayesian method says the parameter's value is fixed but has been chosen from some probability distribution, known as the prior probability distribution. This "prior" might be known (imagine trying to estimate the size of a truck, if we know the overall distribution of truck sizes from the DMV) or it might be an assumption drawn out of thin air. The Bayesian inference is simpler, we collect some data, and then calculate the probability of different values of the parameter GIVEN the data. This new probability distribution is called the "a posteriori probability" or simply the "posterior." Bayesian approaches can summarize their uncertainty by giving a range of values on the posterior probability distribution that includes 95% of the probability.
+
+
+=======================================
+
+hbase shell
+
+create 'Customer', {NAME => 'Address'}, {NAME => 'Order'}
+
+put 'Customer', 'smithj', 'Address:street', 'Central Dr'
+put 'Customer', 'smithj', 'Order:Date', '2/2/15'
+put 'Customer' 'spata', 'Address:city', 'Columbus'
+put 'Customer', 'spata', 'Order:Date', '1/31/14'
+
+get 'Customer', 'smithj'
+	--everything is returned
+	--get row key
+
+scan 'Customer'
+	--scan all the rows
+
+describe 'Customer'
+	--what columns are avail in this table
+
+disable 'Customer'
+	--disable table before dropping
+
+drop 'Customer'
+
+=======================================
+OTHER COMMANDS
+
+get 'Customer', 'smithj', {COLUMN => 'Address:street'}
+	--slice the column
+
+scan 'Customer', { COLUMN => 'Address:city', FILTER =>
+"ValueFilter(=, 'substring:eatt')"}
+	--value filter comparison
+
+scan 'Customer' {COLUMN =>['Address:city', 'Order:Date'],
+LIMIT=>10, FILTER=>"SingleColumnValueFilter('Address', 'city', =,
+'binary:Seattle')"}
+	--anotehr way of doing value filter
+
+Regex, AND, OR, NOT, etc
+
+=======================================
+
+Hot-Spot
+	1 server getting overloaded, all writing (inserting) goes to one server or a few servers
+
+	Inefficient region splitting
+
+Tall Narrow Table
+	Advantages
+		Scanning
+		New entries get unique row
+
+Flat Wide Table
+	Advantages 
+		Getting Column Values
+		Data stored across many columns
+		Atomicity
+			Update many columns, single row
+
+Grouping Data
+	Data accessed together should be in one family
+
+	Data that compress well should be in the same family
+
+Compression
+	LZO and SNAPPY (Apache Hbase)
+	LZ4, LZF, ZLIB, (MapR)
+
+Time To Live (TTL)
+	Keep data for some time and then delete when TTL is passed
+
+Versioning
+	Keeping fewer versions means less data in scans. Default is 1
+
+	Combine MIN_VERSIONS with TTL to keep data older than TTL
+
+In-Memory Setting
+
+	A setting to suggest that server keep data in cache. Not guaranteed.
+
+	Use for smaller, high-access column families
+
+Denormalization
+	Replaces JOINS
+	Populate HBase by JOIN by creating one big table
+
+Duplication
+	Designed for reads
+	
+	customer purchases in city
+		combine cutomer_id and city
+
+Performance
+	Normalized
+		fast update
+
+	Denormalized
+		fast read
+
+Requirements - Drives Key Design in HBase
+	Display posts by category and date
+	Display comments by post
+	Display post by userid
+
+HBase Tables and Keys
+	Post Table
+		Data Column family
+		Comment column family
+
+	User table
+		Data Column family
+			fname, lname, email
+
+	User Post Table (user_id + post_id)
+		Data Column family
+
+1:M
+	Unnormalize 1:M relationship into one table
+
+M:N
+	Create two tables each reflect 1:M relationship from each entity
+
+Unary (Who is following whom?)
+	Use composite keys as new key
+	Tall narrow table
+		carrol following user2, timestamp
+		carrol following user3, timestamp
+
+	How many people is Carrol following?
+
+=":custid, personalinfo:last_name, personalinfo:firstname, product1:product_id, product1:product_name"
+
+=======================================
+HBase Lab
+
+Scoop MySQL data into Hive
+
+1. Make sure the MySQL tables from Cloudera Getting Started tutorial are loaded in your
+Hive tables.
+
+Hive Tables
+	customer
+	orders
+	products
+
+
+2. Design HBase tables so you can answer the following queries based on key – value get
+or scan operations:
+	
+	a. Given a department id, show all items that have been ordered
+
+CREATE TABLE department_items_ordered_2(key string, department_id int, name string)
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key, department:id, product:name");
+
+INSERT OVERWRITE TABLE department_items_ordered_2
+SELECT
+	reflect("java.util.UUID", "randomUUID"),
+	a.id,
+	a.name
+FROM
+(
+	SELECT DISTINCT
+		departments.department_id ID,
+		products.product_name NAME
+	FROM departments
+		INNER JOIN categories ON categories.category_department_id = departments.department_id
+		INNER JOIN products ON products.product_category_id = categories.category_id
+		INNER JOIN order_items ON order_items.order_item_product_id = products.product_id
+) a
+
+hbase shell
+
+--LIMIT RESULTS
+scan 'department_items_ordered_3', {COLUMN=>['department:id', 'product:name'], LIMIT=>100, FILTER=>"SingleColumnValueFilter('department', 'id', =,'binary:4')"}
+
+--RETURN ALL ROWS FOR DEPARTMENT #4 
+scan 'department_items_ordered_3', {COLUMN=>['department:id', 'product:name'], FILTER=>"SingleColumnValueFilter('order', 'product_id', =,'binary:4')"}
+
+
+	b. Given a customer id, show the quantity of a specific item ordered on a specific date
+
+CREATE TABLE lab2b_01
+(
+	key string,
+	customer_id int,
+	quantity int,
+	product_id int,
+	date string
+)
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key, customer:cutsomer_id, order:quantity, order:product_id, order:date");
+
+INSERT OVERWRITE TABLE lab2b_01
+SELECT
+	reflect("java.util.UUID", "randomUUID"),
+	a.customer_id,
+	a.quantity,
+	a.product_id,
+	a.date
+FROM
+(
+	SELECT DISTINCT
+		customers.customer_id customer_id,
+		order_items.order_item_quantity quantity,
+		order_items.order_item_product_id product_id,
+		cast(from_unixtime(CAST(orders.order_date/1000 as BIGINT), 'yyyy-MM-dd') as string) date
+	FROM customers
+		INNER JOIN orders ON orders.order_customer_id = customers.customer_id
+		INNER JOIN order_items ON order_items.order_item_order_id = orders.order_id
+) a
+
+hbase shell
+
+
+
+--FILTER BY CUSTOMER_ID: 1, DATE: 2013-12-13, PRODUCT_ID: 191
+--Typo for customer_id... cutsomer_id
+scan 'lab2b_01', {COLUMN=>['customer:cutsomer_id', 'order:quantity', 'order:product_id', 'order:date'], FILTER=>"(SingleColumnValueFilter('order', 'product_id', =,'binary:191')) AND (SingleColumnValueFilter('customer', 'cutsomer_id', =,'binary:1')) AND (SingleColumnValueFilter('order', 'date', =,'binary:2013-12-13'))"}
+
+
+	c. Given a product id, show all the customers that have ordered this item at a specific price
+
+CREATE TABLE lab2c_01
+(
+	key string,
+	product_id int,
+	price int,
+	customer string
+)
+STORED BY 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+WITH SERDEPROPERTIES ("hbase.columns.mapping" = ":key, product:product_id, product:price, customer:customer");
+
+INSERT OVERWRITE TABLE lab2c_01
+SELECT
+	reflect("java.util.UUID", "randomUUID"),
+	a.product_id,
+	a.price,
+	a.customer
+FROM
+	(
+	SELECT DISTINCT
+		products.product_id product_id,
+		order_items.order_item_product_price price,
+		CONCAT(customers.customer_fname, ' ',customers.customer_lname) customer
+	FROM products
+		INNER JOIN order_items ON order_items.order_item_product_id = products.product_id
+		INNER JOIN orders ON orders.order_id = order_items.order_item_order_id
+		INNER JOIN customers ON customers.customer_id = orders.order_customer_id
+) a
+
+hbase shell
+
+Given a product id, show all the customers that have ordered this item at a specific price
+
+product:product_id, product:price, customer:customer
+
+--FILTER BY PRODUCT_ID: 502, PRICE: 50
+scan 'lab2c_01', {COLUMN=>['product:product_id', 'product:price', 'customer:customer'], FILTER=>"(SingleColumnValueFilter('product', 'product_id', =,'binary:502')) AND (SingleColumnValueFilter('customer', 'cutsomer_id', =,'binary:1')) AND (SingleColumnValueFilter('order', 'date', =,'binary:2013-12-13'))"}
+=======================================
+
+Pick a topic from this article and write about it.  Here are some topics you can consider: What are regression trees? What are classification trees? Give an example, not from this article, on how to create a decision tree from a small data set. What are ways of splitting a tree? What is over-fitting? What is tree-pruning? What is bagging?
+
+Tree-based Models VS Linear Models
+
+The benefits of decision tree models are that they can be much easily communicated to people compared to linear models. More easily explained, and simpler to interpret.
+
+There are cases where linear models will outperform trees, such as when relationship between dependent and indepedent variables are well approximated by linear models. However, decision tree models outperform linear models when relationships between variables are complex, and non-linear.
+
+More Advantages:
+
+Less data preparation, no need for nromalization.
+
+Handles numerical and categorical data.
+
+Easily explained by boolean logic. (White Box Model)
+
+Possible to validate model using other statistical tests, determining reliability.
+
+Efficient for large datasets.
+
+=======================================
+
+R & Hadoop 1
+
+	R is memory based, R will croak if there are too much
+	Need storage for R
+
+	Open Source Program
+	One of the most powerful, leading language
+	Extendable
+	Linux, Windows, Mac
+	Install R and R studio
+
+Getting Help in R
+
+	Use ? with any function
+		ie. ?library
+			?matrix
+			?install.packages
+
+	Use help.search("...") or ??
+		ie. help.search("histogram")
+
+c() 	- concat
+
+Vector
+	Global Declaration
+		myFamilyAges <- c(18, 32, 58) 
+	Local
+		myFamilyAges = c(18, 32, 58) 
+
+Basic Functions
+	sum()
+	mean()
+	range()
+
+Structure	
+	str(myFamilyAges)
+
+Frequency
+	table(myFamilyAges)
+
+Factors
+	Categorical values
+	x <- factor(c('a', 'b', 'c')) 
+	str(x)
+
+	Factor w/ 3 levels "a","b","c": 1 2 3 1
+
+Dataframe
+
+	myFamilyNames <- c("Dad", "Mom", "Sis", "Bro", "Dog")
+	myFamilyGenders <- c("Male", "Female", "Female", "Male", "Female")
+	myFamilyWeights <- c(188, 136, 83, 61, 44)
+
+	myFamily <- data.frame(myFamilyNames, +
+	myFamilyAges, myFamilyGenders, +
+	myFamilyWeights)
+
+	*vector MUST be same length, resulting table should be rectangular
+
+Get family names
+
+	Get myFamilyNames column: 
+
+		myFamily$myFamilyNames
+
+		Return vector
+
+	Get myFamilyNames column: 
+
+		myFamily[1]
+
+		*NO 0th column
+
+	Get first two rows, second and third column: 
+
+		myFamily[1:2, 2:3]
+
+	Get all rows, second and third column: 
+
+		myFamily[, 2:3]
+
+	Get all columns, second and third row: 
+
+		myFamily[2:3, ]
+
+Functions
+
+	summary(myFamily)
+
+	Quartile: 25% of cases (with the smallest values, with low medium values, with high medium values, with the highest values)
+
+	Add column
+
+		c(myFamily$myFamilyAges, 11)
+
+	rm(list=ls()) # remove all objects
+
+	View(mtcars)
+
+		Neat view in R Studio
+
+Reading CSV
+
+	USStatePops <- read.csv(”USCensus.csv", sep=",", header = FALSE, skip = 1)
+
+	USStatePops <- read.table(”USCensus.csv", sep=",", header = FALSE, skip = 1)
+
+	First column (factor – vector with categorical values): USStatePops$V1
+
+	USStatePops[1]
+
+	USStatePops[,1] #?? What’s the Difference ??
+
+	USStatePops <- read.csv(”USCensus.csv", sep=",", header = FALSE, skip = 1, stringsAsFactors=FALSE)
+
+	USStatePops <- read.table(”USCensus.csv", sep=",", header = FALSE, skip = 1, stringsAsFactors=FALSE)
+
+		*No longer vectors
+
+Install libraries (for Centos)
+
+	sudo yum install mariadb-devel mysql-devel
+
+In R:
+	install.packages("RMySQL")
+	library(RMySQL)
+
+	con <- dbConnect(MySQL(), user="retail_dba", sword="cloudera", dbname="retail_db", host="localhost")
+
+	dbListTables(con)
+	rs = dbSendQuery(con, "select * from orders")
+	data = fetch(rs, n=-1)
+	data
+
+Functions
+
+	data = fetch(...)
+	head(data)
+
+
+=======================================
+
+export HADOOP_CMD=/usr/bin/hadoop
+export HADOOP_STREAMING=/usr/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.6.0-mr1-cdh5.8.0.jar
+
+install.packages("/home/cloudera/Downloads/rmr2_3.3.1.tar.gz", type="source", repos=NULL)
+install.packages("/home/cloudera/Downloads/rhdfs_1.0.8.tar.gz", type="source", repos=NULL)
+
+wget https://download2.rstudio.org/rstudio-server-rhel-0.99.467-x86_64.rpm
+
+ifconfig
+
+RStudio Server is up
+
+Sys.setenv(HADOOP_CMD="/usr/bin/hadoop")
+Sys.setenv(HADOOP_STREAMING="/usr/lib/hadoop-0.20-mapreduce/contrib/streaming/hadoop-streaming-2.6.0-mr1-cdh5.8.0.jar")
+Sys.setenv(JAVA_HOME="/usr/java/jdk1.7.0_67-cloudera")
+library(rmr2)
+library(rhdfs)
+hdfs.init()
+
+
+
+mtcars2 <- to.dfs(mtcars)
+> count <-  mapreduce(input = mtcars2,
+              map = function(k, v){keyval(v[2], mtcars)},
+              reduce = function(k, v){keyval(k,
+                                       data.frame(mpg = mean(v$mpg),
+                                                  disp = mean(v$disp),
+                                                  drat = mean(v$drat),
+                                                  wt = mean(v$wt),
+                                                  qsec = mean(v$qsec))
+            )})
+> z <- from.dfs(count)
+> as.data.frame(z)
+
+mobydick <- to.dfs(readLines("/home/cloudera/Downloads/mobydick.txt"))
+
+countmapper <- function(key,line) {
+    word <- unlist(strsplit(line, split = " "))
+    keyval(word, 1)
+}
+
+z <- mapreduce(
+    input = mobydick,
+    map = countmapper,
+    reduce = function(k,v){keyval(k,length(v))}
+    )
+
+z2<-from.dfs(z)
+head(as.data.frame(z2))
+
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig/
+
+port='9095'
+=======================================
+
+R and MapReduce
+
+Move data to hdfs using to.dfs
+	– small.ints = to.dfs(1:1000)
+
+Create a mapreduce function that specifies the input data and reduce function
+	– output <- mapreduce(
+		input = small.ints,
+		map = function(k, v) cbind(v, v^2))
+
+		cbind
+			create 2 columns, returns both, key->value pairs
+
+Output is a big data object. Function from.dfs returns key value pair collection
+	– z <- from.dfs(output)
+	– z
+
+	from.dfs
+		coverts bigdata object to R, readable
+
+Another Example
+
+mtcars2<-to.dfs(mtcars)
+count<-mapreduce(input = mtcars2,
+	map = function(k, v){keyval(v[2], mtcars)},
+	reduce = function(k, v){
+		keyval(k, data.frame(
+		mpg = mean(v$ $mpg),
+		disp = mean(v$ $disp),
+		drat = mean(v$ $drat),
+		wt = mean(v$ $wt),
+		qsec = mean(v$ $qsec)) )})
+
+
+z <- from.dfs(count)
+as.data.frame(z)
+
+R and Wordcount
+
+Create a file called mobydick.txt in Downloads
+
+mobydick <- to.dfs( readLines("/home/cloudera/Downloads/mobydick.txt"))
+
+countmapper <-  function(key,line) {
+	word <- unlist( strsplit(line, split= " "))
+	keyval(word, 1)
+}
+
+z<- mapreduce(
+	input = mobydick,
+	map = countmapper,
+	reduce = function(k,v){keyval(k, length(v))}
+)
+z2<-from.dfs(z)
+head(as.data.frame(z2))
+
+countmapper <-  function(key,line) {
+	word <- unlist( strsplit(line, split= " "))
+	keyval(word, "a")
+}
+z<- mapreduce(
+	input = mobydick,
+	map = countmapper,
+	reduce = function(k,v){keyval(k, length(v))}
+)
+	*if val is 1, then we can sum to get length
+
+z2<-from.dfs(z)
+zout<-as.data.frame(z2)
+head(zout)
+=======================================
+
+Naive Bayes
+
+	Supervised Learning
+		Given the outcome
+
+	Unsupervised learning
+		Classifications unknown
+		Group given data
+
+K-Nearest Neighbors (KNN)
+	classification (or regression) algorithm that in order to determine the classification of a point, combines the classification of the K nearest points. It is supervised because you are trying to classify a point based on the known classification of other points.
+
+K-Means
+	clustering algorithm that tries to partition a set of points into K sets (clusters) such that the points in each cluster tend to be near each other. It is unsupervised because the points have no external classification.
+
+Classifier
+	Classification rule: KNN, Decision Tree
+	Neural Nets / Perceptron
+		Black box
+	Logistic Regression
+
+All are discriminative classifier
+	2 is a probablistic classfier
+	1, 3 can be discriminative probabilistic classifier
+
+Discriminative
+	discovers the “boundaries” between classes, e.g. if weight < 50lbs, age < 20, then chances of cancer is high
+
+Probabilistic
+	discovers the probability distribution over a set of outcomes, rather than only outputting the most likely outcome, e.g. Logistic Regression
+
+Discriminative Probabilistic
+	discovers the probability of an event based on specific variables p(y | x) (probability of y given x)
+
+	Suppose you have the following data in the form of (x, y) where x is independent data, and y is dependent data (1,0), (1,0), (2,0), (2,1), discriminative distribution is a conditional distribution of the probability of y given x p(y | x)
+
+Generative Probabilistic
+	discovers the probability of an event with all variables p(x ∩ y) (probability of x and y)
+
+	Using the same data as in the previous slide in the form of (x, y) where x is independent data, and y is dependent data (1,0), (1,0), (2,0), (2,1), generative distribution is a joint probability distribution of x and y, p(x,y)
+
+BAYES THEOREM
+	P(A|B) – probability of event A given that event B occurred
+
+Based on Bayes Theorem
+	Generative Probabilistic classifier – (focus on the joint probability of events and derive conditional probability)
+	
+	Used for: text classification (spam vs ham emails, author identification, topic categorization), intrusion detection or anomaly detection in computer networks, diagnosing medical conditions given a set of observed symptoms
+
+	Basic ideas: estimated likelihood of an event based on the evidence at hand
+
+		Evidence – attributes / predictor variables / independent variables
+
+		Event – target / predicted variable / dependent variables
+
+	Naïve – assume all of the features or events are independent of each other
+
+		Be careful that “independent evidences” are not the same as “independent variables”!!
+
+		Use the term “evidence” when discussing naïve bayes.
+
+		Example: What is the likelihood of a spam message if it contains the word “Viagra”?
+
+
+
+=======================================
+
+sms_spam.csv
+Copy to Cloudera
+
+system("ls Documents")
+
+nb.r file
+
+# read the sms data into the sms data frame
+sms_raw <- read.csv("Documents/sms_spam.csv", stringsAsFactors = FALSE)
+
+# examine the structure of the sms data
+str(sms_raw)
+
+# convert spam/ham to factor.
+sms_raw$type <- factor(sms_raw$type)
+
+# examine the type variable more carefully
+str(sms_raw$type)
+table(sms_raw$type)
+
+# build a corpus using the text mining (tm) package
+library(tm)
+sms_corpus <- Corpus(VectorSource(sms_raw$text))
+
+# examine the sms corpus
+print(sms_corpus)
+inspect(sms_corpus[1:3])
+
+# clean up the corpus using tm_map()
+corpus_clean <- tm_map(sms_corpus, content_transformer(tolower))
+corpus_clean <- tm_map(corpus_clean, removeNumbers)
+corpus_clean <- tm_map(corpus_clean, removeWords, stopwords())
+corpus_clean <- tm_map(corpus_clean, removePunctuation)
+corpus_clean <- tm_map(corpus_clean, stripWhitespace)
+
+# examine the clean corpus
+inspect(sms_corpus[1:3])
+inspect(corpus_clean[1:3])
+
+# create a document-term sparse matrix
+sms_dtm <- DocumentTermMatrix(corpus_clean)
+sms_dtm
+
+# creating training and test datasets
+sms_raw_train <- sms_raw[1:4169, ]
+sms_raw_test  <- sms_raw[4170:5559, ]
+
+sms_dtm_train <- sms_dtm[1:4169, ]
+sms_dtm_test  <- sms_dtm[4170:5559, ]
+
+sms_corpus_train <- corpus_clean[1:4169]
+sms_corpus_test  <- corpus_clean[4170:5559]
+
+# check that the proportion of spam is similar
+prop.table(table(sms_raw_train$type))
+prop.table(table(sms_raw_test$type))
+
+# word cloud visualization
+library(wordcloud)
+
+wordcloud(sms_corpus_train, min.freq = 30, random.order = FALSE)
+
+# subset the training data into spam and ham groups
+spam <- subset(sms_raw_train, type == "spam")
+ham  <- subset(sms_raw_train, type == "ham")
+
+wordcloud(spam$text, max.words = 40, scale = c(3, 0.5))
+wordcloud(ham$text, max.words = 40, scale = c(3, 0.5))
+
+# indicator features for frequent words
+findFreqTerms(sms_dtm_train, 5)
+#sms_dict <- Dictionary(findFreqTerms(sms_dtm_train, 5))
+sms_dict <- as.vector(findFreqTerms(sms_dtm_train, 5))
+sms_train <- DocumentTermMatrix(sms_corpus_train, list(dictionary = sms_dict))
+sms_test  <- DocumentTermMatrix(sms_corpus_test, list(dictionary = sms_dict))
+
+# convert counts to a factor
+convert_counts <- function(x) {
+  x <- ifelse(x > 0, 1, 0)
+  x <- factor(x, levels = c(0, 1), labels = c("No", "Yes"))
+}
+
+# apply() convert_counts() to columns of train/test data
+sms_train <- apply(sms_train, MARGIN = 2, convert_counts)
+sms_test  <- apply(sms_test, MARGIN = 2, convert_counts)
+
+## Step 3: Training a model on the data ----
+library(e1071)
+sms_classifier <- naiveBayes(sms_train, sms_raw_train$type)
+sms_classifier
+
+## Step 4: Evaluating model performance ----
+sms_test_pred <- predict(sms_classifier, sms_test)
+
+library(gmodels)
+CrossTable(sms_test_pred, sms_raw_test$type,
+           prop.chisq = FALSE, prop.t = FALSE, prop.r = FALSE,
+           dnn = c('predicted', 'actual'))
+
+## Step 5: Improving model performance ----
+sms_classifier2 <- naiveBayes(sms_train, sms_raw_train$type, laplace = 2)
+sms_test_pred2 <- predict(sms_classifier2, sms_test)
+CrossTable(sms_test_pred2, sms_raw_test$type,
+           prop.chisq = FALSE, prop.t = FALSE, prop.r = FALSE,
+           dnn = c('predicted', 'actual'))
+
+
+=======================================
+Lab 6
+
+1. Create two simple sets such as set A = {apple, orange, banana} and set B = {pineapple, orange} in R
+
+set1 <- data.frame(fruit=c("apple", "orange", "banana"), set=c("set1", "set1", "set1"), stringsAsFactors=FALSE)
+set2 <- data.frame(fruit=c("pineapple", "orange"), set=c("set2", "set2"), stringsAsFactors=FALSE)
+sets <- rbind(set1, set2)
+data <- to.dfs(sets)
+
+output <- mapreduce(
+	input = data,
+	map = function(k,v) {
+		keyval(v[1], v[2])
+	},	
+	reduce = function(k,v) {
+		keyval(k, paste(v, collapse=" "))
+	})
+
+result <- from.dfs(output)
+
+result <- as.data.frame(result)
+
+return_set1 <- subset(result, val=='set1', fruit)
+
+return_set1
+
+as.data.frame(return_set1)
+
+B.1.
+Create a SQL statement to determine customers that have purchased Pelican Sunstream 100 Kayak but not O’Brien Men’s Neoprene Life Vest
+
+su
+
+cloudera
+
+sudo yum install mariadb-devel mysql-devel
+
+install.packages("RMySQL")
+
+library("RMySQL")
+
+con <- dbConnect(MySQL(), user="retail_dba", password="cloudera", dbname="retail_db", host="localhost")
+
+dbListTables(con)
+
+rs = dbSendQuery(con, "
+select distinct
+	customer_id,
+	product_name
+from customers
+	inner join orders on order_customer_id = customer_id
+	inner join order_items on order_item_order_id = order_id
+	inner join products on product_id = order_item_product_id
+where 
+	product_name like 'Pelican Sunstream 100 Kayak'")
+
+data = fetch(rs, n=-1)
+
+data
+
+rs = dbSendQuery(con, "
+select distinct
+	customer_id,
+	product_name
+from customers
+	inner join orders on order_customer_id = customer_id
+	inner join order_items on order_item_order_id = order_id
+	inner join products on product_id = order_item_product_id
+where 
+	product_name like 'O''Brien Men''s Neoprene Life Vest'")
+
+data = fetch(rs, n=-1)
+
+data
+
+B.4.
+Create a MapReduce function in R to calculate the difference between the two sets
+
+rs = dbSendQuery(con, "
+select distinct
+	customer_id,
+	product_name
+from customers
+	inner join orders on order_customer_id = customer_id
+	inner join order_items on order_item_order_id = order_id
+	inner join products on product_id = order_item_product_id
+where 
+	product_name like 'Pelican Sunstream 100 Kayak'")
+
+set1 = fetch(rs, n=-1)
+
+rs = dbSendQuery(con, "
+select distinct
+	customer_id,
+	product_name
+from customers
+	inner join orders on order_customer_id = customer_id
+	inner join order_items on order_item_order_id = order_id
+	inner join products on product_id = order_item_product_id
+where 
+	product_name like 'O''Brien Men''s Neoprene Life Vest'")
+
+set2 = fetch(rs, n=-1)
+
+sets <- rbind(set1, set2)
+
+data <- to.dfs(sets)
+
+output <- mapreduce(
+	input = data,
+	map = function(k,v) {
+		keyval(v[1], v[2])
+	},	
+	reduce = function(k,v) {
+		keyval(k, paste(v, collapse=" "))
+	})
+
+result <- from.dfs(output)
+
+result <- as.data.frame(result)
+
+return_set1 <- subset(result, !(val=='O\'Brien Men\'s Neoprene Life Vest'), customer_id)
+
+return_set1
+
+=======================================
+
+Artifical Neuron
+	Train first
+	Each iteration, weight is changed
+
+Activation Function
+	How to broadcast 
+	Given all inputs, what function woul d be used.
+	Is the activiation enough to file the neuron?
+	Function types
+		Some are more easily activated
+
+Network Topology
+	Number of layers
+	Whether information can travel backwards
+	Numeber of nodes within each layer
+	Feedforward and Recurrent Network
+		Delay
+			Other signal might come and activate this node
+		Fast-forwarding
+
+Training Algorithm
+	Adjust weights
+	Backpropagation
+		Compare what network is telling you to actual output, and feed the result back into the input
+
+Gradient Descent
+	Find lowest point
+
+=======================================
+
+install.packages("neuralnet")
+
+library("neuralnet")	
+
+m <- neuralnet(target - perdictors, data = mydata, hidden=1)
+
+p <- compute(m, test)
+
+install.packages("kernlab")
+
+library("kernlab")
+
+m <- ksvm(target - perdictors, data = traindata, kernal = model, c = 1)
+
+model = "rbfdot" (radial basis), "polydot" (polynomial), "tanhdot"...
+
+
+##### Neural Networks and Support Vector Machines -------------------
+
+##### Part 1: Neural Networks -------------------
+## Example: Modeling the Strength of Concrete  ----
+
+## Step 2: Exploring and preparing the data ----
+# read in data and examine structure
+concrete <- read.csv("Downloads/concrete.csv")
+str(concrete)
+
+# custom normalization function
+normalize <- function(x) { 
+  return((x - min(x)) / (max(x) - min(x)))
+}
+
+# apply normalization to entire data frame
+concrete_norm <- as.data.frame(lapply(concrete, normalize))
+
+# confirm that the range is now between zero and one
+summary(concrete_norm$strength)
+
+summary(concrete_norm$cement)
+
+# compared to the original minimum and maximum
+summary(concrete$strength)
+
+# create training and test data
+concrete_train <- concrete_norm[1:773, ]
+concrete_test <- concrete_norm[774:1030, ]
+
+## Step 3: Training a model on the data ----
+# train the neuralnet model
+library(neuralnet)
+
+# simple ANN with only a single hidden neuron
+concrete_model <- neuralnet(formula = strength ~ cement + slag +
+                              ash + water + superplastic + 
+                              coarseagg + fineagg + age,
+                              data = concrete_train)
+
+
+# visualize the network topology
+plot(concrete_model)
+
+## Step 4: Evaluating model performance ----
+# obtain model results
+model_results <- compute(concrete_model, concrete_test[1:8])
+# obtain predicted strength values
+predicted_strength <- model_results$net.result
+# examine the correlation between predicted and actual values
+cor(predicted_strength, concrete_test$strength)
+
+## Step 5: Improving model performance ----
+# a more complex neural network topology with 5 hidden neurons
+concrete_model2 <- neuralnet(strength ~ cement + slag +
+                               ash + water + superplastic + 
+                               coarseagg + fineagg + age,
+                               data = concrete_train, hidden = 5)
+# hidden = c(2,3,2)
+
+# plot the network
+plot(concrete_model2)
+
+# evaluate the results as we did before
+model_results2 <- compute(concrete_model2, concrete_test[1:8])
+predicted_strength2 <- model_results2$net.result
+cor(predicted_strength2, concrete_test$strength)
+
+##### Part 2: Support Vector Machines -------------------
+## Example: Optical Character Recognition ----
+
+## Step 2: Exploring and preparing the data ----
+# read in data and examine structure
+letters <- read.csv("Downloads/letterdata.csv")
+str(letters)
+
+# divide into training and test data
+letters_train <- letters[1:16000, ]
+letters_test  <- letters[16001:20000, ]
+
+## Step 3: Training a model on the data ----
+# begin by training a simple linear SVM
+install.packages("kernlab")
+library(kernlab)
+letter_classifier <- ksvm(letter ~ ., data = letters_train,
+                          kernel = "vanilladot")
+
+# look at basic information about the model
+letter_classifier
+
+## Step 4: Evaluating model performance ----
+# predictions on testing dataset
+letter_predictions <- predict(letter_classifier, letters_test)
+
+head(letter_predictions)
+
+table(letter_predictions, letters_test$letter)
+
+# look only at agreement vs. non-agreement
+# construct a vector of TRUE/FALSE indicating correct/incorrect predictions
+agreement <- letter_predictions == letters_test$letter
+table(agreement)
+prop.table(table(agreement))
+
+## Step 5: Improving model performance ----
+letter_classifier_rbf <- ksvm(letter ~ ., data = letters_train, kernel = "rbfdot")
+letter_predictions_rbf <- predict(letter_classifier_rbf, letters_test)
+
+agreement_rbf <- letter_predictions_rbf == letters_test$letter
+table(agreement_rbf)
+prop.table(table(agreement_rbf))
+
+
+=======================================
+
+Spark
+
+pyspark
+
+spark-shell
+	Scala
+
+Shortcoming in other technologies that we have been using
+	Other are based on map-reduce flow
+	Batch processing
+		Slow
+
+Spark
+	Uses in-memory processing
+	Different ways of processing data, combining them together
+	Work with other languages, scala and python
+	interactive shells (spark-shell, pyspark)
+
+Spark Archtecture
+	Option to choose spark or MapReduce
+	Spark packages
+		Spark SQL
+		Spark Streaming
+		MLlib
+			machine learning library
+		GraphX
+
+Spark VS R
+	R is single threaded
+	Spark is multi-threaded
+
+RDD
+	temp holding space to transform your data
+	
+Transformations
+	transforming existing RDD
+
+Action
+
+RDD
+	Immutable
+	Lazy
+		Nothing happens right away, but really in preparation for later use
+		Not evaluated until they are used
+	Dataset
+		data storage created from HDFS, HBase, JSON, text, local files
+	Distributed
+		Across clusters of machines, data divided in partitions not line by line, but in groups
+	Resilient
+		Recover from errors by tracking history of each partition like a redo to recreate a partition
+
+Create RDD
+	Requires a Spark Context
+		Think of the context like a running program (main)
+	Automatically created in a scala shell
+
+vala=sc.parallelize(List('a' , 'b', 'c', 'd', 'a', 'f', 'd', 'c', 'b', 'c'), 3
+
+a.collect()
+	
+	sc.
+		spark context
+	parallelize 
+		distribute list into 3 clusters
+
+	Nothing is done untill a.collect() is done
+
+ Map: 
+ 	a.map(x=>(x,1)).reduceByKey((x,y)=>x+y).collect
+
+ 		Add extra integer 1 as initial count to each element and reduceByKey will sum up all counts to give final sum of occurrences for each element
+
+ 		a.map(x=>(x,1))
+
+ 			for each x in a... return (x,1)
+
+ Filter: 
+ 	a.filter(x=>x= ='a').collect // only returns a	
+
+a.count()
+
+a.persist()
+
+a.saveAsTextFile("output.txt")
+
+=======================================
+
+netstat -nap | grep 4040
+	
+	if spark-shell is having errors
+
+ps -a
+
+kill -9 22229
+
+spark-shell
+
+val a=sc.parallelize(List('a' , 'b', 'c', 'd', 'a', 'f', 'd', 'c', 'b', 'c'), 3)
+
+a foreach println
+
+a.collect
+
+Map
+	a.map(x=>(x,1)).reduceByKey((x,y)=>x+y).collect
+
+res2 foreach println
+
+Filter
+	a.filter(x=>x=='a').collect // only returns a
+	a.filter(x=>x!='a').collect // return not a
+
+Count
+	a.filter(x=>x=='a').count
+
+Basic Commands
+
+Start spark-shell with spark-shell
+Quit spark-shell with :quit
+
+Address in use:
+	netstat –nap | grep 4040
+	kill -9 <process id>
+
+Scala
+
+	:help
+	:sh <shell command> // execute shell command
+	<res#> foreach println
+
+RDD
+
+	val a = List(‘apple’, ‘orange’, ‘banana’)
+
+	a foreach println
+
+	val b = sc.parallelize(a) // distribute a into partitions
+
+	b.length
+
+
+Access Files
+
+From local file:
+
+	text_RDD = sc.textFile(" file:///home/cloudera/testfile1")
+
+From HDFS:
+
+	text_RDD = sc.textFile("hdfs://locahost:8020/user/cloudera/testfile")
+
+	text_RDD = sc.textFile("hdfs:/user/cloudera/testfile")
+
+val text_RDD = sc.textFile("file:/home/cloudera/Documents/mobydick.txt")
+
+hadoop fs -put mobydick.txt
+
+hadoop fs -ls
+
+val text_RDD1 = sc.textFile("hdfs:/user/cloudera/mobydick.txt")
+text_RDD1.first()
+
+val counts = text_RDD.flatMap(line => line.split(" ")).map(word => (word,1)).reduceByKey(_+_)
+
+counts.collect()
+
+res9 foreach println
+
+=======================================
+
+
+
+=======================================
+
+Lab 7
+
+Objective: Apply neural network to decide likelihood of a product purchase based on customer’s profile
+
+Tasks:
+1. Extract customer information from your MySQL tables and whether the customers have bought Pelican Sunstream 100 Kayak
+
+library("RMySQL")
+
+con <- dbConnect(MySQL(), user="retail_dba", password="cloudera", dbname="retail_db", host="localhost")
+
+dbListTables(con)
+
+rs = dbSendQuery(con, "
+SELECT 
+	c1.customer_id,
+	c1.customer_street,
+	c1.customer_city,
+	c1.customer_state,
+	CASE product_name
+		WHEN 'Pelican Sunstream 100 Kayak' THEN 1
+		ELSE 0
+	END	AS 'PELICAN'
+FROM customers c1
+LEFT JOIN 
+(
+	SELECT DISTINCT
+		customer_id,
+		customer_street,
+		customer_city,
+		customer_state,
+		product_name
+	from customers
+		inner join orders on order_customer_id = customer_id
+		inner join order_items on order_item_order_id = order_id
+		inner join products on product_id = order_item_product_id
+	where 
+		product_name like 'Pelican Sunstream 100 Kayak'
+) c2 
+ON c1.customer_id = c2.customer_id")
+
+mydata = fetch(rs, n=-1)
+
+mydata
+
+2. Create a neural network and use 75% of the data for training
+
+library("neuralnet")	
+
+mydataframe <- as.data.frame(mydata)
+
+mydataframe$customer_state <- factor(mydataframe$customer_state)
+#mydataframe$PELICAN <- factor(mydataframe$PELICAN)
+mydataframe$customer_street <- factor(mydataframe$customer_street)
+mydataframe$customer_city <- factor(mydataframe$customer_city)
+
+mydataframe$customer_state <- as.integer(mydataframe$customer_state)
+mydataframe$PELICAN <- as.integer(mydataframe$PELICAN)
+mydataframe$customer_street <- as.integer(mydataframe$customer_street)
+mydataframe$customer_city <- as.integer(mydataframe$customer_city)
+
+# custom normalization function
+normalize <- function(x) { 
+  return((x - min(x)) / (max(x) - min(x)))
+}
+
+# apply normalization to entire data frame
+mydataframe_norm <- as.data.frame(lapply(mydataframe, normalize))
+
+summary(mydataframe_norm$customer_state)
+
+mydata_train <- mydataframe[1:9326,]
+mydata_test <- mydataframe[9327:12435,]
+
+model <- neuralnet(formula = PELICAN ~ customer_state, data = mydata_train)
+
+model_results <- compute(model, mydata_test[3:3])
+
+predicted_strength <- model_results$net.result
+
+cor(predicted_strength, mydata_test$PELICAN)
+
+4. Improve the neural network performance using two different values of the number of hidden nodes and show the correlation
+
+model <- neuralnet(formula = PELICAN ~ customer_state, data = mydata_train, hidden = 3)
+
+model_results <- compute(model, mydata_test[3:3])
+
+predicted_strength <- model_results$net.result
+
+cor(predicted_strength, mydata_test$PELICAN)
+
+5. Finally use SVM to see if it improves performance
+
+mydata_train <- mydataframe[1:9326,]
+mydata_test <- mydataframe[9327:12435,]
+
+library(kernlab)
+
+classifier <- ksvm(as.matrix(mydataframe), data = mydata_train, kernel = "vanilladot")
+
+classifier
+
+predictions <- predict(classifier, mydata_test)
+
+head(predictions)
+
+table(predictions, mydata_test$PELICAN)
+
+=======================================
+
+Spark Demo
+
+spark-shell
+
+// Ref: http://stackoverflow.com/questions/32519070/how-do-map-and-reduce-methods-work-in-spark-rdds
+// Ref: https://twitter.github.io/scala_school/
+
+// Map function - transformation that passes each dataset element through a function and 
+// returns a new RDD representing the results.
+
+val stringlist: List[String] = List("ab", "cde", "f")
+val intlist: List[Int] = stringlist.map( x => x.length )
+
+// or
+
+val intlist: List[Int] = List("ab", "cde", "f").map( x => x.length )
+
+// Create a function explicitly
+
+val stringLength : (String => Int) = {
+  x => x.length
+}
+val intlist = stringlist.map( stringLength )
+
+// Reduce function - action that aggregates all the elements of the RDD using some 
+// function and returns the final result to the driver program (although there is also a 
+// parallel reduceByKey that returns a distributed dataset).
+
+// Reduce expects a function from (A, A) => A, where A is the type of your RDD
+
+// Step 1 : op( 1, 2 ) will be the first evaluation. 
+//  Start with 1, 2, that is 
+//    x is 1  and  y is 2
+// Step 2:  op( op( 1, 2 ), 3 ) - take the next element 3
+//   Take the next element 3: 
+//    x is op(1,2) = 3   and y = 3
+// Step 3:  op( op( op( 1, 2 ), 3 ), 4) 
+//   Take the next element 4: 
+//    x is op(op(1,2), 3 ) = op( 3,3 ) = 6    and y is 4
+
+// In general reduce calculates
+
+// op( op( ... op(x_1, x_2) ..., x_{n-1}), x_n)
+
+// Ref: http://alvinalexander.com/scala/how-to-walk-scala-collections-reduceleft-foldright-cookbook
+
+List( 1, 2, 3, 4 ).reduce( (x,y) => x + y )
+
+intlist.reduce( (x,y) => x + y )
+
+// or
+
+val addpair = ((x:Int, y:Int) => {x + y})
+
+intlist.reduce( addpair )
+
+// or
+
+intlist.reduceLeft(_ + _)
+
+intlist.reduceRight(_ + _)
+
+// same as:
+
+intlist.reduceLeft((x,y) => x + y)
+
+intlist.reduceRight((x,y) => x + y)
+
+// Not all functions produce the same output for reduceLeft and reduceRight
+
+val divide = (x: Double, y: Double) => {
+    val result = x / y
+    println(s"divided $x by $y to yield $result")
+    result
+}
+
+val a = Array(1.0, 2.0, 3.0)
+
+a.reduceLeft(divide)
+
+a.reduceRight(divide)
+
+// Flatten a list
+
+val lol = List(List(1,2), List(3,4))
+
+val result = lol.flatten
+
+val couples = List(List("kim", "al"), List("julia", "terry"))
+
+val people = couples.flatten
+
+// flatMap
+// flatMap is a frequently used combinator that combines mapping and flattening. flatMap 
+// takes a function that works on the nested lists and then concatenates the results back 
+// together.
+
+lol.flatMap(x => x.map(_ * 2))
+
+// This defines a base RDD from an external local file. This dataset is not loaded in 
+// memory or otherwise acted on: lines is merely a pointer to the file. 
+
+val textFile = sc.textFile("file:/home/cloudera/Documents/Spark/mobydick.txt")
+
+textFile.count()
+
+textFile.map(line => line.split(" ").size).reduce((a, b) => if (a > b) a else b)
+
+textFile.map(line => line.split(" ").size)
+
+res16 foreach println
+
+val wordCounts = textFile.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey((a, b) => a + b)
+
+wordCounts.collect()
+
+res_ foreach println
+
+// This line defines lineLengths as the result of a map transformation.  
+// lineLengths is not immediately computed, due to laziness. 
+
+val lineLengths = textFile.map(s => s.length)
+
+lineLengths foreach println
+
+// Spark breaks the computation into tasks to run on separate machines, and each machine 
+// runs both its part of the map and a local reduction, returning only its answer to the 
+// driver program.
+
+val totalLength = lineLengths.reduce((a, b) => a + b)
+
+val totalLength = lineLengths.collect.reduceRight(_ + _)
+
+val totalLength = lineLengths.collect.reduceLeft(_ + _)
+
+:quit
+
+=======================================
+
+
+// example script to convert text data into a numeric vector for spark naive bayes 
+// algorithm. The data starts as this 
+//
+//   Male,Suspicion of Alcohol,Weekday,12am-4am,75,30-39
+//   Male,Moving Traffic Violation,Weekday,12am-4am,0,20-24
+//   Male,Suspicion of Alcohol,Weekend,4am-8am,12,40-49
+//   Male,Suspicion of Alcohol,Weekday,12am-4am,0,50-59
+//   Female,Road Traffic Collision,Weekend,12pm-4pm,0,20-24
+//
+// and ends up as this 
+//
+//   0,3 0 0 75 3
+//   0,0 0 0 0 1
+//   0,3 1 1 12 4
+//   0,3 0 0 0 5
+//   1,2 1 3 0 1
+//
+// because all of the values in the data can be enumerated. 
+
+// import packages
+
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._
+import org.apache.spark.SparkConf
+
+import org.apache.hadoop.conf._
+import org.apache.hadoop.fs._
+
+
+object convert1 
+{
+
+//------------------------------------------------------------------------------------
+// define a function to enumerate a CSV record
+
+def enumerateCsvRecord( colData:Array[String]): String =
+{
+    // enumerate column 0 
+
+    val colVal1 = 
+      colData(0) match
+      {
+        case "Male"                          => 0
+        case "Female"                        => 1
+        case "Unknown"                       => 2
+        case _                               => 99
+      }
+
+    // enumerate column 2 
+
+    val colVal2 = 
+      colData(1) match
+      {
+        case "Moving Traffic Violation"      => 0
+        case "Other"                         => 1
+        case "Road Traffic Collision"        => 2
+        case "Suspicion of Alcohol"          => 3
+        case _                               => 99
+      }
+
+    // enumerate column 3
+
+    val colVal3 = 
+      colData(2) match
+      {
+        case "Weekday"                       => 0
+        case "Weekend"                       => 0
+        case _                               => 99
+      }
+
+    // enumerate column 4
+
+    val colVal4 = 
+      colData(3) match
+      {
+        case "12am-4am"                      => 0
+        case "4am-8am"                       => 1
+        case "8am-12pm"                      => 2
+        case "12pm-4pm"                      => 3
+        case "4pm-8pm"                       => 4
+        case "8pm-12pm"                      => 5
+        case _                               => 99
+      }
+
+    val colVal5 = colData(4)
+
+    val colVal6 = 
+      colData(5) match
+      {
+        case "16-19"                         => 0
+        case "20-24"                         => 1
+        case "25-29"                         => 2
+        case "30-39"                         => 3
+        case "40-49"                         => 4
+        case "50-59"                         => 5
+        case "60-69"                         => 6
+        case "70-98"                         => 7
+        case "Other"                         => 8
+        case _                               => 99
+      }
+
+    // create a string from the enumerated values
+
+    val lineString = colVal1+","+colVal2+" "+colVal3+" "+colVal4+" "+colVal5+" "+colVal6
+
+    return lineString
+}
+//-------------------------------------------------------------------------------------
+
+  // define variables
+
+  val hdfsServer = "file:"
+  val hdfsPath   = "/home/cloudera/Documents/Spark/"
+
+  val inDataFile  = hdfsServer + hdfsPath + "DigitalBreathTestData2013.csv"
+  val outDataFile = hdfsServer + hdfsPath + "result"
+
+  val sparkMaster = "local"
+  val appName = "Convert 1"
+  val sparkConf = new SparkConf()
+
+  sparkConf.setMaster(sparkMaster)
+  sparkConf.setAppName(appName)
+
+  // create the spark context
+
+  val sparkCxt = sc
+
+  // load raw csv data from hdfs
+
+  val csvData = sparkCxt.textFile(inDataFile)
+
+  println("Records in  : "+ csvData.count() )
+
+  // split cvs data by comma's to get column data array
+
+  val enumRddData = csvData.map
+  {
+    csvLine =>
+      val colData = csvLine.split(',')
+
+      enumerateCsvRecord(colData)
+
+  } // end csv data processing
+
+  // then  write string RDD to hdfs out file
+
+  println("Records out : "+ enumRddData.count() )
+
+  enumRddData.saveAsTextFile(outDataFile)
+
+} // end object
+
+
+=======================================
+
+
+// example script to load data from hdfs
+
+// import packages
+
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkContext._
+import org.apache.spark.SparkConf
+import org.apache.spark.mllib.classification.NaiveBayes
+import org.apache.spark.mllib.linalg.Vectors
+import org.apache.spark.mllib.regression.LabeledPoint
+
+object bayes1 
+{
+  // define variables
+
+  // data file hdfs - example data
+  //    Male,Suspicion of Alcohol,Weekday,12am-4am,75,30-39
+
+  val hdfsServer = "file:"
+  val hdfsPath   = "/home/cloudera/Documents/Spark/result/"
+
+  val dataFile = hdfsServer+hdfsPath+"part-00000"
+
+  val sparkMaster = "local"
+  val appName = "Naive Bayes 1"
+  val conf = new SparkConf()
+
+  conf.setMaster(sparkMaster)
+  conf.setAppName(appName)
+
+  // create the spark context
+
+  val sparkCxt = sc
+
+  // load raw csv data from hdfs 
+
+  val csvData = sparkCxt.textFile(dataFile)
+
+  // Now parse the CSV data into a LabeledPoint structure. Column zero of the column 
+  // data becomes the label in the LabeledPoint i.e. Male/Female. The rest of the data 
+  // columns become the features asociated with the label.
+
+  val ArrayData = csvData.map{csvLine => 
+      val colData = csvLine.split(',')
+      LabeledPoint(colData(0).toDouble, Vectors.dense(colData(1).split(' ').map(_.toDouble)))
+  }
+
+  // divide the data ( randomly into training and testing data sets 
+
+  val divData = ArrayData.randomSplit(Array(0.7, 0.3), seed = 13L)
+
+  // get the train and test data 
+
+  val trainDataSet = divData(0)
+  val testDataSet  = divData(1)
+
+  // train using Naive Bayes with the training data set
+
+  val nbTrained = NaiveBayes.train(trainDataSet)
+  
+  // now run then trained model against the test data set
+
+  val nbPredict = nbTrained.predict(testDataSet.map(_.features))
+
+  // combine the prediction and test data 
+
+  val predictionAndLabel = nbPredict.zip(testDataSet.map(_.label))
+
+  // determine the accuracy
+
+  val accuracy = 100.0 * predictionAndLabel.filter(x => x._1 == x._2).count() / testDataSet.count()
+
+  // print the accuracy 
+
+  println( "Accuracy : " + accuracy );
+
+}
+
+=======================================
+
+Previously...
+
+convert.scale->result->part-00000 (numeric)
+
+bayes.scale
+	takes part-00000 as input
+
+
+
+
+=======================================
+
+import org.apache.spark.ml.classification.MultilayerPerceptronClassifier
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+
+// Read data in SVM format
+val data = sqlContext.read.format("libsvm").load("file:/home/cloudera/Documents/Spark/sample_multiclass_classification_data.txt")
+
+// Split the data into train and test
+val splits = data.randomSplit(Array(0.6, 0.4), seed = 1234L)
+val train = splits(0)
+val test = splits(1)
+
+// specify layers for the neural network:
+// input layer of size 4 (features), two intermediate of size 5 and 4
+// and output of size 3 (classes)
+
+// this seems to fail
+// val layers = Array[Int](4, 5, 4, 3)
+
+// use input layer of size 4 (features), one intermediate of size 5
+// and output of size 3 (classes)
+val layers = Array[Int](4,5,3)
+
+// create the trainer and set its parameters
+
+val trainer = new MultilayerPerceptronClassifier().setLayers(layers).setBlockSize(128).setSeed(1234L).setMaxIter(100)
+
+// train the model
+val model = trainer.fit(train)
+
+// compute accuracy on the test set
+val result = model.transform(test)
+val predictionAndLabels = result.select("prediction", "label")
+val evaluator = new MulticlassClassificationEvaluator().setMetricName("precision")
+println("Prevision: " + evaluator.evaluate(predictionAndLabels))
+
+=======================================
