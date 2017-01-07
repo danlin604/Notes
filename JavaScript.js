@@ -1024,104 +1024,402 @@ function hasSum(list, target) {
  * Quick Sort
  *******************************************************/
 
-function swap(items, firstIndex, secondIndex){
-    var temp = items[firstIndex];
-    items[firstIndex] = items[secondIndex];
-    items[secondIndex] = temp;
+var list = [2, 1, 5, 4, 3];
+
+function quicksort(items, left, right) {
+
+	var mid = partition(items, left, right);
+    
+    if (left < mid - 1) {
+    	quicksort(items, left, mid - 1);
+    }
+    
+    if (right > mid) {
+    	quicksort(items, mid, right);
+    }
+
+	return items;
 }
 
 function partition(items, left, right) {
 
-    var pivot   = items[Math.floor((right + left) / 2)],  // pivot value is middle item
-        i       = left,     // starts from left and goes right to pivot index
-        j       = right;    // starts from right and goes left to pivot index
+	var pivot	= items[(left + right) >>> 1];
+        
+    while (left <= right) {
+    
+    	while (items[left] < pivot) { left++; }
+        
+        while (items[right] > pivot) { right--; }
+        
+        if (left <= right) {
+        	var temp = swap(items, left++, right--);
+        }    
+    }
+    
+    return left;
+}
+
+function swap(items, first, second) {
+	var temp = items[first];    
+    items[first] = items[second];    
+    items[second] = temp;
+}
+
+console.log(quicksort(list, 0, list.length - 1));
 
 
-    // while the two indices don't match
-    while (i <= j) {
+ /*******************************************************
+ * Bubble Sort
+ *******************************************************/
 
-        // if the item on the left is less than the pivot, continue right
-        while (items[i] < pivot) {
-            i++;
-        }
+function bubbleSort(theArray) {
+     var i, j;
+     for (i = theArray.length - 1; i >= 0; i--) {
+         for (j = 0; j <= i; j++) {
+             if (theArray[j + 1] < theArray[j]) {
+                var temp = theArray[j];
+                theArray[j] = theArray[j + 1];
+                theArray[j + 1] = temp;
+             }
+         }
+     }
+    return theArray;
+ }
 
-        // if the item on the right is greater than the pivot, continue left
-        while (items[j] > pivot) {
-            j--;
-        }
+ /*******************************************************
+ * Count negative in rows and columns
+ *******************************************************/
 
-        // if the two indices still don't match, swap the values
-        if (i <= j) {
-            swap(items, i, j);
+var items = [
+    [-3, -2, -1, 1],
+    [-2, 2, 3, 4],
+    [4, 5, 7, 8]
+];
 
-            // change indices to continue loop
-            i++;
-            j--;
+function countNegatives(items) {
+
+    var index = items[0].length - 1,
+        count = 0;
+    
+    for (var i = 0; i < items.length; i++) {
+
+        for (var j = index; j >= 0; j--) {
+            if (items[i][j] < 0) {
+                index = j;
+                count += j + 1;
+                break;
+            }            
         }
     }
 
-    // this value is necessary for recursion
-    return i;
+    return count;
 }
 
-function quickSort(items, left, right) {
+ /*******************************************************
+ * Max Sum Subarray
+ *******************************************************/
 
-    var index;
+var list = [1, 1, -1, -1, 3, -3, 5, -1];
 
-    // performance - don't sort an array with zero or one items
-    if (items.length > 1) {
-
-        // fix left and right values - might not be provided
-        left = typeof left != "number" ? 0 : left;
-        right = typeof right != "number" ? items.length - 1 : right;
-
-        // split up the entire array
-        index = partition(items, left, right);
-
-        // if the returned index
-        if (left < index - 1) {
-            quickSort(items, left, index - 1);
+function maxSum(list) {
+		
+    var max = 0,
+    	sum = 0;
+    
+    for (var i = 0; i < list.length; i++) {
+    		        
+        if (sum <= 0) {                 
+            sum = 0;				// New subarray
         }
-
-        if (index < right) {
-            quickSort(items, index, right);
+        
+        sum += list[i];                 
+        
+        if (max < sum) {
+            max = sum;              // New Max
         }
-
     }
 
-    return items;
+    return max;
 }
 
-
-
  /*******************************************************
- * 
+ * Linked List
  *******************************************************/
 
+/* Singly */
+
+function Node(data) {
+    this.data = data;
+    this.next = null;
+}
+ 
+function SinglyList() {
+    this._length = 0;
+    this.head = null;
+}
+ 
+SinglyList.prototype.add = function(value) {
+    var node = new Node(value),
+        currentNode = this.head;
+ 
+    // 1st use-case: an empty list
+    if (!currentNode) {
+        this.head = node;
+        this._length++;
+ 
+        return node;
+    }
+ 
+    // 2nd use-case: a non-empty list
+    while (currentNode.next) {
+        currentNode = currentNode.next;
+    }
+ 
+    currentNode.next = node;
+ 
+    this._length++;
+     
+    return node;
+};
+ 
+SinglyList.prototype.searchNodeAt = function(position) {
+    var currentNode = this.head,
+        length = this._length,
+        count = 1,
+        message = {failure: 'Failure: non-existent node in this list.'};
+ 
+    // 1st use-case: an invalid position
+    if (length === 0 || position < 1 || position > length) {
+        throw new Error(message.failure);
+    }
+ 
+    // 2nd use-case: a valid position
+    while (count < position) {
+        currentNode = currentNode.next;
+        count++;
+    }
+ 
+    return currentNode;
+};
+ 
+SinglyList.prototype.remove = function(position) {
+    var currentNode = this.head,
+        length = this._length,
+        count = 0,
+        message = {failure: 'Failure: non-existent node in this list.'},
+        beforeNodeToDelete = null,
+        nodeToDelete = null,
+        deletedNode = null;
+ 
+    // 1st use-case: an invalid position
+    if (position < 0 || position > length) {
+        throw new Error(message.failure);
+    }
+ 
+    // 2nd use-case: the first node is removed
+    if (position === 1) {
+        this.head = currentNode.next;
+        deletedNode = currentNode;
+        currentNode = null;
+        this._length--;
+         
+        return deletedNode;
+    }
+ 
+    // 3rd use-case: any other node is removed
+    while (count < position) {
+        beforeNodeToDelete = currentNode;
+        nodeToDelete = currentNode.next;
+        count++;
+    }
+ 
+    beforeNodeToDelete.next = nodeToDelete.next;
+    deletedNode = nodeToDelete;
+    nodeToDelete = null;
+    this._length--;
+ 
+    return deletedNode;
+};
+
+
+
+/* Doubly */
+
+function Node(value) {
+    this.data = value;
+    this.previous = null;
+    this.next = null;
+}
+ 
+function DoublyList() {
+    this._length = 0;
+    this.head = null;
+    this.tail = null;
+}
+ 
+DoublyList.prototype.add = function(value) {
+    var node = new Node(value);
+ 
+    if (this._length) {
+        this.tail.next = node;
+        node.previous = this.tail;
+        this.tail = node;
+    } else {
+        this.head = node;
+        this.tail = node;
+    }
+ 
+    this._length++;
+ 
+    return node;
+};
+ 
+DoublyList.prototype.searchNodeAt = function(position) {
+    var currentNode = this.head,
+        length = this._length,
+        count = 1,
+        message = {failure: 'Failure: non-existent node in this list.'};
+ 
+    // 1st use-case: an invalid position
+    if (length === 0 || position < 1 || position > length) {
+        throw new Error(message.failure);
+    }
+ 
+    // 2nd use-case: a valid position
+    while (count < position) {
+        currentNode = currentNode.next;
+        count++;
+    }
+ 
+    return currentNode;
+};
+ 
+DoublyList.prototype.remove = function(position) {
+    var currentNode = this.head,
+        length = this._length,
+        count = 1,
+        message = {failure: 'Failure: non-existent node in this list.'},
+        beforeNodeToDelete = null,
+        nodeToDelete = null,
+        deletedNode = null;
+ 
+    // 1st use-case: an invalid position
+    if (length === 0 || position < 1 || position > length) {
+        throw new Error(message.failure);
+    }
+ 
+    // 2nd use-case: the first node is removed
+    if (position === 1) {
+        this.head = currentNode.next;
+ 
+        // 2nd use-case: there is a second node
+        if (!this.head) {
+            this.head.previous = null;
+        // 2nd use-case: there is no second node
+        } else {
+            this.tail = null;
+        }
+ 
+    // 3rd use-case: the last node is removed
+    } else if (position === this._length) {
+        this.tail = this.tail.previous;
+        this.tail.next = null;
+    // 4th use-case: a middle node is removed
+    } else {
+        while (count < position) {
+            currentNode = currentNode.next;
+            count++;
+        }
+ 
+        beforeNodeToDelete = currentNode.previous;
+        nodeToDelete = currentNode;
+        afterNodeToDelete = currentNode.next;
+ 
+        beforeNodeToDelete.next = afterNodeToDelete;
+        afterNodeToDelete.previous = beforeNodeToDelete;
+        deletedNode = nodeToDelete;
+        nodeToDelete = null;
+    }
+ 
+    this._length--;
+ 
+    return message.success;
+};
 
  /*******************************************************
- * 
+ * Find equal subarrays between pivot
  *******************************************************/
 
+var list = [-1, 1, 0, 0, 0, 1, 5, 1];
+
+function getVal(A) {
+		
+    var totalSum = 0,
+    	temp = 0,
+        lhs = 0,
+        rhs = 0;
+    
+    for (var i = 0; i < A.length; i++) {        // Get total sum   		
+        totalSum += A[i];   
+    }
+    
+    for (var i = 0; i < A.length; i++) {        // Find equal
+    
+    	if (A[i] < 0) {
+
+            lhs += A[i];  
+
+        } else {   
+
+            pivot = A[i];
+            
+            rhs = totalSum - pivot - lhs;
+            
+            if(lhs === rhs) {
+
+            	return pivot;
+
+            }
+
+        	lhs += A[i];		    
+        }  		
+    }    
+    return false;
+}
+
+console.log("pivot: " + getVal(list));
 
  /*******************************************************
- * 
+ * Squish and round highest pair of numbers
  *******************************************************/
 
+function squish(n) {	// all input should be string
 
- /*******************************************************
- * 
- *******************************************************/
-
-
- /*******************************************************
- * 
- *******************************************************/
-
-
- /*******************************************************
- * 
- *******************************************************/
+		var s = n + "",
+    		round = 0,
+    		largestPair = -1,
+    		largestPairString = "";
+        
+    if (s === 'undefined'   || 
+    	s.length < 2        ||
+        n < 0               ||
+        isNaN(n))
+    {
+    		return n;
+    }
+	
+  	for (var i = 0; i < s.length - 1; i++) {
+        		
+        round = Math.ceil( (parseInt(s.charAt(i), 10) + parseInt(s.charAt(i + 1), 10)) / 2 );
+        
+        if (round > largestPair) {        		
+            largestPair = round;
+            largestPairString = s.charAt(i) + s.charAt(i + 1);
+        }       
+    }
+    
+    return s.replace(largestPairString, largestPair.toString()); 
+}
 
  /*******************************************************
  * 
