@@ -1422,5 +1422,291 @@ function squish(n) {	// all input should be string
 }
 
  /*******************************************************
+ * Printing press for new book using Set
+ *******************************************************/
+
+function printable(src, dest) {
+
+		var letters = new Set();
+    
+    for (var i = 0; i < src.length; i++) {
+    		if (!letters.has(src.charAt(i))) {
+        		letters.add(src.charAt(i));
+        }
+    }
+    
+    for (var i = 0; i < dest.length; i++) {
+    		if (letters.has(dest.charAt(i))) {
+        		letters.delete(dest.charAt(i));
+        }
+        
+        if (letters.size === 0) {
+        		return true;
+        }
+    }
+    
+    return false;
+}
+
+ /*******************************************************
+ * Printing press for new book using dictionary
+ *******************************************************/
+
+var book1 = "Aaa aab";
+var book2 = "aAa aba";
+
+function printable(src, dest) {
+
+		var letters = new Map(),
+    		key = "",
+        val = 0;
+    
+    for (var i = 0; i < src.length; i++) {
+    
+    		key = src.charAt(i);        
+    
+    		if(!letters.has(key)) {        
+        		letters.set(src.charAt(i), 1);
+        } else {
+        		val = letters.get(src.charAt(i)) + 1;
+        		letters.set(key, val);
+        }       
+    }    
+    
+    for (var i = 0; i < dest.length; i++) {
+    
+    		key = dest.charAt(i);        
+    
+    		if(!letters.has(key)) {
+        		return false;
+        } else {
+        		val = letters.get(dest.charAt(i)) - 1;
+        		letters.set(key, val);
+            
+            if (val < 0) {
+            		return false;
+            }
+        }    
+    }
+    
+		return true;
+}
+
+ /*******************************************************
+ * Replace white space
+ *******************************************************/
+
+var input = "Mr John Smith    ";
+
+// output = "Mr%20Dohn%20Smith"
+
+function replaceSpace(s) {
+
+	var result = "";
+
+	for (var i = 0; i < s.length; i++) {   		
+        
+        if (result.length === s.length) {
+        	return result;
+        }
+    
+    	if (s.charAt(i) === " ") {        
+        	result += "%20";	        
+        } else {
+        	result += s.charAt(i);
+        }   
+    }
+}
+
+
+/* Better */
+
+var input = "Mr John Smith    ";
+
+function replaceSpace(s) {
+		
+    var result = s.replace(/\s/g, "%20");
+    
+	return result.slice(0, s.length);
+}
+
+ /*******************************************************
+ * Compress string
+ *******************************************************/
+
+var input = "aabcccccaaa";
+//  output  "a2blc5a3"                
+
+function compress(s) {
+
+    var result = "",
+        counter = 0;
+
+    for (var i = 0; i < s.length; i++) {   
+        if (counter === 0) {
+            result += s.charAt(i);
+            counter++;
+        }
+    
+        if (i === s.length - 1) {
+            result += counter;
+            break;
+        }
+    
+        if (s.charAt(i) !== s.charAt(i + 1)) {
+            result += counter;
+            counter = 0;            
+        } else {
+            counter++;
+        }    
+    }
+    
+    if (result.length < s.length) {
+    	return result;
+    }
+    return s;
+}
+
+/*******************************************************
+ * Rotate matrix array clockwise
+ *******************************************************/
+
+var matrix = [
+    [1,2,3],
+    [4,5,6],
+    [7,8,9]
+];
+
+function rotate(m) {
+
+    var len = m[0].length;
+        result = [],
+        tmp = [];
+
+	for (var i = 0; i < len; i++) { 
+
+        for (var j = m.length - 1; j >= 0; j--) {
+            tmp.push(m[j][i]);
+        }
+
+        result.push(tmp);
+        tmp = [];
+    }
+  
+    return result;
+}
+
+/*******************************************************
+ * Rotate matrix in-place clockwise
+ *******************************************************/
+
+var matrix = [
+    [1,2,3,4],
+    [5,6,7,8],
+    [9,10,11,12],
+    [13,14,15,16]
+];
+
+function rotate(matrix) {
+
+    //validate input
+    if(matrix === "undefined" || matrix.length === 0) {
+        return matrix;
+    }
+
+    //matrix must be square
+    for (var i = 0; i < matrix.length; i++) {
+        if (matrix[i].length !== matrix.length) {
+            return matrix;
+        }
+    }
+
+	var layers = Math.floor(matrix.length / 2),
+    	tmp1, 
+        tmp2,
+    	length = matrix.length;
+
+    for (var i = 0; i < layers; i++) {
+  
+  	    for (var j = 0 + i; j < length - 1 - i; j++) {
+    
+            //top left 			-> top right
+            //0,0 -> 0,9
+            tmp1 = matrix[j][length - 1 - i];
+            matrix[j][length - 1 - i] = matrix[0 + i][j];      
+        
+            //top right 		-> bottom right
+            //0,9 -> 9,9
+            tmp2 = matrix[length - 1 - i][length - 1 - j];
+            matrix[length - 1 - i][length - 1 - j] = tmp1;
+        
+            //bottom right 	-> bottom left
+            //9,9 -> 9,0
+            tmp1 = matrix[length - 1 - j][0 + i];
+            matrix[length - 1 - j][0 + i] = tmp2;
+        
+            //bottom left		-> top left
+            //9,0 -> 0,0
+            matrix[i][j] = tmp1;   
+        }  
+  }
+  
+  return matrix;
+}
+
+/*******************************************************
+ * 
+ *******************************************************/
+
+/*******************************************************
+ * 
+ *******************************************************/
+
+/*******************************************************
+ * 
+ *******************************************************/
+
+/*******************************************************
+ * 
+ *******************************************************/
+
+
+/*******************************************************
+ * 
+ *******************************************************/
+
+/*******************************************************
+ * 
+ *******************************************************/
+
+
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
+ * 
+ *******************************************************/
+/*******************************************************
  * 
  *******************************************************/
