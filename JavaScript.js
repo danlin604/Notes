@@ -52,11 +52,11 @@ function changeString(str) {
 
   // Increment alphabets
   var replaced = str.replace(/[a-z]/gi, function(char) {
-      return (char === 'z' || char === 'Z') ? 'a' : String.fromCharCode(char.charCodeAt() + 1)
+      return (char === 'z' || char === 'Z') ? 'a' : String.fromCharCode(char.charCodeAt() + 1);
   });
 
   // Captialize vowels
-  var captialized = replaced.replace(/a|e|i|o|u/gi, function(vowel) {
+  var captialized = replaced.replace(/a|e|i|o|u/g, function(vowel) {
       return vowel.toUpperCase();
   });
   
@@ -77,6 +77,22 @@ function reverseString(str) {
   str = strTmp;
   
   return str;         
+}
+
+/* Alternative */
+
+function reverse(s) {
+
+	var arr = s.split("");
+	var tmp = "";
+
+	for (var i = 0; i < Math.floor(arr.length / 2); i++) {    		
+    	tmp = arr[i];        
+        arr[i] = arr[arr.length - 1 - i];
+        arr[arr.length - 1 - i] = tmp;   
+    }
+    
+    return arr.join("");
 }
 
  /*******************************************************
@@ -120,10 +136,8 @@ function binarySearch(array, targetValue) {
 			min = mid + 1;
 		} else if (array[mid] > targetValue) {		// Search lower
 			max = mid - 1;
-		} else if (array[mid] === targetValue) {	// Exist
+		} else {	// Exist
 			return true;
-		} else {
-			// Unexpected
 		}
 	}
 	return false;                                   // Not exist
@@ -1142,6 +1156,12 @@ function maxSum(list) {
     return max;
 }
 
+/* better */
+
+//Kadane's Algo
+
+//Compare local subarrays: previous subarray + current VS current
+
  /*******************************************************
  * Linked List
  *******************************************************/
@@ -1427,21 +1447,21 @@ function squish(n) {	// all input should be string
 
 function printable(src, dest) {
 
-		var letters = new Set();
+	var letters = new Set();
     
     for (var i = 0; i < src.length; i++) {
-    		if (!letters.has(src.charAt(i))) {
-        		letters.add(src.charAt(i));
+    	if (!letters.has(src.charAt(i))) {
+       		letters.add(src.charAt(i));
         }
     }
     
     for (var i = 0; i < dest.length; i++) {
-    		if (letters.has(dest.charAt(i))) {
-        		letters.delete(dest.charAt(i));
+    	if (letters.has(dest.charAt(i))) {
+       		letters.delete(dest.charAt(i));
         }
         
         if (letters.size === 0) {
-        		return true;
+       		return true;
         }
     }
     
@@ -1457,34 +1477,34 @@ var book2 = "aAa aba";
 
 function printable(src, dest) {
 
-		var letters = new Map(),
-    		key = "",
+	var letters = new Map(),
+    	key = "",
         val = 0;
     
     for (var i = 0; i < src.length; i++) {
     
-    		key = src.charAt(i);        
+    	key = src.charAt(i);        
     
-    		if(!letters.has(key)) {        
-        		letters.set(src.charAt(i), 1);
+    	if(!letters.has(key)) {        
+        	letters.set(src.charAt(i), 1);
         } else {
-        		val = letters.get(src.charAt(i)) + 1;
-        		letters.set(key, val);
-        }       
+        	val = letters.get(src.charAt(i)) + 1;
+        	letters.set(key, val);
+        }      
     }    
     
     for (var i = 0; i < dest.length; i++) {
     
-    		key = dest.charAt(i);        
+    	key = dest.charAt(i);        
     
-    		if(!letters.has(key)) {
-        		return false;
+    	if(!letters.has(key)) {
+        	return false;
         } else {
-        		val = letters.get(dest.charAt(i)) - 1;
-        		letters.set(key, val);
+        	val = letters.get(dest.charAt(i)) - 1;
+        	letters.set(key, val);
             
             if (val < 0) {
-            		return false;
+            	return false;
             }
         }    
     }
@@ -1655,20 +1675,177 @@ function rotate(matrix) {
 }
 
 /*******************************************************
- * 
+ * Match string permutation
  *******************************************************/
 
-/*******************************************************
- * 
- *******************************************************/
+function isPermutation(a, b) {
+
+    if (a.length !== b.length) { return false; }
+
+    var arrA = a.split("");
+    var arrB = b.split("");
+    
+    arrA.sort();
+    arrB.sort();
+
+    for (var i = 0; i < a.length; i++) {
+		if (arrA[i] !== arrB[i]) { return false; } 
+    }
+    
+    return true;
+}
 
 /*******************************************************
- * 
+ * How close is my guess?
  *******************************************************/
 
+/* unique */
+
+secret word: times
+guess: carts
+output: 2
+
+function guess(secret, guess) {
+
+	var set = new Set(),
+	    count = 0;
+
+	for (var i = 0; i < secret.length; i++) {
+		set.add(secret.charAt(i));
+	}
+
+	for (var i = 0; i < guess.length; i++) {
+		if(set.has(guess.charAt(i))) {
+			count++;
+		}		
+	}
+
+	return count;
+}
+
+/* Non-unique */
+
+secret word: poppy
+guess: perks
+output: 1
+
+function guess(secret, guess) {
+
+	var map = new Map();
+	var count = 0;
+
+	for (var i = 0; i < secret.length; i++) {
+		if (map.has(secret.charAt(i)) {
+map.set(secret.charAt(i), map.get(secret.charAt(i) + 1);
+} else {
+	map.set(secret.charAt(i), 1);
+}
+	}
+
+	for (var i = 0; i < guess.length; i++) {
+		if(map.has(guess.charAt(i)) {
+			map.set(guess.charAt(i), map.get(guess.charAt(i)) - 1);		
+			if(map.get(guess.charAt(i)) === 0) {
+				map.delete(guess.charAt(i));
+			}
+count++;
+}	
+	}
+
+	return count;
+}
+
+
+
 /*******************************************************
- * 
+ * Check diagonals
  *******************************************************/
+
+var matrix = [
+	[7,3,5,1],
+	[2,7,3,5],
+	[1,2,7,3],
+	[4,1,2,7]
+];
+
+function diag(matrix) {
+
+	var rowVal;
+	var columnVal;
+	var originVal = matrix[0][0];
+
+	for (var i = 0; i < matrix.length - 1; i++) {		// starting idx
+
+		rowVal = matrix[0][i];
+		columnVal = matrix[i][0];
+		
+	for (var j = 1; j < matrix.length - i; j++) {
+
+		if (i === 0 && matrix[i + j][i + j] !== originVal ) { // test origin
+	  		return false;
+	  	}
+	  
+	  	if (i > 0 && matrix[0 + j][i + j] !== rowVal) {
+	  		return false;
+	  	}
+	  
+	  	if (i > 0 && matrix[i + j][0 + j] !== columnVal) {
+	  		return false;
+	  	}      
+	}   
+  }
+  
+  return true;
+}
+
+/*******************************************************
+ * Check diagonals using substring slice & join
+ *******************************************************/
+
+var matrix = [
+	[7,3,5,1],
+	[2,7,3,5],
+	[1,2,7,3],
+	[4,1,2,7]
+];
+
+function diag(matrix) {
+
+	// create our pattern string
+
+	var pattern = matrix[0].join("");
+	var offset = 0;
+	var patternLength = 0;
+
+	for (var i = 1; i < matrix.length; i++) {
+		
+		patternLength = pattern.length + i + offset;
+
+		if ( matrix[i].length > patternLength ) {
+			pattern = pattern + (matrix[i].slice(patternLength).join(""));
+		}    
+
+		pattern = matrix[i][0] + pattern;
+		offset--;
+	}
+
+	// test diagonal
+	var index = matrix.length - 2;
+	var rowLength = 0;
+
+	for (var i = 1; i < matrix.length; i++) {  	
+
+		rowLength = matrix[i].length;
+
+		if (matrix[i].join("") !== pattern.slice(index, index + rowLength)) {
+			return false;
+		}
+		
+		index--;
+	}
+
+	return true;
+}
 
 
 /*******************************************************
