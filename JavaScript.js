@@ -1849,13 +1849,210 @@ function diag(matrix) {
 
 
 /*******************************************************
- * 
+ * Set matrix to zero
  *******************************************************/
+
+var setZeroes = function(matrix) {
+    
+    var coords = new Set();
+    
+    for (var i = 0; i < matrix.length; i++) {    
+    	for (var j = 0; j < matrix[i].length; j++) {              
+            if (matrix[i][j] === 0) {
+              coords.add("r" + i);
+              coords.add("c" + j);
+            }        
+        }    	
+    }
+    
+    
+    var index;
+    var header;
+    for (let item of coords) {
+        
+    	index = parseInt(item.slice(1));
+    	header = item.charAt(0);
+    		   		
+        if (header === "r") {        
+        	for (var i = 0; i < matrix[index].length; i++) {            		
+                matrix[index][i] = 0;                
+            }                
+        }   
+        
+        if (header === "c") {        
+        	for (var i = 0; i < matrix.length; i++) {            		
+                matrix[i][index] = 0;                
+            }        
+        } 
+    }
+};
+
+
+/* hacking */
+
+var setZeroes = function(matrix) {
+
+	var r = matrix.length;
+	var l = matrix[0].length;
+	for (var i = 0; i < r; i++) {
+	    for (var j = 0; j < l; j++) {
+	        if (matrix[i][j] === 0 && 1 / matrix[i][j] === Infinity) {
+	            for (var x = 0; x < r; x++) {
+	                matrix[x][j] = matrix[x][j] && -0;
+	            }
+	            for (var y = 0; y < l; y++) {
+	                matrix[i][y] = matrix[i][y] && -0;
+	            }
+	        }
+	    }
+	}
+
+};
+
 
 /*******************************************************
- * 
+ * Longest increasing path matrix
  *******************************************************/
+var longestIncreasingPath = function(matrix) {
+    
+    if (matrix.length === 0) return 0;
+    
+    var cache;
+    var max = 1;
+    
+    for (var i = 0, row = matrix.length; i < row; i++) {
+        for (var j = 0, col = matrix[i].length; j < col; j++) {            
+            var length = dfs(matrix, i, j, row, col, -Infinity);
+            max = Math.max(max, length);
+        }
+    }    
+    return max;
+};
 
+function dfs(matrix, i, j, row, col, value) {
+    
+    if (i >= row || i < 0 || j < 0 || j >= col || value >= matrix[i][j]) {
+        return 0;
+    }    
+    
+    var top = dfs(matrix, i - 1, j, row, col, matrix[i][j]);
+    var down = dfs(matrix, i + 1, j, row, col, matrix[i][j]);
+    var left = dfs(matrix, i, j - 1, row, col, matrix[i][j]); 
+    var right = dfs(matrix, i, j + 1, row, col, matrix[i][j]);
+    
+    var max = Math.max(top, down, left, right);   
+    
+    return max + 1;
+}
+
+/* format changed */
+
+var longestIncreasingPath = function(matrix) {
+    
+    if (matrix.length === 0) return 0;
+    
+    var cache;
+    var max = 1;
+    
+    for (var i = 0, row = matrix.length; i < row; i++) {
+        for (var j = 0, col = matrix[i].length; j < col; j++) {            
+            var length = dfs(matrix, i, j, row, col);
+            max = Math.max(max, length);
+        }
+    }    
+    return max;
+};
+
+function dfs(matrix, i, j, row, col) { 
+    
+    var top = 0;
+    var down = 0;
+    var left = 0; 
+    var right = 0;    
+    
+    // UP
+    if ( (i - 1) >= 0 && matrix[i][j] < matrix[i - 1][j]) {
+        top = dfs(matrix, i - 1, j, row, col);
+    }
+    
+    // DOWN
+    if ( (i + 1) < row && matrix[i][j] < matrix[i + 1][j]) {
+        down = dfs(matrix, i + 1, j, row, col);
+    }
+    
+    // LEFT
+    if ( (j - 1) >= 0 && matrix[i][j] < matrix[i][j - 1]) {
+        left = dfs(matrix, i, j - 1, row, col);
+    }
+    
+    // RIGHT
+    if ( (j + 1) < col && matrix[i][j] < matrix[i][j + 1]) {
+        right = dfs(matrix, i, j + 1, row, col);
+    }
+    
+    var max = Math.max(top, down, left, right);   
+    
+    return max + 1;
+}
+
+/* Fast solution */
+
+var longestIncreasingPath = function(matrix) {
+    var cache = [], // sets max, traverse only once
+        rows = matrix.length,
+        max = 0;
+    
+    if (rows === 0) {
+        return 0;
+    }
+    
+    // Add rows
+    for (var i = 0; i < rows; i++) {
+        cache.push( new Array(matrix[i].length) );
+    }
+    
+    // Zero the array
+    for (var i = 0; i < rows; i++) {
+        for (var j = 0; j < matrix[i].length; j++) {
+            cache[i][j] = 0;
+        }
+    }
+    
+    
+    for (var i = 0; i < rows; i++) {
+        for (var j = 0; j < matrix[i].length; j++) {
+            max = Math.max(max, dfs(i, j, rows, matrix[i].length, matrix, cache));
+        }
+    }
+    
+    return max;
+};
+
+function dfs(i, j, rows, cols, matrix, cache) {
+    if (cache[i][j] !== 0) {
+        return cache[i][j];
+    }
+    
+    var dx = [1, 0, 0, -1],
+        dy = [0, 1, -1, 0],
+        max = 1,
+        x,
+        y;
+    
+    // Try each direction
+    for (var m = 0; m < 4; m++) {
+        x = dx[m] + i;
+        y = dy[m] + j;
+        
+        if (x >= 0 && y >= 0 && x < rows && y < cols && matrix[i][j] < matrix[x][y]) {
+            max = Math.max(max, 1 + dfs(x, y, rows, cols, matrix, cache));
+        }
+    }
+    
+    cache[i][j] = max;
+    
+    return max;
+}
 
 /*******************************************************
  * 
