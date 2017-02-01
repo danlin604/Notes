@@ -856,8 +856,8 @@ typeof a[90]; // undefined
 
 function Trie() {
 	this.head = {
-			key : ''
-		, children: {}
+		key : '',
+		children: {}
 	}
 }
 
@@ -1736,10 +1736,10 @@ function guess(secret, guess) {
 
 	for (var i = 0; i < secret.length; i++) {
 		if (map.has(secret.charAt(i)) {
-map.set(secret.charAt(i), map.get(secret.charAt(i) + 1);
-} else {
-	map.set(secret.charAt(i), 1);
-}
+		map.set(secret.charAt(i), map.get(secret.charAt(i) + 1);
+		} else {
+			map.set(secret.charAt(i), 1);
+		}
 	}
 
 	for (var i = 0; i < guess.length; i++) {
@@ -1748,8 +1748,8 @@ map.set(secret.charAt(i), map.get(secret.charAt(i) + 1);
 			if(map.get(guess.charAt(i)) === 0) {
 				map.delete(guess.charAt(i));
 			}
-count++;
-}	
+			count++;
+		}	
 	}
 
 	return count;
@@ -2055,32 +2055,705 @@ function dfs(i, j, rows, cols, matrix, cache) {
 }
 
 /*******************************************************
- * 
+ * Search matrix sorted columns
  *******************************************************/
+
+var searchMatrix = function(matrix, target) {
+    
+    var lower = 0;
+    
+    for (var i = 0; i < (matrix.length + lower) ; i++) {
+        
+        if ( target < matrix[matrix.length - 1 - i][0] ) {
+            lower--;
+        } 
+    
+        if ( target <= matrix[i][matrix[i].length - 1] && target >= matrix[i][0] ) {
+            
+            if(binarySearch( matrix, i, target )) {
+                return true;
+            }
+        }
+    }
+    
+    return false;
+};
+
+function binarySearch(matrix, row, target) {
+
+	var min = 0,
+	    max = matrix[row].length - 1;
+
+	while (max >= min) {
+
+		var mid = Math.floor((max + min) / 2);
+
+		if (matrix[row][mid] < target) {
+			min = mid + 1;
+		} else if (matrix[row][mid] > target) {
+			max = mid - 1;
+		} else {
+			return true;
+		}
+	}
+}
+
+
+/*******************************************************
+ * Valid Parentheses
+ *******************************************************/
+
+var isValid = function(s) {
+    
+    var stack = [];
+    
+    if (s.length % 2 !== 0) return false;
+    
+    for (var i = 0; i < s.length; i++) {
+        
+        if (s.charAt(i) === "(") {
+            stack.push(")");
+        }
+        else if (s.charAt(i) === "{") {
+            stack.push("}");
+        }
+        else if (s.charAt(i) === "[") {
+            stack.push("]");
+        }
+        else if (s.charAt(i) === ")" && stack[stack.length - 1] === ")") {
+            stack.pop();
+        }
+        else if (s.charAt(i) === "}" && stack[stack.length - 1] === "}") {
+            stack.pop();
+        }
+        else if (s.charAt(i) === "]" && stack[stack.length - 1] === "]") {
+            stack.pop();
+        } else {
+            return false;
+        }
+    }
+    
+    if (stack.length > 0) {
+    	return false;
+    } else {
+    	return true;
+    }
+};
 /*******************************************************
  * 
  *******************************************************/
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+
+function insertionSortList(head) {
+    
+    var before = {
+        val: -Infinity,
+        next: null
+    };
+
+    while (head) {
+        
+        var prev = before;
+        
+        while (prev.next && prev.next.val < head.val) {
+            prev = prev.next;
+        }
+        
+        var next = head.next;	// next head 
+
+        head.next = prev.next; 	// insert head to sorted
+        prev.next = head;      	// connect sorted to inserted
+        head = next;           	// assign new head
+    }    
+};
+
+
+/* Mine */
+
+function insertionSortList(head) {
+    
+    var sorted = new ListNode(-Infinity);
+    
+    while (head) {
+        
+        var insert = sorted;
+        
+        // find location to insert
+        while (insert.next && insert.next.val < head.val) {
+            insert = insert.next;
+        }
+        
+        var tmp = insert.next;
+        
+        insert.next = new ListNode(head.val);
+        
+        insert.next.next = tmp;
+        
+        head = head.next;
+    }
+    
+    return sorted.next;
+};
+
+
+/*******************************************************
+ * Pascal rows
+ *******************************************************/
+
+/**
+ * @param {number} rowIndex
+ * @return {number[]}
+ */
+var getRow = function(rowIndex) {
+    
+    if (rowIndex === 0) {
+        var result = [1];
+        return result;
+    }
+    
+    if (rowIndex === 1) {
+        var result = [1,1];
+        return result;
+    }
+    
+    var previous = [1,1];
+    var current = [];
+    
+    for (var i = 2; i <= rowIndex; i++) {
+        
+        current = [1];
+        
+        for (var j = 0; j < previous.length - 1; j++) {
+            
+            current.push(previous[j] + previous[j + 1]);
+            
+        }
+        
+        current.push(1);
+        previous = current;
+    }
+    
+    return current;
+};
+
+
+/*******************************************************
+ * https://leetcode.com/problems/decode-string/
+ *******************************************************/
+
+// Incomplete
+
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var decodeString = function(s) {
+    
+    var result = "";
+    var stack = 0;
+    var repeat = "";
+    
+    for (var i = 0; i < s.length; i++) {
+    
+        if ( !isNaN(s.charAt(i)) ) {
+            repeat += s.charAt(i);
+        } else {
+            
+            
+            if ( s.charAt(i) === "[") {
+                
+                
+                // loop through subarray
+                if (repeat !== "") {
+                    
+                    start = i + 1;
+                
+                    for (var j = 0; j < parseInt(repeat); j++) {
+                        result += decodeString(s.slice(start));
+                    }
+                    
+                    repeat = "";
+                }
+                
+                stack++;
+            }
+            
+            
+            else if (s.charAt(i) === "]") {
+                
+                stack--;
+                
+                console.log(repeat + " : "  + result);
+                
+                if (stack < 0) {
+                    return result;
+                }
+            }
+            
+            else if (stack === 0) {
+                result += s.charAt(i);    
+            }
+                
+                
+        }
+    }
+    
+    return result;
+};
+
 /*******************************************************
  * 
  *******************************************************/
+
+/**
+ * @param {number} x
+ * @return {number}
+ */
+var reverse = function(x) {
+    
+    if ( x === 'undefined' || isNaN(x) ) {
+        return x;
+    }
+    
+    var minus     = false;
+    var reversed  = "";
+    
+    if (x < 0) {
+        minus = true;
+        reversed += "-";
+        x *= -1;
+    }
+    
+    var y = x.toString();
+    
+    for (var i = y.length - 1; i >= 0 ; i--) {
+        reversed += y.charAt(i);
+    }
+    
+    var result = parseInt(reversed);
+    
+    // Math.pow(2,31) ... Check for int32 overflow
+    if (result > ( -(1 << 31) - 1) || result < ( 1 << 31) ) 
+    {
+        return 0;
+    }
+    
+    return  result;
+};
+
+
+/*******************************************************
+ * Template Literals
+ *******************************************************/
+
+console.log(`string text line 1
+string text line 2`);
+// "string text line 1
+// string text line 2"
+
+var a = 5;
+var b = 10;
+console.log(`Fifteen is ${a + b} and\nnot ${2 * a + b}.`);
+// "Fifteen is 15 and
+// not 20."
+
+
+
+var person = "mike";
+var age = 28;
+
+function myTag(strings, personExp, ageExp) {
+
+  var str0 = strings[0]; // "that "
+  var str1 = strings[1]; // " is a "
+
+  // There is technically a string after
+  // the final expression (in our example),
+  // but it is empty (""), so disregard.
+  // var str2 = strings[2];
+
+  var ageStr;
+  if (ageExp > 99){
+    ageStr = "centenarian";
+  } else {
+    ageStr = "youngin'";
+  }
+
+  return str0 + personExp + str1 + ageStr;
+
+}
+
+var output = myTag`that ${ person } is a ${ age }`
+
+console.log( output )
+// that mike is a youngin'
+
+
+
+function tag(strings, ...values) {
+  console.log(strings.raw[0]); 
+  // "string text line 1 \n string text line 2"
+}
+
+tag`string text line 1 \n string text line 2`;
+
+
+String.raw`Hi\n${2+3}!`;
+// "Hi\n5!"
+
 /*******************************************************
  * 
  *******************************************************/
+const dragonEvents = [
+  { type: 'attack', value: 12, target: 'player-dorkman' },
+  { type: 'yawn', value: 40 },
+  { type: 'eat', target: 'horse' },
+  { type: 'attack', value: 23, target: 'player-fluffykins' },
+  { type: 'attack', value: 12, target: 'player-dorkman' },
+]
+
+
+const totalDamageOnDorkman = dragonEvents
+  .filter(function (event) {
+    return event.type === 'attack'
+  })
+  .filter(function (event) {
+    return event.target === 'player-dorkman'
+  })
+  .map(function(event) {
+    return event.value
+  })
+  .reduce(function(prev, value) {
+    return (prev || 0) + value
+  })
+
+
+const totalDamageOnDorkman = dragonEvents
+  .filter(e => e.type === 'attack')
+  .filter(e => e.target === 'player-dorkman')
+  .map(e => e.value)
+  .reduce((prev, x) => (prev || 0) + x)
+
+
+/*******************************************************
+ * Destructuring
+ *******************************************************/
+
+makeSound({
+    weight: 23,
+    sound:  'woof'
+})
+
+function makeSound({ species = 'animal', sound }) {
+    console.log(`the ${animal} goes ${sound}`)
+}
+
+
 /*******************************************************
  * 
  *******************************************************/
+
+function play(grid, generation) {
+
+	// remember to do generations
+
+	for (var g = 0; g < generation; g++) {
+
+	for (var i = 0; i < grid.length; i++) {
+
+for (var j = 0; j < grid[i].length; j++) {
+
+	var map = new Map();
+	map.set(“A”, 0);
+	map.set(“D”, 0);
+	var isAlive = false;
+
+// center 
+var center = grid[i][j];
+
+if (center === “A”) {
+	isAlive = true;
+}
+
+	// Offsets
+var topOffset = getOffset(i - 1, grid.length - 1);
+var leftOffset = getOffset(j - 1, grid[i].length - 1);
+var rightOffset = getOffset(j + 1, grid[i].length - 1);
+var bottomOffset = getOffset(i + 1, grid.length - 1);
+
+var top = grid[topOffset)][j];
+map.set(top, map.get(top) + 1);
+
+	//top right
+	var topRight = grid[topOffset][rightOffset];
+	map.set(topRight , map.get(topRight ) + 1);
+
+	//top left
+	var topLeft = grid[topOffset][leftOffset];
+map.set(topLeft  , map.get(topLeft) + 1);
+
+// center left
+var centerLeft = grid[i][leftOffset];
+map.set(centerLeft , map.get(centerLeft) + 1);
+ 
+// center right
+var centerRight = grid[i][rightOffset];
+map.set(centerRight, map.get(centerRight) + 1);
+
+// bottom
+var bottom = grid[bottomOffset][j];
+map.set(bottom , map.get(bottom ) + 1);
+
+// bottom left
+var bottomLeft = grid[bottomOffset][leftOffset];
+map.set(bottomLeft , map.get(bottomLeft ) + 1);
+
+// bottom right
+var bottomRight = grid[bottomOffset][rightOffset];
+map.set(bottomRight , map.get(bottomRight) + 1);
+
+var result = [];
+
+if(isAlive) {
+	if(map.get(“A”) < 2){
+		result[i][j] = “D”;
+	} else if (map.get(“A”) > 3) {
+		result[i][j] = “D”;
+	} else {
+		result[i][j] = “A”;
+}	
+} else {
+if( map.get(“A”) === 3) {
+	result[i][j] = “A”;
+} else {
+	result[i][j] = “D”;
+}
+}
+}		
+
+	}
+
+	grid = result;
+
+	}
+
+	return result;
+}
+
+
+function getOffset(index, length) {
+
+	if ( index > length) {
+		return 0;
+	} 
+
+	if ( index < 0) {
+		return length;
+	}
+
+	return index;	
+}
+
+
 /*******************************************************
+ * Object Creation / this / Bind
+ *******************************************************/
+
+let dog = {
+    sound: 'woof',
+    talk: function() {
+        console.log(this.sound)
+    }
+}
+
+/* example */
+
+dog.talk() // "woof"
+let talkFunction = dog.talk // this = undefined
+let boundFunction = talkFunction.bind(dog)
+boundFunction() // "woof"
+
+/* practical example */
+
+let button = document.getElementById('myNiceButton')
+
+button.addEventListener(
+    'click',
+    //dog.talk // undefined
+    dog.talk.bind(dog)
+)
+
+/* 'this' refers to the global object when no context is given */
+
+/* this.sound = undefined */
+
+let talk() {
+    console.log(this.sound)
+}
+
+talk()
+
+
+
+/* using bind */
+
+let talk() {
+    console.log(this.sound)
+}
+
+let boromir = {
+    sound: 'one does not simply walk into mordor!'
+}
+
+let talkBoundBoromir = talk.bind(boromir)
+talkBoundBoromir()  // "one does not..."
+talk() // undefined
+
+
+
+/* talk as property of the object boromir */
+
+let talk = function() {
+    console.log(this.sound)
+}
+
+let boromir = {
+    speak: talk,
+    sound: 'one does not simply walk into mordor!'
+}
+
+boromir.speak() // "one does not..."
+talk() // undefined
+
+
+// 'this' is context sensitive determined at time of the call.
+
+ /*******************************************************
  * 
  *******************************************************/
-/*******************************************************
+
+
+ /*******************************************************
  * 
  *******************************************************/
-/*******************************************************
+
+
+ /*******************************************************
  * 
  *******************************************************/
-/*******************************************************
+
+
+ /*******************************************************
  * 
  *******************************************************/
-/*******************************************************
+
+
+ /*******************************************************
  * 
  *******************************************************/
+
+
+ /*******************************************************
+ * 
+ *******************************************************/
+
+ /*******************************************************
+ * 
+ *******************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
