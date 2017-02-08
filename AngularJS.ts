@@ -28,6 +28,14 @@ Generate component
 
   ng g c name
 
+Generate pipe
+
+  ng g pipe name
+
+Generate Service 
+
+  ng g s name 
+
 /*******************************************************
 * 
 *******************************************************/
@@ -484,6 +492,285 @@ Attribute Directive
 Structural Directive
 
   Changes the actual structure of the HTML code
+
+/* directory.component.html 
+
+  <p [ngClass]="{
+    'blue': false, 
+    'red': true,
+    'underline': false 
+  }">
+    directory works!
+  </p>
+
+  <style>
+    .blue{color: blue;}
+    .red{color: red;}
+    .underline{text-decoration: underline;}
+  </style>
+*/
+OR
+/* directory.component.ts */
+classes = {
+  'blue': true, 
+  'red': false,
+  'underline': false 
+}; 
+/* directory.component.html
+
+  <p [ngClass]="classes">
+    directory works!
+  </p>
+*/
+
+
+
+
+
+
+
+/* Structural Directive */
+
+/* ngIf */
+/* directory.component.html
+
+  <p *ngIf="true">Only show if test is true</p>
+*/
+OR
+/* directory.component.ts */
+export class DirectoryComponent implements OnInit {
+  test = true;
+}
+/* directory.component.html
+
+  <p *ngIf="test">Only show if test is true</p>
+*/
+
+
+
+
+
+
+
+
+/* ngFor */
+
+/* directory.component.ts */
+  ninjas = [
+    {name: "Yoshi", belt: "green"},
+    {name: "Ryu", belt: "red"},
+    {name: "Dr. McNinja", belt: "black"}
+  ]
+/* directory.component.html 
+
+<ul id="ninja-listing">
+  <li *ngFor="let ninja of ninjas">{{ninja.name}}</li>
+</ul>
+*/
+
+
+/* directory.component.html 
+
+<ul id="ninja-listing">
+  <li *ngFor="let ninja of ninjas">
+    <div class="single-ninja">
+      <!-- Belt Colour -->
+      <span [ngStyle]="{background: ninja.belt}">{{ninja.belt}} belt</span>
+      <!-- Ninja Name -->
+      <h3>{{ninja.name}}</h3>
+    </div>
+  </li>
+</ul>
+*/
+
+
+
+
+/*******************************************************
+* Pipes
+*******************************************************/
+
+Why use pipes over functions?
+
+/* directory.component.html
+
+  <h3>{{ninja.name | uppercase | slice:1:3}}</h3>
+*/
+
+
+
+/* custom pipe filter */
+
+ng g pipe filter
+
+/* filter.pipes.ts */
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'filter'
+})
+export class FilterPipe implements PipeTransform {
+
+  transform(ninjas: any, term: any): any {
+    // check if search is undefined
+    if (term === undefined) return ninjas;
+    
+    //return updated ninjas array
+    return ninjas.filter(function(ninja) {
+      return ninja.name.toLowerCase().includes(term.toLowerCase());
+    })
+  }
+}
+
+/* directory.component.html 
+
+  <form id="filter">
+    <label>Filter ninjas by name</label>
+    <input type="text" [ngModelOptions]="{standalone:true}" [(ngModel)]="term"/>
+  </form>
+
+  <ul id="ninja-listing">
+  <li *ngFor="let ninja of ninjas | filter:term">
+    <div class="single-ninja">
+      <!-- Belt Colour -->
+      <span [ngStyle]="{background: ninja.belt}">{{ninja.belt}} belt</span>
+      <!-- Ninja Name -->
+      <h3>{{ninja.name}}</h3>
+    </div>
+  </li>
+*/
+
+
+/*******************************************************
+* Service
+*******************************************************/
+
+ng g s name 
+
+
+/* Multiple instance service */
+
+/* logging.service.ts */
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class LoggingService {
+  log() {
+    console.log('I am the logging service');
+  }
+  constructor() { }
+}
+
+/* directory.component.ts */
+import { LoggingService } from '../logging.service';
+
+@Component({
+  providers: [LoggingService]
+})
+export class DirectoryComponent implements OnInit {
+
+  constructor(private logger: LoggingService) { }
+
+  logIt() {
+    this.logger.log();
+  }
+}
+
+/* directory.component.html 
+
+  <button (click)="logIt()">Log Me</button>
+*/
+
+
+
+
+/* single instance service */
+
+/* app.module.ts */
+@NgModule({
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    DirectoryComponent,
+    FilterPipe
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+    Routing
+  ],
+  providers: [LoggingService],
+  bootstrap: [AppComponent]
+})
+
+/* directory.component.ts */
+@Component({
+  selector: 'app-directory',
+  templateUrl: './directory.component.html',
+  styleUrls: ['./directory.component.css']
+})
+
+/*******************************************************
+* Read dummy JSON data
+*******************************************************/
+
+/* ninjas.json */
+[
+  {
+    "name": "Yoshi", 
+    "belt": "green"
+  },
+  {
+    "name": "Ryu", 
+    "belt": "red"
+  },
+  {
+    "name": "Dr. McNinja", 
+    "belt": "pink"
+  }
+]
+
+/* data.service.ts */
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
+import 'rxjs/add/operator/map';
+//import 'rxjs/Rx';
+
+@Injectable()
+export class DataService {
+
+  constructor(private http: Http ) { }
+
+  fetchData() {
+    return this.http.get('../assets/ninjas.json').map(
+      (res) => res.json()
+    );
+  }
+}
+
+/* app.module.ts */
+providers: [LoggingService, DataService]
+
+/* directory.component.ts */
+import { DataService } from '../data.service';
+
+export class DirectoryComponent implements OnInit {
+  ninjas = [];
+
+  constructor(private logger: LoggingService, private dataService: DataService) { }
+
+  ngOnInit() {
+    this.dataService.fetchData().subscribe(
+      (data) => this.ninjas = data
+    );
+  }
+}
+
+/*******************************************************
+* 
+*******************************************************/
+
 
 
 /*******************************************************
