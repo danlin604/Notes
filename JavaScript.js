@@ -2639,19 +2639,126 @@ talk() // undefined
 
 // 'this' is context sensitive determined at time of the call.
 
+
+/* prototype */
+
+function talk() {
+  console.log(this)
+  console.log(this.sound)
+}
+let animal = {
+  talk // talk: talk
+}
+animal.talk() // this is assigned to animal
+
+
+
+
+
+function talk() {
+  console.log(this) // this -> cat
+  console.log(this.sound)
+}
+let animal = {  
+  talk
+}
+let cat = { // can't find talk -> check prototype animal
+  sound: 'meow!'
+}
+Object.setPrototypeOf(cat, animal)
+cat.talk() // this -> cat
+
+/*
+{ sound: 'meow!' }
+meow!
+*/
+
+
+
+function talk() {
+  console.log(this.sound)
+}
+let animal = {  
+  talk
+}
+let dog = {
+  sound: 'woof!'
+}
+let prarieDog = {
+  howl: function() {
+    console.log(this.sound.toUpperCase())
+  }
+}
+Object.setPrototypeOf(dog, animal)
+dog.talk() // woof!
+Object.setPrototypeOf(prarieDog, dog)
+prarieDog.howl() // WOOF!
+
+
+
  /*******************************************************
- * 
+ * Function
  *******************************************************/
 
+/*
+A Function Declaration defines a named function variable without requiring variable assignment. Function Declarations occur as standalone constructs and cannot be nested within non-function blocks. It’s helpful to think of them as siblings of Variable Declarations. Just as Variable Declarations must start with “var”, Function Declarations must begin with “function”.
+*/
+
+function bar() {
+    return 3;
+} 
+bar() //3
+bar  //function
+
+
+/*
+A Function Expression defines a function as a part of a larger expression syntax (typically a variable assignment ). Functions defined via Functions Expressions can be named or anonymous. Function Expressions must not start with “function” (hence the parentheses around the self invoking example below)
+*/
+
+//anonymous function expression
+var a = function() {
+    return 3;
+}
+ 
+//named function expression
+var a = function bar() {
+    return 3;
+}
+ 
+//self invoking function expression
+(function sayHello() {
+    alert("hello!");
+})();
+
+
+
+
 
  /*******************************************************
- * 
+ * Hoist
  *******************************************************/
+
+/*
+Function declarations and function variables are always moved (‘hoisted’) to the top of their JavaScript scope by the JavaScript interpreter
+*/
 
 
  /*******************************************************
- * 
+ * Transpiler
  *******************************************************/
+
+/*
+Transpilers, or source-to-source compilers, are tools that read source code written in one programming language, and produce the equivalent code in another language. Languages you write that transpile to JavaScript are often called compile-to-JS languages, and are said to target JavaScript.
+
+They read CoffeeScript, TypeScript, and ES2015, and spit out JavaScript guaranteed to work anywhere.
+*/
+
+Transpiler
+
+	babeljs.io 
+
+	traceur 
+
 
 
  /*******************************************************
