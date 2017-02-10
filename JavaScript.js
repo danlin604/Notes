@@ -2734,6 +2734,256 @@ var a = function bar() {
 
 
 
+
+
+/* ECMAScript 5 */
+
+function Person(saying) {
+  this.saying = saying
+}
+
+Person.prototype.talk = function() {
+  console.log('I say: ' + this.saying)
+}
+
+var crockforg = new Person('SEMICOLONS!!111one1')
+crockforg.talk()
+
+
+
+/* ECMAScript 5 */
+
+function Person(saying) {
+  this.saying = saying
+  
+  /* edge case */
+  return {
+    dumbObject: true
+  }
+}
+
+Person.prototype.talk = function() {
+  console.log('I say: ' + this.saying)
+}
+
+function spawn(ctor) { // mew = new
+  var obj = {} // step 1
+  Object.setPrototypeOf(obj, ctor.prototype) // step 2
+  //var argsArray = Array.from(arguments) // ES6: argument -> array
+  var argsArray = Array.prototype.slice.apply(arguments)  
+  return ctor.apply(obj, argsArray.slice(1)) || obj
+}
+
+var crockforg = spawn(Person, 'SEMICOLONS!!111one1')
+
+console.log(
+  'hello', crockforg
+)
+
+crockforg.talk()
+
+
+
+/* This is how 'new' works */
+/* ECMAScript 5 */
+
+function Person(saying) {
+  this.saying = saying
+}
+
+Person.prototype.talk = function() {
+  console.log('I say: ' + this.saying)
+}
+
+function spawn(ctor) { // mew = new
+  var obj = {} // step 1
+  Object.setPrototypeOf(obj, ctor.prototype) // step 2
+  var argsArray = Array.prototype.slice.apply(arguments)  
+  return ctor.apply(obj, argsArray.slice(1)) || obj
+}
+
+var crockforg = spawn(Person, 'SEMICOLONS!!111one1')
+crockforg.talk()
+
+
+
+
+
+
+
+
+
+
+/* Prototypes delegates objects */
+
+/* 
+Analogy: you ask if your friend has a pen, and he asks his, and a pen is passed back to you 
+
+Object.__proto__ 
+
+  all objects will delegate to __proto__
+
+  Object.__proto__ === Object.prototype // true
+
+  Global Object() is actually a function
+
+Object.prototype
+
+  prototype is used when the user calls 'new', the term prototype should be prototypeToInstall or prototypeToUseInNew to be more descriptive
+
+Object.__proto__
+
+  __proto__ is property on an object that points out the prototype that has been set for that object
+
+*/
+
+
+let cat = {
+  breed: 'munchkin'
+}
+
+let myCat = {
+  name: 'Dreadlord Razorfluff'
+}
+
+Object.setPrototypeOf(myCat, cat)
+
+console.log(myCat.breed)
+
+// reference to the same object
+console.log(myCat.__proto__) // { breed: 'munchkin' } 
+
+cat.tailLength = 15
+
+console.log(myCat.__proto__) // { breed: 'munchkin', tailLength: 15 }
+
+
+
+
+
+
+/* 
+What is Object.create?
+
+  Creates a new Object with the prototype set to a certain object 
+
+Object.create
+
+  More natural than 'new' keyword
+
+  'new' kinda look like a class, but has many quirks...
+
+  .create is more what prototype should have been
+
+   Object.create is a method on Object constructor, not on prototype
+
+setPrototypeOf & messing with prototype directly on existing object
+
+  poor performance
+
+  Not really used in real-life performance
+  
+*/
+
+const cat = {
+  makeSound: function() {
+    console.log(this.sound)
+  }
+}
+
+const mark = Object.create(cat)
+mark.sound = 'mew'
+mark.makeSound()
+
+const waffles = Object.create(cat)
+waffles.sound = "MOOF!"
+waffles.makeSound()
+
+console.log(
+  'Is mark a cat?',
+  cat.isPrototypeOf(mark)
+)
+
+
+
+
+/* Implement our own create */
+const cat = {
+  makeSound: function() {
+    console.log(this.sound)
+  }
+}
+
+function objectCreate(proto) {
+  const obj = {}
+  Object.setPrototypeOf(obj, proto) // poor performance
+  return obj
+}
+
+const mark = objectCreate(cat)
+mark.sound = 'mew'
+mark.makeSound()
+
+const waffles = objectCreate(cat)
+waffles.sound = "MOOF!"
+waffles.makeSound()
+
+console.log(
+  'Is mark a cat?',
+  cat.isPrototypeOf(mark)
+)
+
+
+
+
+/* ctor pattern */
+const cat = {
+  init: function(sound) {
+    this.sound = sound
+  },
+  makeSound: function() {
+    console.log(this.sound)
+  }
+}
+
+const mark = Object.create(cat)
+mark.init('mew')
+mark.makeSound()
+
+const waffles = Object.create(cat)
+waffles.init('meowth')
+waffles.makeSound()
+
+console.log(
+  'Is mark a cat?',
+  cat.isPrototypeOf(mark)
+)
+
+
+
+/* better pattern */
+const cat = {
+  init: function(sound) {
+    this.sound = sound
+    return this
+  },
+  makeSound: function() {
+    console.log(this.sound)
+  }
+}
+
+const mark = Object.create(cat).init('mew')
+mark.makeSound()
+
+const waffles = Object.create(cat).init('meowth')
+waffles.makeSound()
+
+console.log(
+  'Is mark a cat?',
+  cat.isPrototypeOf(mark)
+)
+
+
  /*******************************************************
  * Hoist
  *******************************************************/
