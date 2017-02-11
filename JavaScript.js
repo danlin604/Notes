@@ -3012,53 +3012,149 @@ Transpiler
 
 
  /*******************************************************
- * 
+ * Convert to boolean
  *******************************************************/
+
+var foo = 0
+console.log(foo) // 0
+console.log(!!foo) // false, shorter than Boolean()
+console.log(Boolean(foo)) // false 
 
 
  /*******************************************************
- * 
+ * Convert arguments to array
  *******************************************************/
 
-
- /*******************************************************
- * 
- *******************************************************/
-
- /*******************************************************
- * 
- *******************************************************/
+Array.prototype.slice.call(arguments) // idiom to convert arg object to array
 
 
+// example
+(function() {
+  console.log(arguments instanceof Array) // false 
+
+  let args = Array.prototype.slice.call(arguments)
+  console.log(args instanceof Array) //true
+})()
+
+
+/*******************************************************
+* Assigning default values
+*******************************************************/
+
+/* classic */
+let animal = {}
+
+function speak(animal) {
+  let sound = animal.sound ? animal.sound : 'woof'
+  console.log(sound)
+}
+speak(animal) // woof
+
+/* better */
+function speak(animal) {
+  let msg = animal.sound || 'meow'
+  console.log(msg)
+}
+speak(animal) // meow
+
+/*******************************************************
+* Convert to array if not already
+*******************************************************/
+
+/* classic */
+let value = 1
+let arr = value instanceof Array ? value : [value]
+console.log(arr) // [1]
+
+/* better */
+let arr = [].concat(value)
+console.log(arr) // [1]
+
+/*******************************************************
+* Convert strings to number
+*******************************************************/
+
+/* classic */
+let int = parseInt('12')
+let float = parseFloat('12.3')
+
+/* alternative */
+let int = +'12'
+let float = +'12.3'
+
+/*******************************************************
+* Check if an array includes an element
+*******************************************************/
+
+/* classic */
+if ([1,2,3].indexOf(2) > -1) {
+  console.log('includes')
+}
+
+/* alternative */
+if (~[1, 2, 3].indexOf(2)) {  
+  console.log('includes') 
+}
+
+/*******************************************************
+* Writing multiline strings
+*******************************************************/
+
+/* classic */
+var multiStr = "This is the first line\n" +
+  "This is the second line\n" +
+  "This is more...";
+
+/* alternative */
+var multiStr = [
+  "This is the first line",
+  "This is the second line",
+  "This is more..."
+].join("\n");
+
+
+
+/*******************************************************
+* Looping through an array
+*******************************************************/
+
+// if order unimportant
+for (var i = arr.length; i--;) {
+  // ...
+}
+
+// instead of
+for (var i = 0; i < arr.length; i++) {
+  // ...
+}
+
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+
+
+/*******************************************************
+* 
+*******************************************************/
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*******************************************************
+* 
+*******************************************************/
 
 
 

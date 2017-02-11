@@ -1,20 +1,14 @@
-const cat = {
-  init: function(sound) {
-    this.sound = sound
-    return this
-  },
-  makeSound: function() {
-    console.log(this.sound)
-  }
-}
+// Writing multiline strings
 
-const mark = Object.create(cat).init('mew')
-mark.makeSound()
+/* classic */
+var multiStr = "This is the first line\n" +
+  "This is the second line\n" +
+  "This is more...";
 
-const waffles = Object.create(cat).init('meowth')
-waffles.makeSound()
+/* alternative */
+var multiStr = [
+  "This is the first line",
+  "This is the second line",
+  "This is more..."
+].join("\n");
 
-console.log(
-  'Is mark a cat?',
-  cat.isPrototypeOf(mark)
-)
