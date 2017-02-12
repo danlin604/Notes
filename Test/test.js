@@ -1,14 +1,18 @@
-// Writing multiline strings
+(function () {
+    
+  function init() {
+    hello()
+  }
 
-/* classic */
-var multiStr = "This is the first line\n" +
-  "This is the second line\n" +
-  "This is more...";
+  function hello() {
+    console.log('hi!')
+    goodbye()
+  }
 
-/* alternative */
-var multiStr = [
-  "This is the first line",
-  "This is the second line",
-  "This is more..."
-].join("\n");
+  function goodbye() {
+    console.log('bye!')
+  }
 
+  init()
+
+})();

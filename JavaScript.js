@@ -2725,12 +2725,90 @@ var a = function bar() {
     return 3;
 }
  
+
+
+
 //self invoking function expression
 (function sayHello() {
     alert("hello!");
 })();
 
+/*
+It is an anonymous function expression that is immediately invoked
 
+The pair of parenthesis surrounding the anonymous function turns the anonymous function into a function expression or variable expression. So instead of a simple anonymous function in the global scope, or wherever it was defined, we now have an unnamed function expression.
+*/
+
+// Shown without the parentheses here:​
+? = function () {};
+​
+​// And with the parentheses here:​
+(? = function () {});
+​// An unknown variable assigned the value of a function, wrapped in a parentheses, which turns it into an unnamed function expression.
+
+(showName = function (name) {console.log(name || "No Name")}) (); // No Name​
+​
+showName ("Rich"); // Rich​
+showName (); // No Name
+
+/* 
+— Note that you cannot use the var keyword inside the opening pair of parentheses (you will get a syntax error), but it is not necessary in this context to use var since any variable declared without the var keyword will be a global variable anyway.
+— We were able to call this named function expression both immediately and later because it has a name.
+— But we can’t call the anonymous function expression later, since there is no way to refer to it. This is the reason it is only useful when it is immediately invoked.
+*/
+
+
+IIFE (iffy) // mmediately-invoked function expression
+
+	// We can call multiple functions within our IIFE
+
+(function () {
+    
+  function init() {
+    hello()
+  }
+
+  function hello() {
+    console.log('hi!')
+    goodbye()
+  }
+
+  function goodbye() {
+    console.log('bye!')
+  }
+
+  init()
+
+})();
+
+
+/* conditional operator */
+var unnamedDocs = [], namedDocs = ["a_bridge_runover", "great_dreamers"];
+​
+​function createDoc(documentTitle) {
+    var documentName = documentTitle 
+​
+        ?
+​
+ (function (theName) {
+        var newNamedDoc = theName.toLocaleLowerCase().replace(" ", "_");
+        namedDocs.push(newNamedDoc);
+​
+        return newNamedDoc;
+    })(documentTitle)​
+​
+        :​
+​
+        (function () {
+            var newUnnamedDoc = "untitled_" + Number(namedDocs.length + 1);
+            unnamedDocs.push(newUnnamedDoc);
+            return newUnnamedDoc;
+        })();​
+​
+    return documentName;
+}
+​createDoc("Over The Rainbow"); // over_the rainbow​
+​createDoc(); // untitled_4
 
 
 
@@ -3038,7 +3116,7 @@ Array.prototype.slice.call(arguments) // idiom to convert arg object to array
 
 
 /*******************************************************
-* Assigning default values
+* Assigning default values using OR || / AND &&
 *******************************************************/
 
 /* classic */
@@ -3050,12 +3128,82 @@ function speak(animal) {
 }
 speak(animal) // woof
 
-/* better */
-function speak(animal) {
-  let msg = animal.sound || 'meow'
-  console.log(msg)
+
+
+
+/* classic */
+function bark(sound) {
+	if (!sound) {
+		sound = 'woof!'
+	}
 }
-speak(animal) // meow
+
+
+
+/* better */
+function bark(sound) {
+	sound = sound || 'woof!'
+}
+
+
+
+
+/* short circuting with AND */
+
+/* classic */
+function isAdult(age) {
+  if (age && age > 17) {
+    return true;
+  }
+  ​else {
+    return false;
+  }
+}
+
+/* better */
+function isAdult(age) {
+  return age && age > 17
+}
+
+
+
+/* if else example */
+
+/* classic */
+if (userName) {
+  logIn(userName)
+}
+else {
+  signUp()
+}
+
+
+/* better */
+userName && logIn(userName) || signUp()
+
+/*
+Explanation:
+— If userName is truthy, then call the logIn function with userName as the parameter.
+— If userName is falsy, call the signUp function
+*/
+
+/* classic */
+var userID;
+​if (userName && userName.loggedIn) {
+  userID = userName.id;
+}
+​else {
+  userID = null;
+}
+
+/* better */
+var userID = userName && userName.loggedIn && userName.id
+
+/*
+Explanation:
+— If userName is truthy, call userName.loggedIn and check if it is truthy; if it is truthy, then get the id from userName.
+— If userName is falsy, return null.
+*/
 
 /*******************************************************
 * Convert to array if not already
@@ -3131,15 +3279,64 @@ for (var i = 0; i < arr.length; i++) {
 
 
 /*******************************************************
-* 
+* Tilde ~
 *******************************************************/
+
+/* 
+It is a unary operator that takes the expression to its right performs this small algorithm on it (where N is the expression to the right of the tilde): -(N+1). 
+*/
+
+console.log(~-2); // 1
+console.log(~-1); // 0
+console.log(~0);  // -1
+console.log(~1);  // -2
+console.log(~2);  // -3
+
+// String to Int
+
+console.log(~~-1);    // -1
+console.log(~~0);     // 0
+console.log(~~1);     // 1
+console.log(~~"-1");  // -1
+console.log(~~"0");   // 0
+console.log(~~"1");   // 1
+console.log(~~true);  // 1
+console.log(~~false); // 0
+
+
+// Possible usage
+
+
+// indexOf not found is -1
+if (someStr.indexOf("a") >= 0) { 
+	// Found it
+} else  {
+	// Not Found
+}
+
+
+// alternative
+
+// converts -1 to 0, and 0 is falsey
+if (~someStr.indexOf("a")) {
+	// Found it
+} else  {
+	// Not Found
+}
 
 
 
 /*******************************************************
-* 
+* Falsey
 *******************************************************/
 
+/*
+JavaScript Falsy Values: null, false, 0 undefined, NaN, and “” (this last item is an empty string).
+
+— Note that Infinity, which is a special number like NaN, is truthy; it is not falsy, while NaN is falsy.
+
+JavaScript Truthy Values: Anything other than the falsy values.
+*/
 
 
 
