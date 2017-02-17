@@ -3341,12 +3341,164 @@ JavaScript Truthy Values: Anything other than the falsy values.
 
 
 /*******************************************************
-* 
+* Breakout Game
 *******************************************************/
 
+/*
+<canvas id="myCanvas" width="480" height="320"></canvas>
+*/
+
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+
+ctx.beginPath();
+// draw code
+ctx.closePath();
+
+ctx.rect(20, 40, 50, 50);
+
+ctx.arc(240, 160, 20, 0, Math.PI*2, false);
+
+ctx.fillStyle = "green";
+
+ctx.fill(); // filled shape
+
+ctx.stroke(); // outline
+
+ctx.clearRect(0, 0, canvas.width, canvas.height); // clears
+
+setInterval(draw, 10);
+
+
+// EventListener on key press
+document.addEventListener("keyup", keyUpHandler, false);
+
+function keyDownHandler(e) {
+    if(e.keyCode == 39) {
+      rightPressed = true;
+    }
+    else if(e.keyCode == 37) {
+      leftPressed = true;
+    }
+}
+
+ctx.font = "16px Arial";
+ctx.fillStyle = "#0095DD";
+ctx.fillText("Score: "+score, 8, 20);
 
 
 
+document.addEventListener("mousemove", mouseMoveHandler, false);
+
+function mouseMoveHandler(e) {
+  var relativeX = e.clientX - canvas.offsetLeft;
+  if(relativeX > 0 && relativeX < canvas.width) {
+    paddleX = relativeX - paddleWidth/2;
+  }
+}
+
+
+
+// loop
+function draw() {
+  // do stuff
+  requestAnimationFrame(draw); // browser control frames, loop on draw
+}
+
+draw();
+
+
+
+
+/*******************************************************
+* Testing
+*******************************************************/
+
+Prediction
+
+  Validate prediction
+  Validate an expectation
+  Failing the test is not bad
+
+*******************************************************
+
+// sum of a and b
+function add(a, b) {
+  return a + b;
+}
+
+add(2, 3);      // 5, expected
+add(2, 3);      // 6, unexpected
+add('2', '3');  // '23', unexpected
+
+
+Expectations
+
+  Expect 2 + 3 = 5
+  Expect error IF non-numbers are used // not passing
+  Expect 0.1 + 0.2 = 0.3 // 0.30000...4
+
+
+// Refactor
+Red, Green, Refactor Cycle
+
+  Red   = fail
+  Green = pass
+
+
+*******************************************************
+
+
+function add(a, b) {
+  if ((typeof a && typeof b) !== 'number') {
+    throw new Error('Params must be a number.');
+  }
+
+  return a + b;
+}
+
+Expectations
+
+  Expect 2 + 3 = 5        // pass
+  Expect error            // pass
+  Expect 0.1 + 0.2 = 0.3  // fail
+
+
+*******************************************************
+
+
+function add(a, b) {
+  if ((typeof a && typeof b) !== 'number') {
+    throw new Error('Params must be a number.');
+  }
+
+  result = a + b;
+  if (parseInt(result) !== result) {
+    result = parseFloat(result.toFixed(1));
+  }
+
+  return a + b;
+}
+
+Expectations
+
+  Expect 2 + 3 = 5        // pass
+  Expect error            // pass
+  Expect 0.1 + 0.2 = 0.3  // pass
+
+
+*******************************************************
+
+// Expect Function and Matcher
+
+expect(add(2, 3)).toBe(5);
+expect(add(2, 'test')).toThrow();
+expect(add(0.1, 0.2)).toBe(0.3);
+
+
+/*******************************************************
+* 
+*******************************************************/
 
 
 /*******************************************************
@@ -3355,6 +3507,28 @@ JavaScript Truthy Values: Anything other than the falsy values.
 
 
 
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
 
 
 
