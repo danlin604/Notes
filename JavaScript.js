@@ -3497,20 +3497,68 @@ expect(add(0.1, 0.2)).toBe(0.3);
 
 
 /*******************************************************
-* 
+* Storage
 *******************************************************/
+
+Window.localStorage
+
+  The localStorage property allows you to access a local Storage object. localStorage is similar to sessionStorage. The only difference is that, while data stored in localStorage has no expiration time, data stored in sessionStorage gets cleared when the browsing session ends—that is, when the browser is closed.
+
+myStorage = localStorage;
+localStorage.setItem('myCat', 'Tom');
+
+*******************************************************
+
+Window.sessionStorage
+
+  The sessionStorage property allows you to access a session Storage object for the current origin. sessionStorage is similar to Window.localStorage, the only difference is while data stored in localStorage has no expiration set, data stored in sessionStorage gets cleared when the page session ends. A page session lasts for as long as the browser is open and survives over page reloads and restores. Opening a page in a new tab or window will cause a new session to be initiated, which differs from how session cookies work.
+
+  It should be noted that data stored in either sessionStorage or localStorage is specific to the protocol of the page.
+
+// Save data to sessionStorage
+sessionStorage.setItem('key', 'value');
+
+// Get saved data from sessionStorage
+var data = sessionStorage.getItem('key');
+
+// Remove saved data from sessionStorage
+sessionStorage.removeItem('key');
+
+// Remove all saved data from sessionStorage
+sessionStorage.clear();
 
 
 /*******************************************************
-* 
+* Geolocation
 *******************************************************/
 
+Navigator.geolocation
 
+  The Navigator.geolocation read-only property returns a Geolocation object that gives Web content access to the location of the device. This allows a Web site or app to offer customized results based on the users location.
+
+geo = navigator.geolocation
+
+Geolocation.getCurrentPosition()
+
+  Determines the devices current location and gives back a Position object with the data.
+
+Geolocation.watchPosition()
+
+  Returns a long value representing the newly established callback func to be invoked whenever the device location changes.
+
+Geolocation.clearWatch()
+
+  Removes the particular handler previously installed using watchPosition().
 
 /*******************************************************
-* 
+* Security
 *******************************************************/
 
+Validation
+
+  Required for both client & server
+
+    Client side JS can be manipulated
 
 /*******************************************************
 * 
