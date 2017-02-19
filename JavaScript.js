@@ -3561,8 +3561,127 @@ Validation
     Client side JS can be manipulated
 
 /*******************************************************
-* 
+* const vs Object.freeze
 *******************************************************/
+
+// An immutable, empty object
+const null = Object.freeze {
+  Object.create()
+};
+
+
+const 
+  
+  const applies to bindings ("variables"). It creates an immutable binding, i.e. you cannot assign a new value to the binding.
+
+  ES6 const does not indicate that a value is ‘constant’ or immutable. A const value can definitely change. The following is perfectly valid ES6 code that does not throw an exception:
+
+    const foo = {};
+    foo.bar = 42;
+    console.log(foo.bar);
+    // → 42
+
+    The only thing that’s immutable here is the binding. const assigns a value ({}) to a variable name (foo), and guarantees that no rebinding will happen. Using an assignment operator or a unary or postfix -- or ++ operator on a const variable throws a TypeError exception:
+
+      const foo = 27;
+      // Any of the following uncommented lines throws an exception.
+      // Assignment operators:
+      foo = 42;
+      foo *= 42;
+      foo /= 42;
+      foo %= 42;
+      foo += 42;
+      foo -= 42;
+      foo <<= 0b101010;
+      foo >>= 0b101010;
+      foo >>>= 0b101010;
+      foo &= 0b101010;
+      foo ^= 0b101010;
+      foo |= 0b101010;
+      // Unary `--` and `++`:
+      --foo;
+      ++foo;
+      // Postfix `--` and `++`:
+      foo--;
+      foo++;
+
+
+Object.freeze works on values, and more specifically, object values. It makes an object immutable, i.e. you cannot change its properties.
+
+
+
+
+
+/*******************************************************
+* Const vs Let
+*******************************************************/
+
+use const by default
+
+only use let if rebinding is needed
+
+(var shouldn’t be used in ES6)
+
+/*******************************************************
+* Generators
+*******************************************************/
+
+function factory(...) {
+
+  // The generator's state variables
+
+  return function generator() {
+    // compute the new value
+    // and update the state variables
+    return value;
+  };
+}
+
+
+// powerful example
+function element(array) {
+  let i = 0;
+  return function generator() {
+    if (i < array.length) {
+      i += 1;
+      return value;
+    }
+  };
+}
+
+
+
+/*******************************************************
+* Callback
+*******************************************************/
+
+// Does the continuation argument go first or last?
+
+function first(callback, a) {
+  return callback(a);
+}
+
+function last(a, callback) {
+  return callback(a);
+}
+
+// The continuation argument goes first.
+
+function first(callback, ...a) {
+  return callback(a);
+}
+
+
+/*******************************************************
+* Async
+*******************************************************/
+
+Promises
+
+// better 
+RQ 
+  // https://github.com/douglascrockford/RQ
+
 
 /*******************************************************
 * 
@@ -3579,9 +3698,29 @@ Validation
 *******************************************************/
 
 
+/*******************************************************
+* 
+*******************************************************/
 
 
+/*******************************************************
+* 
+*******************************************************/
 
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
 
 
 
