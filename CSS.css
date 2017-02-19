@@ -1,0 +1,254 @@
+/* -------------------------------------------------- */
+	CSS
+/* -------------------------------------------------- */
+
+Control your specificity
+
+Be modular and create reusable style
+
+Ease maintenance
+
+Work better as a team
+
+Write less to achieve more
+
+
+/* -------------------------------------------------- */
+	DOM
+/* -------------------------------------------------- */
+
+
+DOM
+
+	A DOM has a tree-like structure. Each element, attribute and piece of text in the markup language becomes a DOM node in the tree structure. The nodes are defined by their relationship to other DOM nodes. Some elements are parents of child nodes, and child nodes have siblings.
+
+
+
+Load HTML 	--> 	Parse HTML
+
+Load CSS 	-->		Parse CSS
+
+Create DOM Tree
+
+Display
+
+
+
+
+/* -------------------------------------------------- */
+	Apply CSS to HTML
+/* -------------------------------------------------- */
+
+External /* best */
+
+	<link rel="stylesheet" href="style.css">
+
+
+Internal
+
+	<style>
+		...
+	</style>
+
+
+Inline Style
+
+	<h1 style="color: blue;background-color: yellow;border: 1px solid black;">Hello World!</h1>
+
+    <p style="color:red;">This is my first CSS example</p>
+
+    The only time you might have to resort to using inline styles is when your working environment is really restrictive (perhaps your CMS only allows you to edit the HTML body.)
+
+
+/* -------------------------------------------------- */
+	Syntax
+/* -------------------------------------------------- */
+
+
+CSS Declaration
+
+	body {
+		property : value ; 
+		property : value   /* ; not needed */
+	}
+
+
+Selector Ruleset
+
+	div p, #id:first-line 
+	{
+		property : value ; 
+		property : value   /* ; not needed */
+	}
+
+
+CSS Statements
+
+	At-rules @
+
+		/* @charset */
+		
+		/* @media */
+
+			Applied only if the device which runs the browser matches the expressed condition;
+
+			@media (min-width: 801px) 
+			{
+			  body 
+			  {
+			    margin: 0 auto;
+			    width: 800px;
+			  }
+			}
+		
+		/* @supports */
+
+			Applied only if the browser actually supports the tested feature;
+
+		/* @document */
+
+			Applied only if the current page matches some conditions.
+
+		/* @font-face */
+
+		/* @import */
+
+			@import 'custom.css';
+
+			Imports another CSS file into the current CSS.
+
+
+/* -------------------------------------------------- */
+	Comment Styles
+/* -------------------------------------------------- */
+
+
+/* Handle basic element styling */
+/* --------------------------------------------------------------- */
+body {font: 1em/150% Helvetica, Arial, sans-serif; padding: 1em; margin: 0 auto; max-width: 33em;}
+@media (min-width: 70em) {
+  /* Let's special case the global font size. On large screen or window,
+     we increase the font size for better readability */
+  body {font-size: 130%;}
+}
+
+h1 {font-size: 1.5em;}
+
+/* Handle specific elements nested in the DOM  */
+/* --------------------------------------------------------------- */
+div p, #id:first-line {background-color: red; background-style: none}
+div p                 {margin          :   0; padding         : 1em;}
+div p + p             {padding-top     :   0;                       }
+
+
+
+
+
+
+
+/* -------------------------------------------------- */
+	Selectors
+/* -------------------------------------------------- */
+
+
+Simple selectors
+
+	Match one or more elements based on element type, class, or id.
+
+Attribute selectors
+
+	Match one or more elements based on their attributes/attribute values.
+
+Pseudo-classes
+
+	Match one or more elements that exist in a certain state, such as an element that is being hovered over by the mouse pointer, or a checkbox that is currently disabled or checked, or an element that is the first child of its parent in the DOM tree.
+
+Pseudo-elements
+
+	Match one or more parts of content that are in a certain position in relation to an element, for example the first word of each paragraph, or generated content appearing just before an element.
+
+Combinators
+
+	These are not exactly selectors themselves, but ways of combining two or more selectors in useful ways for very specific selections. So for example, you could select only paragraphs that are direct descendants of divs, or paragraphs that come directly after headings.
+
+
+Multiple selectors
+
+	Again, these are not separate selectors; the idea is that you can put multiple selectors on the same CSS rule, separated by commas, to apply a single set of declarations to all the elements selected by those selectors.
+
+
+
+
+
+/* -------------------------------------------------- */
+	SMACSS : Scalable and Modular Architecture CSS
+/* -------------------------------------------------- */
+
+
+Base
+
+	This include selector rules. No classes or id here. This is to reset browser rules and set a base style for elements which are going to be consistent and reused. You are defining here the default style for your elements. This can include html, body, h1, h2, h3, h4, h5, h6, img, a…
+
+Layout
+
+	This is where the style used to lay out your pages will sit. It should be separated to your module style for flexibility. You want to be able to use your layout style to build your pages in the most flexible way possible. A module or components should be added to any place in your site independent from the layout.
+
+Modules
+
+	A module is a part or a component of your page. Your menu, dialog box, download list or any widget you have on your page. It depends of your design.
+
+	A module is independent from your layout so it can live anywhere in you app. You should be able to copy/paste the html and move somewhere else, and it will look and behave the same.
+
+	A module should be encapsulated in one file and easily accessible. It will be easy to find and you’ll be in control of what you want to update as it won’t be depending on any other style.
+
+States
+
+	A state will be a style which modifies or overrides other rules. A great example is accordion when collapsing or expanding elements. Using a `is-collapsed` class will make sure your element is collapsed. This is a good place to use !important (and probably the only one) as you want this state to be applied no matter what. Also, it can relate to modified state with javascript.
+
+	Good practise is to prefix or add a namespace to those states classes like is- or has-: is-hidden, is-displayed, is-collapsed, has-children, etc
+
+Theme
+
+	Idea is to have a file called theme.css where you can define all the theme rules.
+
+	// box.scss
+	.box {
+	  border: 1px solid;
+	}
+	// theme.scss
+	.box {
+	  border-color: red;
+	}
+
+/*******************************************************
+* Masonory Layout
+*******************************************************/
+
+
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
