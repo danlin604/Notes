@@ -647,18 +647,105 @@ Colour
 		opacity: 0.5;
 
 
+/* -------------------------------------------------- */
+	Cascade and inheritance
+/* -------------------------------------------------- */
+
+Cascading Style Sheets
+
+	Which style will override which?
 
 
+Importance
+
+	lways win over all others
+
+	border: none !important;
+
+
+Specificity
+
+	Specificity is basically a measure of how specific a selector is, in terms of how many elements it could match. As shown in the example seen above, element selectors have low specificity. Class selectors have a higher specificity, so will win against element selectors. ID selectors have an even higher specificity, so will win against class selectors. The only way to win against an ID selector is to use !important.
+
+	/* weight: 0101 */
+	#outer a {
+		background-color: red;
+	}
+
+	/* weight: 0201 */
+	#outer #inner a {
+		background-color: blue;
+	}
+
+	/* weight: 0104 */
+	#outer div ul li a {
+		color: yellow;
+	}
+
+
+Source order
+
+	later rules will win over earlier rules
+
+	p {
+		color: blue;
+	}
+
+	/* This rule will win over the first one */
+	p {
+		color: red;
+	}
+
+	/* This rule will win by specificity*/
+	.footnote { 
+		color: blue;
+	}
+
+	p {
+		color: red;
+	}
+
+
+/* -------------------------------------------------- */
+
+Inheritance
+
+	inherit
+
+		This value sets the property value applied to a selected element to be the same as that of its parent element.
+
+	initial
+
+		This value sets the property value applied to a selected element to be the same as the value set for that element in the browser's default style sheet. If no value is set by the browser's default style sheet and the property is naturally inherited, then the property value is set to inherit instead.
+
+	unset
+
+		This value resets the property to its natural value, which means that if the property is naturally inherited it acts like inherit, otherwise it acts like initial.
+
+
+	body {
+		color: green;
+	}
+
+	.inherit a {
+		color: inherit;
+	}
+
+	.initial a {
+		color: initial
+	}
+
+	.unset a {
+		color: unset;
+	}
 
 
 
 /* -------------------------------------------------- */
-	
+	CSS Box Model
 /* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
-	
-/* -------------------------------------------------- */
+
 
 
 /* -------------------------------------------------- */
