@@ -379,14 +379,94 @@ Combinators
 
 	These are not exactly selectors themselves, but ways of combining two or more selectors in useful ways for very specific selections. So for example, you could select only paragraphs that are direct descendants of divs, or paragraphs that come directly after headings.
 
+
+AB	
+	
+	Any element matching both A and B at the same time.
+
+A B	
+
+	Any element matching B that is a descendant of an element matching A (that is: a child, or a child of a child, etc.)
+
+A > B
+
+	Any element matching B that is a direct child of an element matching A.
+
+A + B	
+
+	Any element matching B that is the next sibling of an element matching A (that is: the next child of the same parent.)
+
+A ~ B
+
+	Any element matching B that is among the next sibling of an element matching A (that is: one of the next children of the same parent.)
+
+
+	/* All <td>s within a <table> and all <th>s within a <table>
+	   Comma is not a combinator, it just allows you to target
+	   several selectors with the same CSS ruleset */
+	table td, table th {
+		border : 1px solid black;
+		padding: 0.5em 0.5em 0.4em;
+	}
+
+
+	/* All <th>s within <thead>s that are within <table>s */
+	table thead th {
+		color: white;
+		background: black;
+	}
+
+	/* All <td>s preceded by another <td>,
+	within a <tbody>, within a <table> */
+	table tbody td + td {
+		text-align: center;
+	}
+
+	/* All <td>s that are a last child,
+	within a <tbody>, within a <table> */
+	table tbody td:last-child {
+		text-align: right
+	}
+
+	/* All <th>s, within a <tfoot>s, within a <table> */
+	table tfoot th {
+		text-align: right;
+		border-top-width: 5px;
+		border-left: none;
+		border-bottom: none;
+	}
+
+	/* All <td>s preceded by a <th>, within a <table> */
+	table th + td {
+		text-align: right;
+		border-top-width: 5px;
+		color: white;
+		background: black;
+	}
+
+	/* All pseudo-elements "before" <td>s that are a last child,
+	appearing within elements with a class of "with-currency" that
+	also have an attribute "lang" with the value "en-US" */
+	.with-currency[lang="en-US"] td:last-child::before {
+		content: '$';
+	}
+
+	/* All pseudo-elements "after" <td>s that are a last child,
+	appearing within elements with the class "with-currency" that
+	also have an attribute "lang" with the value "fr" */
+	.with-currency[lang="fr"] td:last-child::after {
+		content: ' €';
+	}
+
 /* -------------------------------------------------- */
 
 Multiple selectors
 
-	Again, these are not separate selectors; the idea is that you can put multiple selectors on the same CSS rule, separated by commas, to apply a single set of declarations to all the elements selected by those selectors.
+	You can write multiple selectors separated by commas, to apply the same rule to multiple sets of selected elements at once.
 
-
-
+	h1, h2, h3, h4, h5, h6 {
+		font-family: helvetica, 'sans serif';
+	}
 
 
 /* -------------------------------------------------- */
@@ -431,8 +511,145 @@ Theme
 
 
 /* -------------------------------------------------- */
-	
+	CSS Values and Units
 /* -------------------------------------------------- */
+
+Numeric values
+
+	Length values for specifying e.g. element width, border thickness, or font size, and unitless integers for specifying e.g. relative line width or number of times to run an animation.
+
+Percentages
+
+	Can also be used to specify size or length — relative to a parent container's width or height for example, or the default font-size.
+
+Colors
+
+	For specifying background colors, text colors, etc.
+
+Coordinate positions
+
+	e.g. for specifying the position of a positioned element relative to the top left of the screen.
+
+Functions
+
+	For specifying e.g. background images or background image gradients.
+
+
+/* -------------------------------------------------- */
+
+Length and Size
+
+	margin: 5px;
+	padding: 10px;
+	border: 2px
+	width: 150px;
+	font-size: 18px;
+
+	px (pixel)
+
+		absolute units, same size regardless of any other related settings
+		
+	mm, cm, in
+
+		Millimeters, centimeters, or inches
+
+	pt, pc
+
+		Points (1/72 of an inch) or picas (12 points.)
+
+	em
+
+		1em is the same as the font-size of the current element (more specifically, the width of a capital letter M.) The default base font-size given to web pages by web browsers before CSS styling is applied is 16 pixels, which means the computed value of 1em is 16 pixels for an element by default. But beware — font sizes are inherited by elements from their parents, so if different font sizes have been set on parent elements, the pixel equivalent of an em can start to become complicated.
+
+	ex, ch
+
+		Respectively these are the height of a lower case x, and the width of the number 0. These are not as commonly used or well-supported as ems.
+
+	rem
+
+		The rem (root em) works in exactly the same way as the em, except that it will always equal the size of the default base font-size; inherited font sizes will have no effect, so this sounds like a much better option than ems, although rems don't work in older versions of Internet Explorer.
+
+	vw, vh
+
+		Respectively these are 1/100th of the width of the viewport, and 1/100th of the height of the viewport. Again, these are not as widely supported as rems.
+
+Unitless Values
+
+	For example, if you want to completely remove the margin or padding from an element, you can just use unitless 0 — 0 is 0, no matter what units were set before!
+
+	margin: 0;
+
+	line-height: 1.5;
+
+CSS Animations
+
+	@keyframes rotate {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	p:hover {
+		animation-name: rotate;
+		animation-duration: 0.6s;
+		animation-timing-function: linear;
+		animation-iteration-count: 5;
+	}
+
+Percentages
+
+	font-size: 200%;
+	width: 75%;
+
+Colour
+
+	Hexadecimal values
+
+		background-color: #ff0000; /* red */
+
+	RGB
+
+		background-color: rgb(255,0,0);
+
+	HSL
+
+		Slightly less well supported than RGB is the HSL model (not on old versions of IE), which was implemented after much interest from designers — instead of red, green and blue values, the hsl() function accepts hue, saturation, and lightness values, which are used to distinguish between the 16.7 million colors, but in a different way
+
+		hue
+
+			the base shade of the color. This takes a value between 0 and 360, presenting the angles round a color wheel.
+
+		saturation
+
+			how saturated is the color? This takes a value from 0-100%, where 0 is no color (it will appear as a shade of grey), and 100% is full color saturation
+
+		lightness
+
+			how light, or bright is the color? This takes a value from 0-100%, where 0 is no light (it will appear completely black) and 100% is full light (it will appear completely white)
+
+		background-color: hsl(0,100%,50%);
+		background-color: hsl(240,100%,50%);
+
+	RGBA (transparency)
+
+		background-color: rgba(255,0,0,0.5);
+
+	HSLA (transparency)
+
+		background-color: hsla(240,100%,50%,0.5);
+
+	Obacity
+
+		opacity: 0.5;
+
+
+
+
+
 
 
 /* -------------------------------------------------- */
