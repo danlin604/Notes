@@ -73,7 +73,7 @@ Important bits
 
 
 /* -------------------------------------------------- */
-	Testing Basic
+	Testing Basic - Browser
 /* -------------------------------------------------- */
 
 Naming
@@ -116,6 +116,109 @@ Naming
     <!-- load your test files here -->
     <script src="test/classNameTest.js"></script>
 */
+
+
+/* -------------------------------------------------- */
+
+
+/* expanded example */
+
+/* addClass.js */
+
+	function addClass(el, newClass) {
+
+	  el.classname = el.classname || ''; 
+
+	  if(el.className.indexOf(newClass) !== -1) {
+	    return;
+	  }
+
+	  if(el.className) { // is empty string
+	    //ensure class names are separated by a space
+	    newClass = ' ' + newClass;
+	  }
+
+	  el.className += newClass;
+	}
+
+/* classNameTest.js */
+
+	var assert = chai.assert;
+
+	describe('addClass', function() {
+	    
+	  it('should add class to element', function() {
+	    var element = { className: '' };
+
+	    addClass(element, 'test-class');
+
+	    assert.equal(element.className, 'test-class');
+	  });
+
+	  it('should not add a class which already exists', function() {
+	    var element = { className: 'exists' };
+
+	    addClass(element, 'exists');
+
+	    var numClasses = element.className.split(' ').length;
+	    assert.equal(numClasses, 1);
+	  });
+
+	  it('should append new class after existing one', function() {
+	    var element = { className: 'exists' };
+
+	    addClass(element, 'new-class');
+
+	    var classes = element.className.split(' ');
+	    assert.equal(classes[1], 'new-class');
+	  });  
+
+	});
+
+
+/* -------------------------------------------------- */
+	Testing Basic - Node
+/* -------------------------------------------------- */
+
+// className.js
+
+	module.exports = {
+	  addClass: function(el, newClass) {
+	    if(el.className.indexOf(newClass) !== -1) {
+	      return;
+	    }
+
+	    if(el.className !== '') {
+	      //ensure class names are separated by a space
+	      newClass = ' ' + newClass;
+	    }
+
+	    el.className += newClass;
+	  }
+	}
+
+
+// classNameTest.js
+
+	var chai = require('chai');
+	var assert = chai.assert;
+
+	var className = require('../js/className.js');
+	var addClass = className.addClass;
+
+	// The rest of the file remains the same
+
+	describe('addClass', function() {
+	  ...
+	});
+
+// Terminal
+
+	test/test.js 
+	test/classNameTest.js
+
+	mocha . // test all
+	mocha classNameTest.js 
 
 /* -------------------------------------------------- */
 	
