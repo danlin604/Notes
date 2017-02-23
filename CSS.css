@@ -803,18 +803,58 @@ Overflow
 	.clipped    { overflow: hidden;  }
 	.default    { overflow: visible; }
 
+
+
 /* -------------------------------------------------- */
+	Debugging
+/* -------------------------------------------------- */
+
+Just like HTML, CSS is permissive. In CSS's case, if a declaration is invalid (contains a syntax error, or the browser doesn't support that feature), the browser just ignores it completely and moves on to the next one it finds.
+
+If a selector is invalid, then it doesn't select anything, and the whole rule does nothing — again, the browser just moves on to the next rule.
+
+
+
+Web Developer Tool
+
+	Inspect DOM --> See CSS rules applied
+
+CSS Validator
+
+	W3C CSS Validation Service
+
+
+/* -------------------------------------------------- */
+	z-index
+/* -------------------------------------------------- */
+
+The z-index property specifies the z-order of a positioned element and its descendants. When elements overlap, z-order determines which one covers the other. An element with a larger z-index generally covers an element with a lower one.
 	
-/* -------------------------------------------------- */
-
-
-/* -------------------------------------------------- */
+auto
 	
-/* -------------------------------------------------- */
+	The box does not establish a new local stacking context. The stack level of the generated box in the current stacking context is the same as its parent's box.
+
+	z-index: auto;
+
+<integer>
+
+	This integer is the stack level of the generated box in the current stacking context. The box also establishes a local stacking context in which its stack level is 0. This means that the z-indexes of descendants are not compared to the z-indexes of elements outside this element.
+
+	z-index: 0;
+	z-index: 3;
+	z-index: 289;
+	z-index: -1; /* Negative values to lower the priority */
+
+Global values
+
+	z-index: inherit;
+	z-index: initial;
+	z-index: unset;
 
 
+
 /* -------------------------------------------------- */
-	
+	CSS Layout
 /* -------------------------------------------------- */
 
 /* -------------------------------------------------- */
