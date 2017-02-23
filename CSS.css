@@ -854,8 +854,116 @@ Global values
 
 
 /* -------------------------------------------------- */
-	CSS Layout
+	Floats
 /* -------------------------------------------------- */
+
+/* img on left, words flow around it */
+
+	<img src="butterfly.jpg">
+	<p> ... </p>
+
+	img {
+	  float: left;
+	  margin: 0 30px 0 0;
+	}
+
+
+/* 2-column layout */
+
+	The :nth-of-type(n) selector matches every element that is the nth child, of a particular type, of its parent.
+
+	div:nth-of-type(1) { 
+	  width: 48%;
+	  float: left;
+	}
+	div:nth-of-type(2) {
+	  width: 48%;
+	  float: right;
+	}
+
+/* 3-column layout */
+
+	div:nth-of-type(1) {
+	  width: 36%;
+	  float: left;
+	}
+
+	div:nth-of-type(2) {
+	  width: 30%;
+	  float: left;
+	  margin-left: 4%;
+	}
+
+	div:nth-of-type(3) {
+	  width: 26%;
+	  float: right;
+	}
+
+/* clear */
+
+	stop floating here
+
+	footer {
+	  clear: both;
+	}
+
+	none
+
+		Is a keyword indicating that the element is not moved down to clear past floating elements.
+
+	left
+
+		Is a keyword indicating that the element is moved down to clear past left floats.
+
+	right
+
+		Is a keyword indicating that the element is moved down to clear past right floats.
+
+	both
+
+		Is a keyword indicating that the element is moved down to clear past both left and right floats.
+
+	inline-start 
+
+		Is a keyword indicating that the element is moved down to clear floats on start side of its containing block, that is the left floats on ltr scripts and the right floats on rtl scripts.
+
+	inline-end 
+		
+		Is a keyword indicating that the element is moved down to clear floats on end side of its containing block, that is the right floats on ltr scripts and the left floats on rtl scripts.
+
+
+/* -------------------------------------------------- */
+
+Issues
+
+ 	The whole width can be tricky to calculate
+
+Solution
+
+	box-sizing
+
+	Makes the box model change so the width of the box is taken as content + padding + border, not just content — so adding padding and border won't make the box any wider — it'll just make the content narrower to accomodate.
+
+	* {
+	  box-sizing: border-box;
+	}
+
+/* -------------------------------------------------- */
+
+Issues
+
+	Add margin-top to footer against above floating columns
+
+Solution
+
+	/* columns above */
+	<div class="clearfix"></div>
+	/* footer below */
+
+	.clearfix {
+	  clear: both;
+	}
+
 
 /* -------------------------------------------------- */
 	
