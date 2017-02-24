@@ -966,6 +966,86 @@ Solution
 
 
 /* -------------------------------------------------- */
+	ALL: INITIAL;
+/* -------------------------------------------------- */
+
+Effectively stops inheritance.
+
+Prevents legacy styles from leaking into fresh work.
+
+A very progressive way of defending against legacy.
+
+p {
+	all: initial;
+}
+
+/* -------------------------------------------------- */
+	DEFENSE.CSS
+/* -------------------------------------------------- */
+
+old.css --> defense.css --> new.css
+
+	Fixes for collisions between old.css and new.css.
+
+	Contains hacks, crude code, etc.
+
+	Remove old.css and defense.css at end of project.
+
+
+/* -------------------------------------------------- */
+	BEM - Block Element Modifier
+/* -------------------------------------------------- */
+
+Naming concention for modular/object-oriented CSS
+
+	.{block}__{element}
+	.{block}__{element}--{modifier}
+	.{block}--{modifier}
+
+Grandchildren are a bad idea; Start a new block instead!
+
+
+.object {
+	color: red;
+}
+.object__descendant {
+	color: black;
+}
+
+
+/* -------------------------------------------------- */
+	SHAME.CSS :<
+/* -------------------------------------------------- */
+
+The idea of shame.css is that you have a totally new stylesheet reserved just for your hacky code. The code you have to write to get the release out on time, but the code that makes you ashamed. :<
+
+/* -------------------------------------------------- */
+	CSS Pre-Processors
+/* -------------------------------------------------- */
+
+A preprocessor is a program that takes one type of data and converts it to another type of data. In the case of HTML and CSS, some of the more popular preprocessor languages include Haml and Sass. Haml is processed into HTML and Sass is processed into CSS.
+
+Pre-processors, with their advanced features, helped to achieve writing reusable, maintainable and extensible codes in CSS. By using a pre-processor, you can easily increase your productivity, and decrease the amount of code you are writing in a project.
+
+SASS
+
+LESS
+
+Stylus
+
+
+/* -------------------------------------------------- */
+	Utility Classes
+/* -------------------------------------------------- */
+
+<div class="pull-left col-md-6 small"></div>
+
+Problem
+
+	Utility classes tie your markup presentation
+
+
+/* -------------------------------------------------- */
 	
 /* -------------------------------------------------- */
 
