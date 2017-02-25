@@ -1046,9 +1046,42 @@ Problem
 
 
 /* -------------------------------------------------- */
-	
+	Positioning
 /* -------------------------------------------------- */
 
+Static positioning
+
+	Static positioning is the default that every element gets — it just means "put the element into it's normal position in the document layout flow — nothing special to see here".
+
+	.positioned {
+	   position: static;
+	}
+
+Relative positioning
+
+	Relative positioning is the first position type we'll take a look at. This is very similar to static positioning, except that once the positioned element has taken its place in the normal layout flow, you can then modify its final position, including making it overlap other elements on the page.
+
+	.positioned {
+		position: relative;
+		top: 30px;
+		left: 30px;
+	}
+
+Absolute positioning
+
+	An absolutely positioned element no longer exists in the normal document layout flow. Instead, it sits on it's own layer separate from everything else.
+
+	position: absolute;
+
+Fixed positioning
+
+	There is one more type of positioning to cover — fixed. This works in exactly the same way as absolute positioning, with one key difference — whereas absolute positioning fixes an element in place relative to the <html> element or its nearest positioned ancestor, fixed positioning fixes an element in place relative to the browser viewport itself. This means that you can create useful UI items that are fixed in place, like persisting navigation menus.
+
+	position: fixed;
+	
+Sticky position (experimental)
+
+	There is a new positioning value available called position: sticky, support for which is not very widespread yet. This is basically a hybrid between relative and fixed position, which allows a positioned element to act like it is relatively positioned until it is scrolled to a certain threshold point (e.g. 10px from the top of the viewport), after which it becomes fixed.
 
 /* -------------------------------------------------- */
 	
