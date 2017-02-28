@@ -56,12 +56,26 @@ Convert keywords to machine code (0s and 1s);
 
 
 /* -------------------------------------------------- */
-	
+	Int overflow
 /* -------------------------------------------------- */
 
+Bits: 11...1 ---> becomes negative OR 0 once bits overflow
+
+Count too high, you wrap around 0
+
 /* -------------------------------------------------- */
-	
+	Floating-point imprecision
 /* -------------------------------------------------- */
+
+Computers are imprecise
+
+	Infinite possible numbers in math
+
+	Computer rounds
+
+	Computer shows us the closest approx. to the number we want.
+
+
 
 /* -------------------------------------------------- */
 	

@@ -90,7 +90,7 @@ int main(void)
 
     printf("%i + %i = %i\n", a, b, a + b); // int
     printf("%i * %i = %i\n", a, b, a * b); // int
-    printf("%f / %f = %f\n", c, d, c / d); // float
+    printf("%f / %f = %.10f\n", c, d, c / d); // float (10 decimal)
 }
 
 
@@ -107,6 +107,23 @@ int main(void)
     printf("int is %lu\n", sizeof(int));
     printf("long long is %lu\n", sizeof(long long));
 }
+
+
+c	Character
+d or i	Signed decimal integer
+e	Scientific notation (mantissa/exponent) using e character
+E	Scientific notation (mantissa/exponent) using E character
+f	Decimal floating point
+g	Uses the shorter of %e or %f
+G	Uses the shorter of %E or %f
+o	Signed octal
+s	String of characters
+u	Unsigned decimal integer
+x	Unsigned hexadecimal integer
+X	Unsigned hexadecimal integer (capital letters)
+p	Pointer address
+n	Nothing printed
+%	Character
 
 /* -------------------------------------------------- */
 	
