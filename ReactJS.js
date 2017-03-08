@@ -133,9 +133,59 @@ Steps
 
 
 /* -------------------------------------------------- */
-	
+	CSS
 /* -------------------------------------------------- */
 
+Old School
+
+	.main .sidebar .button
+
+	Complicated on larger applications
+
+
+
+CSS Methodologies
+
+	once you adopt one, you are pretty much stuck with that and its going to be difficult to migrate.
+
+	OOCSS (Object Oriented CSS)
+
+	SMACSS (Scalable and Modular Approach for CSS)
+
+	BEM (Block Element Modifier)
+
+		BEM originates from Yandex. The goal of BEM is to allow reusable components and code sharing.
+
+	React Inline
+
+		CSS is powerful, but it can become an unmaintainable mess without some discipline. Where do we draw the line between CSS and JavaScript?
+
+		styling at the component level
+
+		/* Instead of
+
+			render(props, context) {
+			  const notes = this.props.notes;
+
+			  return <ul className='notes'>{notes.map(this.renderNote)}</ul>;
+			}
+		*/
+
+		/* Use
+
+			render(props, context) {
+			  const notes = this.props.notes;
+			  const style = {
+			    margin: '0.5em',
+			    paddingLeft: 0,
+			    listStyle: 'none'
+			  };
+
+			  return <ul style={style}>{notes.map(this.renderNote)}</ul>;
+			}
+		*/
+
+		It is going to be difficult to perform large, sweeping changes to our codebase as we need to tweak a lot of components to achieve that.
 
 /* -------------------------------------------------- */
 	

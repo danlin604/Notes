@@ -1084,7 +1084,7 @@ Sticky position (experimental)
 	There is a new positioning value available called position: sticky, support for which is not very widespread yet. This is basically a hybrid between relative and fixed position, which allows a positioned element to act like it is relatively positioned until it is scrolled to a certain threshold point (e.g. 10px from the top of the viewport), after which it becomes fixed.
 
 /* -------------------------------------------------- */
-	
+	left-half right-half layouts
 /* -------------------------------------------------- */
 
 

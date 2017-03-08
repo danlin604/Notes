@@ -1,41 +1,227 @@
-/*******************************************************
- * NodeJS index
- *******************************************************/
+/* -------------------------------------------------- */
+    HTML5 Template
+/* -------------------------------------------------- */
 
- <!DOCTYPE html>
-
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
-    <style>
-        body 
-        { 	
-    		background: skyblue; 
-    		font-family: verdana; 
-    		color: #fff; 
-    		padding: 30px; 
-        }
+    <title>Dan</title>
 
-        h1 
-        { 		
-    		font-size: 48px; 
-    		text-transform: uppercase; 
-    		letter-spacing: 2px; 
-    		text-align: center; 
-        }
+    <meta charset="utf-8">  
+    <meta name="description"    content="template description">
+    <meta name="keywords"       content="HTML,CSS,JavaScript">
+    <meta name="author"         content="Daniel Lin">
+    <meta name="viewport"       content="width=device-width, initial-scale=1.0">
 
-        p 
-        { 
-        	font-size: 16px; 
-        	text-align: center; 
-        }
-        
-    </style>
+    <link rel="stylesheet" href="./styles.css">
+
 </head>
 
 <body>
-    <h1>Welcome to the most awesome website on the internet</h1>
-    <p>You don't find a better website anywhere else!</p>
-</body>
 
+  <header>  
+    <h1>Page Title</h1>
+
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main role="main">
+
+    <section>
+      <article>
+        <header>
+          <h1>Section header</h1>
+        </header>
+
+        <p>Section body</p>
+
+        <footer>Section footer</footer>
+      </article>      
+    </section>
+
+    <aside>
+      <p>tangentially connected section</p>
+    </aside>
+  </main>
+
+  <footer>
+    footer for nearest section or sectioning root   
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
 </html>
+
+/* -------------------------------------------------- */
+    HTML5 Components
+/* -------------------------------------------------- */
+
+section
+
+  Used for grouping together thematically-related content. Sounds like a div element, but it’s not. The div has no semantic meaning. Before replacing all your div’s with section elements, always ask yourself: “Is all of the content related?”
+
+aside
+
+  Used for tangentially related content. Just because some content appears to the left or right of the main content isn’t enough reason to use the aside element. Ask yourself if the content within the aside can be removed without reducing the meaning of the main content. Pullquotes are an example of tangentially related content.
+
+header
+
+  There is a crucial difference between the header element and the general accepted usage of header (or masthead). There’s usually only one header or ‘masthead’ in a page. In HTML5 you can have as many as you want. The spec defines it as “a group of introductory or navigational aids”. You can use a header in any section on your site. In fact, you probably should use a header within most of your sections. The spec describes the section element as “a thematic grouping of content, typically with a heading.”
+
+nav
+
+  Intended for major navigation information. A group of links grouped together isn’t enough reason to use the nav element. Site-wide navigation, on the other hand belongs in a nav element.
+
+footer
+
+  Sounds like its a description of the position, but its not. Footer elements contain informations about its containing element: who wrote it, copyright, links to related content, etc. Whereas we usually have one footer for an entire document, HTML5 allows us to also have footer within sections.
+
+
+Usage:
+
+<body>
+ <h1>page title</h1>
+
+  <nav>
+   <h1>navigation</h1>
+  </nav>
+
+  <aside>
+   <h1>tangentially related to the topic at hand</h1>
+  </aside>
+
+  <article></article>
+
+  <article>
+    <h1>named article</h1>
+  </article>
+
+  <h2>untyped section, sibling 
+      of the last article</h2>
+
+Usage:
+
+<body>
+
+ <h3>if you want siblings at top level</h3>
+
+ <h3>you have to use untyped sections with <hX> </h3>
+  
+  <article>
+   <h1>as any section will descent</h1>
+  </article>
+
+  <nav>
+   <ul><li><a href=...>...</a></li></ul>
+  </nav>
+
+
+
+
+What is the difference between <article> and <section>?
+
+  both can:
+
+    be nested in each other
+
+    take a different notion in a different context or nesting level
+
+  <section>s are like book chapters
+
+    they usually have siblings (maybe in a different document?)
+
+    together they have something in common, like chapters in a book
+
+  one author, one <article>... at least on the lowest level
+
+    standard example: a single blog comment
+
+    a blog entry itself is also a good example
+
+    a blog entry <article> and its comment <article>s could also be wrapped with an <article>
+
+    it’s some “complete” thing, not a part in a series of similar
+
+  <section>s in an <article> are like chapters in a book
+
+  <article>s in a <section> are like poems in a volume (within a series)
+
+
+How do <header>, <footer> and <main> fit in?
+
+  they have zero influence on sectioning
+
+  <header> and <footer>
+
+    they allow you to mark zones of each and every section
+
+    even within a section you can have them several times
+
+    to differentiate from the main part in this section
+
+    limited only by the author’s taste
+
+  <header>
+    
+    may mark the title/name of this section
+
+    may contain a logo for this section
+
+    has no need to be at the top or upper part of the section
+
+  <footer>
+
+    may mark the credits/author of this section
+
+    can come at the top of the section
+
+    can even be above a <header>
+
+  <main>
+
+    only allowed once
+
+    marks the main part of the top level section (i.e. the document, <body> that is)
+
+    subsections themselves have no markup for their main part
+
+    <main> can even “hide” in some subsections of the document, while document’s <header> and <footer> can’t (that markup would mark header/footer of that subsection then)
+
+      but it is not allowed in <article> sections4
+
+    helps to distinguish “the real thing” from document’s non-header, non-footer, non-main content, if that makes sense in your case...  
+
+
+/* -------------------------------------------------- */
+    
+/* -------------------------------------------------- */
+
+/* -------------------------------------------------- */
+    
+/* -------------------------------------------------- */
+
+
+/* -------------------------------------------------- */
+    
+/* -------------------------------------------------- */
+
+
+/* -------------------------------------------------- */
+    
+/* -------------------------------------------------- */
+
+
+/* -------------------------------------------------- */
+    
+/* -------------------------------------------------- */
+
+
+/* -------------------------------------------------- */
+    
+/* -------------------------------------------------- */
