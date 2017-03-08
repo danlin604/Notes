@@ -199,8 +199,59 @@ How do <header>, <footer> and <main> fit in?
 
 
 /* -------------------------------------------------- */
-    
+    Data form validation
 /* -------------------------------------------------- */
+
+While you should always validate data on your servers, additional validation of data on the Web page itself has multiple benefits. In many ways, users are annoyed by forms. By validating form data while the user is filling it out, the user can know immediately if they've made any mistakes; this saves the time of waiting for an HTTP response and saves your server from dealing with bad form input.
+
+:invalid CSS pseudo class
+
+
+  <input id="choose" name="i_like" pattern="banana|cherry" required>
+
+  <input type="number" min="12" max="120" step="1" id="n1" name="age" pattern="\d+">
+
+  <input type="text" id="t1" name="fruit" list="l1" required pattern="[Bb]anana|[Cc]herry">
+
+  <input type="email" name="email">
+
+  <textarea id="t3" name="msg" maxlength="140" rows="5"></textarea>
+
+Radio
+
+  <fieldset>
+    <legend>Title<abbr title="This field is mandatory">*</abbr></legend>
+    <input type="radio" required name="title" id="r1" value="Mr" ><label for="r1">Mr. </label>
+    <input type="radio" required name="title" id="r2" value="Ms"><label for="r2">Ms.</label>
+  </fieldset>
+
+
+Customized error messages
+
+  There is no standard way to change their look and feel with CSS.
+
+  They depend on the browser locale, which means that you can have a page in one language but an error message displayed in another language.
+
+  Use JavaScript to customize appearance and text.
+
+Example
+
+<form>
+  <label for="mail">I would like you to provide me an e-mail</label>
+  <input type="email" id="mail" name="mail">
+  <button>Submit</button>
+</form>
+
+var email = document.getElementById("mail");
+
+email.addEventListener("keyup", function (event) {
+  if (email.validity.typeMismatch) {
+    email.setCustomValidity("I expect an e-mail, darling!");
+  } else {
+    email.setCustomValidity("");
+  }
+});
+
 
 /* -------------------------------------------------- */
     

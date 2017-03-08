@@ -3694,9 +3694,224 @@ try {
 }
 // clean up
 
+
 /*******************************************************
-* 
+* HTML5 Constraint validation API
 *******************************************************/
+
+More and more browsers now support the constraint validation API, and its becoming reliable. This API consists of a set of methods and properties available on each form element.
+
+validationMessage
+
+	A localized message describing the validation constraints that the control does not satisfy (if any), or the empty string if the control is not a candidate for constraint validation (willValidate is false), or the elements value satisfies its constraints.
+
+validity
+
+	A ValidityState object describing the validity state of the element.
+
+validity.customError
+
+	Returns true if the element has a custom error; false otherwise.
+
+validity.patternMismatch
+
+	Returns true if the element's value doesn't match the provided pattern; false otherwise.
+
+	If it returns true, the element will match the :invalid CSS pseudoclass.
+
+validity.rangeOverflow
+
+	Returns true if the elements value is higher than the provided maximum; false otherwise.
+
+	If it returns true, the element will match the :invalid and :out-of-range and CSS pseudoclass.
+
+validity.rangeUnderflow
+
+	Returns true if the elements value is lower than the provided minimum; false otherwise.
+
+	If it returns true, the element will match the :invalid and :out-of-range CSS pseudoclass.
+
+validity.stepMismatch
+
+	Returns true if the element's value doesn't fit the rules provided by the step attribute; otherwise false .
+
+	If it returns true, the element will match the :invalid and :out-of-range CSS pseudoclass.
+
+validity.tooLong
+
+	Returns true if the elements value is longer than the provided maximum length; else it wil be false 
+
+	If it returns true, the element will match the :invalid and :out-of-range CSS pseudoclass.
+
+validity.typeMismatch
+
+	Returns true if the elements value is not in the correct syntax; otherwise false.
+
+	If it returns true, the element will match the :invalid css pseudoclass.
+
+validity.valid
+
+	Returns true if the elements value has no validity problems; false otherwise.
+
+	If it returns true, the element will match the :valid css pseudoclass; the :invalid CSS pseudoclass otherwise.
+
+validity.valueMissing
+
+	Returns true if the element has no value but is a required field; false otherwise.
+
+	If it returns true, the element will match the :invalid CSS pseudoclass.
+
+willValidate
+
+	Returns true if the element will be validated when the form is submitted; false otherwise.
+
+checkValidity()
+
+	Returns true if the elements value has no validity problems; false otherwise. If the element is invalid, this method also causes an invalid event at the element.
+
+setCustomValidity(message)
+
+	Adds a custom error message to the element; if you set a custom error message, the element is considered to be invalid, and the specified error is displayed. This lets you use JavaScript code to establish a validation failure other than those offered by the standard constraint validation API. The message is shown to the user when reporting the problem.
+
+	If the argument is the empty string, the custom error is cleared.
+
+*******************************************************
+Example
+
+/*
+	<form novalidate>
+	  <p>
+	    <label for="mail">
+	      <span>Please enter an email address:</span>
+	      <input type="email" id="mail" name="mail">
+	      <span class="error" aria-live="polite"></span>
+	    </label>
+	  </p>
+	  <button>Submit</button>
+	</form>
+*/
+
+// There are many ways to pick a DOM node; here we get the form itself and the email
+// input box, as well as the span element into which we will place the error message.
+
+var form  = document.getElementsByTagName('form')[0];
+var email = document.getElementById('mail');
+var error = document.querySelector('.error');
+
+email.addEventListener("keyup", function (event) {
+  // Each time the user types something, we check if the
+  // email field is valid.
+  if (email.validity.valid) {
+    // In case there is an error message visible, if the field
+    // is valid, we remove the error message.
+    error.innerHTML = ""; // Reset the content of the message
+    error.className = "error"; // Reset the visual state of the message
+  }
+}, false);
+form.addEventListener("submit", function (event) {
+  // Each time the user tries to send the data, we check
+  // if the email field is valid.
+  if (!email.validity.valid) {
+    
+    // If the field is not valid, we display a custom
+    // error message.
+    error.innerHTML = "I expect an e-mail, darling!";
+    error.className = "error active";
+    // And we prevent the form from being sent by canceling the event
+    event.preventDefault();
+  }
+}, false);
+
+
+*******************************************************
+Validating without built-in API
+
+/*
+<form>
+  <p>
+    <label for="mail">
+        <span>Please enter an email address:</span>
+        <input type="text" class="mail" id="mail" name="mail">
+        <span class="error" aria-live="polite"></span>
+    </label>
+  <p>
+  <!-- Some legacy browsers need to have the `type` attribute
+       explicitly set to `submit` on the `button`element -->
+  <button type="submit">Submit</button>
+</form>
+*/
+
+// There are fewer ways to pick a DOM node with legacy browsers
+var form  = document.getElementsByTagName('form')[0];
+var email = document.getElementById('mail');
+
+// The following is a trick to reach the next sibling Element node in the DOM
+// This is dangerous because you can easily build an infinite loop.
+// In modern browsers, you should prefer using element.nextElementSibling
+var error = email;
+while ((error = error.nextSibling).nodeType != 1);
+
+// As per the HTML5 Specification
+var emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+// Many legacy browsers do not support the addEventListener method.
+// Here is a simple way to handle this; it's far from the only one.
+function addEvent(element, event, callback) {
+  var previousEventCallBack = element["on"+event];
+  element["on"+event] = function (e) {
+    var output = callback(e);
+    
+    // A callback that returns `false` stops the callback chain
+    // and interrupts the execution of the event callback.
+    if (output === false) return false;
+
+    if (typeof previousEventCallBack === 'function') {
+      output = previousEventCallBack(e);
+      if(output === false) return false;
+    }
+  }
+};
+
+// Now we can rebuild our validation constraint
+// Because we do not rely on CSS pseudo-class, we have to  
+// explicitly set the valid/invalid class on our email field
+addEvent(window, "load", function () {
+  // Here, we test if the field is empty (remember, the field is not required)
+  // If it is not, we check if its content is a well-formed e-mail address.
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+ 
+  email.className = test ? "valid" : "invalid";
+});
+
+// This defines what happens when the user types in the field
+addEvent(email, "keyup", function () {
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+  if (test) {
+    email.className = "valid";
+    error.innerHTML = "";
+    error.className = "error";
+  } else {
+    email.className = "invalid";
+  }
+});
+
+// This defines what happens when the user tries to submit the data
+addEvent(form, "submit", function () {
+  var test = email.value.length === 0 || emailRegExp.test(email.value);
+ 
+  if (!test) {
+    email.className = "invalid";
+    error.innerHTML = "I expect an e-mail, darling!";
+    error.className = "error active";
+
+    // Some legacy browsers do not support the event.preventDefault() method
+    return false;
+  } else {
+    email.className = "valid";
+    error.innerHTML = "";
+    error.className = "error";
+  }
+});
 
 
 /*******************************************************
