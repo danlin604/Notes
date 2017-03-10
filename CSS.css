@@ -1084,8 +1084,155 @@ Sticky position (experimental)
 	There is a new positioning value available called position: sticky, support for which is not very widespread yet. This is basically a hybrid between relative and fixed position, which allows a positioned element to act like it is relatively positioned until it is scrolled to a certain threshold point (e.g. 10px from the top of the viewport), after which it becomes fixed.
 
 /* -------------------------------------------------- */
-	left-half right-half layouts
+	Flexbox
 /* -------------------------------------------------- */
+
+The CSS3 Flexible Box, or flexbox, is a layout mode providing for the arrangement of elements on a page such that the elements behave predictably when the page layout must accommodate different screen sizes and different display devices.
+
+The defining aspect of the flex layout is the ability to alter its items' width and/or height to best fit in the available space on any display device. A flex container expands items to fill available free space, or shrinks them to prevent overflow.
+
+The flexbox layout algorithm is direction-agnostic as opposed to the block layout, which is vertically-biased, or the inline layout, which is horizontally-biased. While the block layout works well for pages, it lacks sufficient definition to support application components that have to change orientation, resize, stretch, or shrink as the user agent changes, flips from vertical to horizontal, and so forth.
+
+Flex container
+
+	The parent element in which flex items are contained. A flex container is defined using the flex or inline-flex values of the display property.
+
+Flex item
+
+	Each child of a flex container becomes a flex item. Text directly contained in a flex container is wrapped in an anonymous flex item.
+
+Axes
+
+	Every flexible box layout follows two axes. The main axis is the axis along which the flex items follow each other. The cross axis is the axis perpendicular to the main axis.
+
+	The flex-direction property establishes the main axis.
+
+	The justify-content property defines how flex items are laid out along the main axis on the current line.
+
+	The align-items property defines the default for how flex items are laid out along the cross axis on the current line.
+	
+	The align-self property defines how a single flex item is aligned on the cross axis, and overrides the default established by align-items.
+
+Directions
+
+	The main start/main end and cross start/cross end sides of the flex container describe the origin and terminus of the flow of flex items. They follow the main axis and cross axis of the flex container in the vector established by the writing-mode (left-to-right, right-to-left, etc.).
+
+	The order property assigns elements to ordinal groups and determines which elements appear first.
+
+	The flex-flow property shorthands the flex-direction and flex-wrap properties to lay out the flex items.
+
+Lines
+
+	Flex items can be laid out on either a single line or on several lines according to the flex-wrap property, which controls the direction of the cross axis and the direction in which new lines are stacked.
+
+Dimensions
+
+	The flex items' agnostic equivalents of height and width are main size and cross size, which respectively follow the main axis and cross axis of the flex container.
+
+	The min-height and min-width properties initial value is 0.
+
+	The flex property shorthands the flex-grow, flex-shrink, and flex-basis properties to establish the flexibility of the flex items.
+
+/* -------------------------------------------------- */
+
+Usage
+
+	display: flex
+
+	display: inline-flex
+
+Doing so defines the element as a flex container and its children as flex items. The flex value makes the flex container a block-level element. The inline-flex value makes the flex container an atomic inline-level element.
+
+
+/* -------------------------------------------------- */
+
+Holy Grail Layout Example
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+    body {
+        font: 24px Helvetica;
+        background: #999999;
+    }
+
+    #main {
+        min-height: 800px;
+        margin: 0px;
+        padding: 0px;
+        display: flex;
+        flex-flow: row;
+    }
+ 
+    #main > article {
+        margin: 4px;
+        padding: 5px;
+        border: 1px solid #cccc33;
+        border-radius: 7pt;
+        background: #dddd88;
+        flex: 3 1 60%;
+        order: 2;
+    }
+
+    #main > nav {
+        margin: 4px;
+        padding: 5px;
+        border: 1px solid #8888bb;
+        border-radius: 7pt;
+        background: #ccccff;
+        flex: 1 6 20%;
+        order: 1;
+    }
+  
+    #main > aside {
+        margin: 4px;
+        padding: 5px;
+        border: 1px solid #8888bb;
+        border-radius: 7pt;
+        background: #ccccff;
+        flex: 1 6 20%;
+        order: 3;
+    }
+ 
+    header, footer {
+        display: block;
+        margin: 4px;
+        padding: 5px;
+        min-height: 100px;
+        border: 1px solid #eebb55;
+        border-radius: 7pt;
+        background: #ffeebb;
+    }
+ 
+    /* Too narrow to support three columns */
+    @media all and (max-width: 640px) {
+        #main, #page {
+            flex-direction: column;
+        }
+
+        #main > article, #main > nav, #main > aside {
+        /* Return them to document order */
+            order: 0;
+        }
+  
+        #main > nav, #main > aside, header, footer {
+            min-height: 50px;
+            max-height: 50px;
+        }
+    }
+    </style>
+  </head>
+  <body>
+    <header>header</header>
+    <div id='main'>
+      <article>article</article>
+      <nav>nav</nav>
+      <aside>aside</aside>
+    </div>
+    <footer>footer</footer>
+  </body>
+</html>
 
 
 /* -------------------------------------------------- */

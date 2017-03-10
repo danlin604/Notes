@@ -3915,19 +3915,140 @@ addEvent(form, "submit", function () {
 
 
 /*******************************************************
-* 
+* DOM
 *******************************************************/
+
+The Document Object Model (DOM) is a programming interface for HTML and XML documents.
+
+var paragraphs = document.getElementsByTagName("P");
+// paragraphs[0] is the first <p> element
+// paragraphs[1] is the second <p> element, etc.
+alert(paragraphs[0].nodeName);
+
+The DOM is not a programming language, but without it, the JavaScript language wouldnt have any model or notion of web pages, HTML documents, XML documents, and their component parts (e.g. elements).
+
+DOM is language neutral
+
+/*
+	# Python DOM example
+	import xml.dom.minidom as m
+	doc = m.parse("C:\\Projects\\Py\\chap1.xml");
+	doc.nodeName # DOM property of document object;
+	p_list = doc.getElementsByTagName("para");
+*/
+
+When you create a script–whether its inline in a <script> element or included in the web page by means of a script loading instruction–you can immediately begin using the API for the document or window elements to manipulate the document itself or to get at the children of that document, which are the various elements in the web page.
+
+	// create a couple of elements in an otherwise empty HTML page
+	var heading = document.createElement("h1");
+	var heading_text = document.createTextNode("Big Head!");
+	heading.appendChild(heading_text);
+	document.body.appendChild(heading);
+
+document
+
+	document object
+
+element
+
+	element refers to an element or a node of type element returned by a member of the DOM API.
+
+nodeList
+
+	A nodeList is an array of elements, like the kind that is returned by the method document.getElementsByTagName(). Items in a nodeList are accessed by index.
+
+		list.item(1)
+
+		list[1]
+
+		*They are equivalent
+
+attribute
+
+	When an attribute is returned by a member (e.g., by the createAttribute() method), it is an object reference that exposes a special (albeit small) interface for attributes. Attributes are nodes in the DOM just like elements are, though you may rarely use them as such.
+
+namedNodeMap
+
+	A namedNodeMap is like an array, but the items are accessed by name or index, though this latter case is merely a convenience for enumeration, as they are in no particular order in the list. A namedNodeMap has an item() method for this purpose, and you can also add and remove items from a namedNodeMap.
+
+
+document.getElementById(id)
+document.getElementsByTagName(name)
+document.createElement(name)
+parentNode.appendChild(node)
+element.innerHTML
+element.style.left
+element.setAttribute
+element.getAttribute
+element.addEventListener
+window.content
+window.onload
+window.dump
+window.scrollTo
+
+/*******************************************************
+* Merge 2 Arrays
+*******************************************************/
+
+let a = [2,4,6,8,9]
+let b = [1,3,5,7,8]
+
+const merge = function(lhs, rhs) {
+    
+    let merged = []
+    let idxl = 0
+    let idxr = 0
+
+    while(true) {
+        if (idxl >= lhs.length) {
+            return merged.concat(rhs.slice(idxr))
+        }
+        else if (idxr >= rhs.length) {
+            return merged.concat(lhs.slice(idxl))
+        }
+        else if (lhs[idxl] < rhs[idxr]) {
+            merged.push(lhs[idxl++])
+        } else {
+            merged.push(rhs[idxr++])
+        }
+    }
+
+}
+
+console.log(merge(a, b))
 
 
 /*******************************************************
-* 
+* Rank array numbers
 *******************************************************/
 
 
-/*******************************************************
-* 
-*******************************************************/
+let arr = [25, 7, 54, 90, 7]
 
+const rank = function(arr) {
+
+    let map = new Map()
+    let rank = 1
+    let result = []
+    let sorted = arr.slice(0) // copy
+    sorted.sort(function(a, b) { // sort
+        return a - b
+    })
+    
+    for(let i = 0; i < sorted.length; i++) {
+        if (!map.has(sorted[i])) {
+            map.set(sorted[i], rank++)
+        }
+    }
+
+    for(let i = 0; i < arr.length; i++) {
+        result.push(map.get(arr[i]))
+    }
+
+    return result
+}
+
+console.log(rank(arr))
 
 /*******************************************************
 * 
