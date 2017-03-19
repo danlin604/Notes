@@ -67,16 +67,15 @@ function changeString(str) {
  * Reverse string
  *******************************************************/
 
-function reverseString(str) { 
+const s = 'hello'
 
-  var strTmp = "";    
-    
-  for (var i = 1, length = str.length; i <= length; i++) {
-      strTmp += str.charAt(length - i);
-  }  
-  str = strTmp;
-  
-  return str;         
+function reverse(s) {
+    s = s || ''
+    let reversed = ''
+    for(let i = s.length - 1; i >= 0; i--) {
+        reversed += s.charAt(i)
+    }
+    return reversed
 }
 
 /* Alternative */
@@ -600,32 +599,35 @@ Queue.prototype.dequeue = function() {
 var list = generateRandomList(100);
 list = mergeSort(list);
 
-function mergeSort(ls) {
-    if (ls.length < 2) { return ls; }    
-   
-    var midIdx  = Math.floor(ls.length / 2),
-        lhs     = mergeSort(ls.slice(0, midIdx)),
-        rhs     = mergeSort(ls.slice(midIdx));
+function mergeSort(list) {
+    if (!list || list.length < 2) {
+        return list
+    }
 
-    return merge(lhs, rhs);
+    let mid = Math.floor(list.length / 2)
+    let lhs = mergeSort(list.slice(0, mid))
+    let rhs = mergeSort(list.slice(mid))
+
+    return merge(lhs, rhs)
 }
 
 function merge(lhs, rhs) {
-    var merged  = [];
-    lIdx        = 0;
-    rIdx        = 0;
-
+    let merged = []
+    let l = 0, r = 0 // Index
     while(true) {
-        if (rIdx >= rhs.length) {
-            return merged.concat(lhs.slice(lIdx));           
-        } else if (lIdx >= lhs.length) {
-            return merged.concat(rhs.slice(rIdx));            
-        } else if (lhs[lIdx] < rhs[rIdx]) {
-            merged.push(lhs[lIdx++]);
-        } else {
-            merged.push(rhs[rIdx++]);
-        }        
-    }
+        if (l >= lhs.length ) {
+            return merged.concat(rhs.slice(r))
+        }
+        else if (r >= rhs.length) {
+            return merged.concat(lhs.slice(l))
+        }
+        else if (lhs[l] < rhs[r]) {
+            merged.push(lhs[l++])
+        }
+        else {
+            merged.push(rhs[r++])
+        }
+    }   
 }
 
 function generateRandomList(length) {    
@@ -1678,22 +1680,67 @@ function rotate(matrix) {
  * Match string permutation
  *******************************************************/
 
-function isPermutation(a, b) {
+const a = 'aaabbc'
+const b = 'cabaab'
 
-    if (a.length !== b.length) { return false; }
-
-    var arrA = a.split("");
-    var arrB = b.split("");
+function permutation(a, b) {
     
-    arrA.sort();
-    arrB.sort();
-
-    for (var i = 0; i < a.length; i++) {
-		if (arrA[i] !== arrB[i]) { return false; } 
+    if(a.length !== b.length) {
+        return false
     }
-    
-    return true;
+
+    let listA = a.split('')
+    let listB = b.split('')
+
+    listA.sort()
+    listB.sort()
+
+    for(let i = 0; i < listA.length; i++) {
+        if(listA[i] !== listB[i]) {
+            return false
+        }
+    }
+    return true
 }
+
+console.log(permutation(a, b))
+
+/* Better */
+const a = ['a', 'b', 'c', 'a']
+const b = ['a', 'a', 'c', 'c']
+
+function permutation(a, b) {
+    
+    if(a.length !== b.length) {
+        return false
+    }
+
+    let map = new Map()
+    for(let i = 0; i < a.length; i++) {
+        if(map.has(a[i])) {
+            map.set(a[i], map.get(a[i]++))
+        } else {
+            map.set(a[i], 1)
+        }
+    }
+
+    for(let i = 0; i < b.length; i++) {
+        if(map.has(b[i])) {
+            let val = map.get(b[i])
+            if(val === 1) {
+                map.delete(b[i])
+            } else {
+                map.set(b[i], val - 1)
+            }
+        } else {
+            return false
+        }
+    }
+
+    return true
+}
+
+console.log(permutation(a, b))
 
 /*******************************************************
  * How close is my guess?
@@ -4051,8 +4098,122 @@ const rank = function(arr) {
 console.log(rank(arr))
 
 /*******************************************************
-* 
+* Parse File 
+	 _   _   _
+	|_| | | |_
+	|_|   | |_|
 *******************************************************/
+
+const fs = require('fs')
+
+const content = fs.readFileSync('./data', 'utf8')
+
+function mapper(c) {
+    if (c === '_' || c === '|') {
+        return '1' 
+    }
+    return '0'
+}
+
+let parse = function(s) {
+
+    let arr = []
+    let word = 1 
+
+    for (let i = 0; i < s.length; i++) {
+
+        // next line
+        if (s.charAt(i) === '\n') {
+            word = 1         
+        }
+        // new word
+        else if (((i + 1) % 4) === 0) {
+            word++
+        }
+        else {
+            if (arr.length < word) {
+                arr.push(mapper(s.charAt(i)))
+            } else {
+                arr[word - 1] +=  mapper(s.charAt(i))
+            }            
+        }
+    }
+    return arr
+}
+
+let parsed = parse(content)
+
+let match = function(arr) {
+
+    const map = new Map()
+    map.set('010111111', '8')
+    map.set('010101001', '7')
+    map.set('010110111', '6')
+
+    let result = ''
+
+    for (let i = 0; i < arr.length; i++) {
+        
+        if (!map.has(arr[i])) {
+            return 'Bad data!'
+        }
+
+        result += map.get(arr[i])
+    }
+    return result
+}
+
+console.log(match(parsed))
+
+/*******************************************************
+* Recure Unique Array Merge
+*******************************************************/
+
+const a = ['a', 'b', 'c', 'f']
+const b = ['c', 'e', 'f', 'a', 'c']
+
+function mergeUnique(a, b, add) {
+    let result = add(a, new Set())
+    result = add(b, result)
+    return result
+}
+
+function add(arr, set) {
+    if(arr.length === 1) {
+        return set.add(arr[0])
+    }
+    add(arr.slice(1), set)
+    set.add(arr[0])
+    return set
+}
+
+console.log(mergeUnique(a, b, add))
+
+
+/*******************************************************
+* Retroactive Buy low sell high
+*******************************************************/
+
+const a = [500, 100, 300, 50, 200, 20]
+
+function buyLowSellHigh(list) {
+    let best = -Infinity
+    let buy = Infinity
+
+    for (let i = 1; i < list.length; i++) {
+        buy = Math.min(buy, list[i - 1])
+        best = Math.max(best, list[i] - buy)
+    }
+
+    return best
+}
+
+console.log(buyLowSellHigh(a))
+
+/*******************************************************
+* OOJS Object-Oriented JavaScript
+*******************************************************/
+
 
 
 /*******************************************************
@@ -4064,12 +4225,25 @@ console.log(rank(arr))
 * 
 *******************************************************/
 
+/*******************************************************
+* 
+*******************************************************/
 
+/*******************************************************
+* 
+*******************************************************/
 
+/*******************************************************
+* 
+*******************************************************/
 
+/*******************************************************
+* 
+*******************************************************/
 
-
-
+/*******************************************************
+* 
+*******************************************************/
 
 
 
