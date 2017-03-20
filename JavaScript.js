@@ -4248,6 +4248,86 @@ bob.greeting()          // Hi! I'm Bob.
 console.log(joe.name)   // Joe
 joe.greeting()          // Hi! I'm Joe.
 
+
+We now have two new namespace: bob and joe!
+
+/* object view */
+{
+  name: 'Bob',
+  greeting: function() {
+    alert('Hi! I\'m ' + this.name + '.');
+  }
+}
+
+/*
+NOTE: ctor function greeting() is being created every time. To avoid this we can define functions on the prototype instead!
+*/
+
+
+/* longer version */
+
+function Person(first, last, age, gender, interests) {
+  this.name = {
+    first,
+    last
+  };
+  this.age = age;
+  this.gender = gender;
+  this.interests = interests;
+  this.bio = function() {
+    console.log(this.name.first + ' ' + this.name.last + ' is ' + this.age + ' years old. He likes ' + this.interests[0] + ' and ' + this.interests[1] + '.');
+  };
+  this.greeting = function() {
+    console.log('Hi! I\'m ' + this.name.first + '.');
+  };
+};
+
+var person1 = new Person('Bob', 'Smith', 32, 'male', ['music', 'skiing']);
+
+console.log(person1['age'])
+console.log(person1.interests[1])
+person1.bio()
+
+
+/* --------------------------------------------------- */
+    Object() constructor
+/* --------------------------------------------------- */
+
+var person1 = new Object();
+
+// add properties to object
+person1.name = 'Chris';
+person1['age'] = 38;
+person1.greeting = function() {
+  alert('Hi! I\'m ' + this.name + '.');
+};
+
+// pass object literal to the object()
+var person1 = new Object({
+  name: 'Chris',
+  age: 38,
+  greeting: function() {
+    alert('Hi! I\'m ' + this.name + '.');
+  }
+});
+
+
+
+/* --------------------------------------------------- */
+    create() method
+/* --------------------------------------------------- */
+
+Create a new object instance based on an existing object. !!Not a real clone in the traditional sense!!
+
+// Same properties as person1
+var person2 = Object.create(person1);
+
+console.log(person2.interests[1])
+person2.greeting()
+
+
+
+
 /*******************************************************
 * 
 *******************************************************/
