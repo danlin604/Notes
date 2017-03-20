@@ -4214,7 +4214,39 @@ console.log(buyLowSellHigh(a))
 * OOJS Object-Oriented JavaScript
 *******************************************************/
 
+// define a person
+function createNewPerson(name) {
+  let obj = {}
+  obj.name = name
+  obj.greeting = function() {
+    console.log('Hi! I\'m ' + this.name + '.');
+  }
+  return obj
+}
 
+// create a new person
+let bob = createNewPerson('Bob')
+console.log(bob.name)   // Bob
+bob.greeting()          // Hi! I'm Bob.
+
+
+
+/* shortcut */
+function Person(name) {
+    this.name = name
+    this.greeting = function() {
+        console.log('Hi! I\'m ' + this.name + '.')
+    }
+}
+
+// create a new person
+let bob = new Person('Bob')
+let joe = new Person('Joe')
+
+console.log(bob.name)   // Bob
+bob.greeting()          // Hi! I'm Bob.
+console.log(joe.name)   // Joe
+joe.greeting()          // Hi! I'm Joe.
 
 /*******************************************************
 * 
