@@ -4326,11 +4326,149 @@ console.log(person2.interests[1])
 person2.greeting()
 
 
-
-
 /*******************************************************
-* 
+* OOJS Object Prototypes 
 *******************************************************/
+
+Prototypes are the mechanism by which JavaScript objects inherit features from one another, and they work differently than inheritance mechanisms in classical object-oriented programming languages.
+
+Prototype-based Language
+
+    JavaScript is often described as a prototype-based language — each object has a prototype object, which acts as a template object that it inherits methods and properties from. An objects prototype object may also have a prototype object, which it inherits methods and properties from, and so on. This is often referred to as a prototype chain, and explains why different objects have properties and methods defined on other objects available to them.
+
+    In classic OOP, classes are defined, then when object instances are created all the properties and methods defined on the 'class' are copied over to the instance. In JavaScript, they are not copied over — instead, a link is made between the object instance and its constructor (a link in the prototype chain), and the properties and methods are found in the constructor by walking up the chain.
+
+
+
+/* Example */
+
+function Person(first, last, age, gender, interests) {  
+  // property and method definitions  
+};
+var person1 = new Person('Bob');
+
+
+'Person1'
+
+    Inherites from prototype -> Person
+
+'Person'
+
+    Inherites from prototype -> Object
+
+
+// What happens when you call a mthod on person1?
+person1.valueOf()
+
+// What happens...
+
+    The browser initially checks to see if the person1 object has a valueOf() method available on it.
+
+    It doesnt, so the browser then checks to see if the person1 objects prototype object (Person) has a valueOf() method available on it.
+
+    It doesnt either, so the browser then checks to see if the Person() constructors prototype object (Object) has a valueOf() method available on it. It does, so it is called, and all is good!
+
+
+!!Note!!
+
+    We want to reiterate that the methods and properties are not copied from one object to another in the prototype chain — they are accessed by walking up the chain as described above.
+
+    __proto__ contains the objects prototype object (modern bowsers)
+
+
+
+
+/* Prototype Property */
+
+Think of Object.prototype as a sub-namespace
+
+The prototype propertys value is an object, which is basically a bucket for storing properties and methods that we want to be inherited by objects further down the prototype chain.
+
+So Object.prototype.watch(), Object.prototype.valueOf(), etc., are available to any object types that inherit from Object.prototype, including new object instances created from the constructor.
+
+Object.is(), Object.keys(), and other members not defined inside the prototype bucket are not inherited by object instances or object types that inherit from Object.prototype. They are methods/properties available just on the Object() constructor itself.
+
+
+// Example
+var myString = 'This is my string.';
+
+    myString immediately has a number of useful methods available on it, like split(), indexOf(), replace(), etc.
+
+
+!!Important!!
+
+    The prototype property is one of the most confusingly-named parts of JavaScript — you might think that this points to the prototype object of the current object, but it doesn't (that's an internal object that can be accessed by __proto__, remember?) prototype instead is a property containing an object on which you define members that you want to be inherited.
+
+
+/* --------------------------------------------------- */
+    Revisiting create()
+/* --------------------------------------------------- */
+
+var person2 = Object.create(person1);
+
+    What create() actually does is to create a new object from a specified prototype object. Here, person2 is being created using person1 as a prototype object. You can check this by entering the following in the console:
+
+    person2.__proto__ // Person { name: 'bob'... }
+
+        Returns the person1 object
+
+
+
+/* --------------------------------------------------- */
+    Constructor Property
+/* --------------------------------------------------- */
+
+/*
+Every function has a prototype property whose value is an object containing a constructor property. This constructor property points to the original constructor function. As you will see in the next section that properties defined on the Person.prototype property (or in general on a constructor function's prototype property which is an object as mentioned in the above section) become available to all the instance objects created using the Person() constructor. Hence, the constructor property is also available to both person1 and person2 objects.
+*/
+
+person1.constructor // returns [Function: Person]
+person2.constructor // returns [Function: Person]
+
+    These should both return the Person() constructor, as it contains the original definition of these instances.
+
+
+/* Clever trick to create another instance */
+var person3 = new person1.constructor('Karen', 'Stephenson', 26, 'female', ['playing drums', 'mountain climbing']);
+
+    // Handy when you need to create a new instance, but dont have reference to the original constructor.
+
+console.log(person1.constructor.name) // Person 
+
+
+
+/* --------------------------------------------------- */
+    Modifying Prototypes
+/* --------------------------------------------------- */
+
+// Add new method to the ctor's prototype property
+Person.prototype.farewell = function() {
+  console.log(this.name.first + ' has left the building. Bye for now!');
+}
+
+person1.farewell() // Bob has left the building. Bye for now!
+
+    //  The whole inheritance chain has updated dynamically, automatically making this new method available on all object instances derived from the constructor.
+
+
+/* Common pattern 
+
+    Define the properties inside the constructor, and the methods on the prototype.
+*/
+
+// Constructor with property definitions
+function Test(a, b, c, d) {
+  // property definitions
+};
+
+// First method definition
+Test.prototype.x = function() { ... }
+
+// Second method definition
+Test.prototype.y = function() { ... }
+
+// etc.
+
 
 
 /*******************************************************
