@@ -4472,12 +4472,115 @@ Test.prototype.y = function() { ... }
 
 
 /*******************************************************
-* 
+* Inheritance in OOJS
 *******************************************************/
 
+// Person
+function Person(first, last, age, gender, interests) {
+  this.name = {
+    first,
+    last
+  };
+  this.age = age;
+  this.gender = gender;
+  this.interests = interests;
+};
+
+Person.prototype.greeting = function() {
+  console.log('Hi! I\'m ' + this.name.first + '.');
+};
+
+// Teacher, ctor to use Person 
+function Teacher(first, last, age, gender, interests, subject) {
+  Person.call(this, first, last, age, gender, interests); 
+
+  this.subject = subject;
+}
+
+// Teacher.prototype to inherit Person.prototype
+Teacher.prototype = Object.create(Person.prototype);
+// Teacher now has Person's ctor, reset Teacher ctor back to itself
+Teacher.prototype.constructor = Teacher;
+
+    // t.greeting() now works!
+
+
+
+/* 
+Calls a function defined somewhere else, but in the current context. The first parameter specifies the value of this that you want to use when running the function, and the other parameters specify the parameters that the function should have passed to it when it runs.
+
+So in this case we are effectively running the Person() constructor function (see above) inside the Teacher() constructor function, resulting in the same properties being defined inside Teacher(), but using the values of the parameters passed to Teacher(), not Person() (we are using simply this as the value of this passed to call(), meaning that this will be the Teacher() function).
+*/
+
+
+
+
+
+/* We could have simply done this */
+function Teacher(first, last, age, gender, interests, subject) {
+  this.name = {
+    first,
+    last
+  };
+  this.age = age;
+  this.gender = gender;
+  this.interests = interests;
+  this.subject = subject;
+}
+
+
+
+!!BUT!! 
+
+    We want Teacher() to inherit from Person()! Not to redefine properties aneww.
+
+
+
+
 /*******************************************************
-* 
+* Classes OOJS (ES2015)
 *******************************************************/
+
+/*
+JavaScript classes introduced in ECMAScript 2015 are syntactical sugar over JavaScript's existing prototype-based inheritance. The class syntax is not introducing a new object-oriented inheritance model to JavaScript. JavaScript classes provide a much simpler and clearer syntax to create objects and deal with inheritance.
+*/
+
+// class declarations
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+}
+
+// class expressions
+var Rectangle = class {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+};
+
+// prototype methods
+class Rectangle {
+  constructor(height, width) {
+    this.height = height;
+    this.width = width;
+  }
+  
+  get area() {
+    return this.calcArea();
+  }
+
+  calcArea() {
+    return this.height * this.width;
+  }
+}
+
+const square = new Rectangle(10, 10);
+console.log(square.area);
+
+
 
 /*******************************************************
 * 
