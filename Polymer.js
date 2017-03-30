@@ -369,19 +369,157 @@ In addition to text content, you can bind to an elements properties (using prope
 You can install Polymer via the Polymer CLI, or via Bower.
 
 
+/* --------------------------------------------------- */
+    Option 1: Start a blank application with polymer init
+/* --------------------------------------------------- */
+
+
+
+// Install the Polymer CLI
+
+	npm install -g polymer-cli@next
+
+// Verify your Polymer version.
+
+	polymer --version
+
+	The output of this command should be at least 0.18.0-pre.13.
+
+// Create a test folder for Polymer 2.0, and switch to it.
+
+	mkdir polymer-20-test
+	cd polymer-20-test
+
+// Initialize your project.
+
+	polymer init
+
+// Select polymer-2-application.
+
+// Serve your project.
+
+	polymer serve
+
+
+/* Example app struct */
+
+|── README.md
+|── bower.json
+|── bower_components
+|── index.html
+|── manifest.json
+|── images
+|    └── chrome-logo.svg
+|── src
+|    └── show-app
+|         └── show-app.html
+└── test
+     └── show-app
+          └── show-app_test.html
+
+
+/* --------------------------------------------------- */
+    Building for deployment
+/* --------------------------------------------------- */
+
+The polymer build command is the easiest way to build your project for deployment. It can minify, compile and bundle your code dependending on command line flags, or options specified in a polymer.json file.
+
+// To create a universal build that works on all browsers, use the --js-compile flag:
+
+	polymer build --js-compile
+
+// This will build your project to build/default. Serve that directory with polymer serve:
+
+	polymer serve build/default
+
 
 
 /*******************************************************
- * 
+ * Building a progressive web app
  *******************************************************/
 
-/*******************************************************
- * 
- *******************************************************/
+npm init
+
+	CLI generates:
+
+		README.md
+		index.html
+		manifest.json
+		bower.json
+		bower_components 	// dir: external dependencies
+		src 				// dir: app's elements will live here
+		src/show-app.html	// main element
+
+
 
 /*******************************************************
- * 
+ * The PRPL pattern
  *******************************************************/
+
+PRPL is a pattern for structuring and serving Progressive Web Apps (PWAs), with an emphasis on the performance of app delivery and launch. It stands for:
+
+Push critical resources for the initial URL route.
+
+Render initial route.
+
+Pre-cache remaining routes.
+
+Lazy-load and create remaining routes on demand.
+
+
+/*******************************************************
+ * Hello World
+ *******************************************************/
+
+/* index.html
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>hello-world</title>
+    <meta name="description" content="hello-world description">
+
+    <link rel="manifest" href="/manifest.json">
+    <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="/src/hello-world/hello-world.html">
+ 
+  </head>
+  <body>
+    <hello-world id="greet" name="User"></hello-world>
+  </body>
+</html>
+
+*/
+
+webcomponents-lite.js 	// required
+hello-world.html		// my web component
+
+You can insert custom elemet properties.
+
+/* hello-world.html 
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="hello-world">
+  <template>    
+    <h1>Hello, [[name]]</h1> <!-- One way data binding -->
+    <input type="text" value="{{name::keyup}}">
+  </template>
+  <script>
+    Polymer({
+      is: 'hello-world'
+    })
+  </script>
+</dom-module>
+*/
+
+One way data binding demonstrates input field that modifies hello-world name property.
+
+
+
 
 
 /*******************************************************
