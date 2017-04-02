@@ -523,18 +523,364 @@ One way data binding demonstrates input field that modifies hello-world name pro
 
 
 /*******************************************************
- * 
+ * juicy-ace-editor
  *******************************************************/
+
+bower install juicy-ace-editor --save
+
+/* index.html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="bower_components/juicy-ace-editor/juicy-ace-editor.html">
+    <style type="text/css">
+      #editor-container {
+        position: absolute;
+        top:  0px;
+        left: 280px;
+        bottom: 0px;
+        right: 0px;
+        background: white;
+      }
+    </style>
+</head>
+<body>
+    <juicy-ace-editor id="editor-container" theme="ace/theme/monokai" mode="ace/mode/javascript">
+    var User          = require('./controllers/user.server.controller'),
+        Notification  = require('./controllers/notification.server.controller');
+
+        module.exports = function(app) {
+
+          app.get('/api',  User.welcome);
+
+          app.post('/api/users',           User.createNewUser);
+          app.delete('/api/user/:user_id', User.deleteOneUser);
+
+          app.post('/api/notify', Notification.notifyUsers);
+        };
+    </juicy-ace-editor>
+</body>
+</html>
+*/
+
+
+
+/*******************************************************
+ * Custom elements
+ *******************************************************/
+
+/* --------------------------------------------------- */
+    Rules
+/* --------------------------------------------------- */
+
+	The name of your custom element must contain a dash (-). For example, <file-reader>, and <skype-login> are valid names for custom elements, while <skype_login>, and <skypelogin> are not. This is necessary in order to allow the HTML parser differentiate between a custom element and an inbuilt HTML element.
+
+	A custom element cant be registered more than once. A DOMException error will be thrown if you do so.
+
+	A custom element can't be self-closing. For example, you can't write a custom element like this: <skype-login />. It should always be written like this: <skype-login></skype-login>.
+
+
+/* --------------------------------------------------- */
+    Create custom element
+/* --------------------------------------------------- */
+
+class FileBag extends HTMLElement {
+  // Define behavior here
+}
+
+window.customElements.define('file-bag', FileBag);
+
+
+
+
+/* --------------------------------------------------- */
+    Create anonymous custom element
+/* --------------------------------------------------- */
+
+window.customElements.define('file-bag', class extends HTMLElement {
+  // Define behaviour here
+});
+
+
+
+
+/* --------------------------------------------------- */
+    Usage
+/* --------------------------------------------------- */
+
+/* index.html
+
+<file-bag></file-bag>
+*/
+
+
+
+
+/* --------------------------------------------------- */
+    Define custom properties on a customElement
+/* --------------------------------------------------- */
+
+class FileBag extends HTMLElement {
+  // Set the "open" property
+  set open(option) {
+    this.setAttribute("open", option);
+  }
+
+  // Get the "open" property
+  get open() {
+    return this.hasAttribute("open");
+  }
+
+}
+
+/* index.html
+
+<file-bag open="true"></file-bag>
+*/
+
+
+constructor(): 
+
+	Here, you can attach event listeners and initialize state.
+
+connectedCallback(): 
+
+	Called whenever the custom element is inserted into the DOM.
+
+disconnectedCallback(): 
+
+	Called whenever the custom element is removed from the DOM.
+
+attributeChangedCallback(attrName, oldVal, newVal): 
+
+	Called whenever an attribute is added, removed or updated. Only attributes listed in the observedAttributes property are affected.
+
+adoptedCallback(): 
+
+	Called whenever the custom element has been moved into a new document.
+
+
+
+
+/* --------------------------------------------------- */
+    Shadow DOM
+/* --------------------------------------------------- */
+
+This is a powerful API to combine with custom elements. It provides encapsulation by hiding DOM subtrees under shadow roots.
+
+
+/* Usage */
+
+window.customElements.define('file-bag', class extends HTMLElement {
+  constructor() {
+    super();
+    var shadowRoot = this.attachShadow({mode: 'open'});
+    shadowRoot.innerHTML = `<strong>Shadow dom super powers for the win!</strong>`;
+  }
+});
+
+/* Result
+
+<file-bag>
+    <strong>Shadow dom super powers for the win!</strong>
+</file-bag>
+*/
+
+The main idea behind Shadow DOM is to mask all of the markup behind a custom element in the shadows. If you inspect the element in the browser, you wont see any of the markup apart from the attributes of the element. They are hidden under shadow roots. Browser vendors have been using Shadow DOM for years to natively implement elements such as <input>, <audio>, <video> and many others. Another benefit is that all the styling and scripts inside the custom element wont accidentally leak out and affect anything else on the page.
+
+
+
+
+
+
+/* --------------------------------------------------- */
+    HTML Imports
+/* --------------------------------------------------- */
+
+HTML Imports are a way to include and reuse HTML documents in other HTML documents.
+
+/*
+<link rel="import" href="/imports/file-reader.html">
+*/
+
+
+
+/* --------------------------------------------------- */
+    HTML Template
+/* --------------------------------------------------- */
+
+This is a web component specification that defines how to declare pieces of markup at page load.
+
+The <template> tag is placed within the web component. You can write HTML and CSS code within this tag to define how you want the component to be presented in the browser.
+
+
+/*******************************************************
+ * Build a Vimeo Embed Web Component
+ *******************************************************/
+
+bower install webcomponentsjs --save
+
+
+/* index.html
+
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vimeo Embed</title>
+    <script src="./bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="vimeo-embed.html">
+    <style type="text/css">
+        .wrapper {
+            max-width: 680px;
+            margin: 60px auto 100px;
+        }
+    </style>
+</head>
+<body>
+    <h3 align="center"> VIMEO EMBEDED WEB COMPONENT</h3>
+    <div class="wrapper">
+        <vimeo-embed embed="203909195"></vimeo-embed>
+    </div>   
+</body>
+</html>
+*/
+
+
+
+
+/* vimeo-embed.html
+
+<!-- Defines element markup -->
+<template>
+    <style>
+        .vimeo {
+            background-color: #000;
+            margin-bottom: 30px;
+            position: relative;
+            padding-top: 56.25%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .vimeo img {
+            width: 100%;
+            top: -16.82%;
+            left: 0;
+            opacity: 0.7;
+        }
+        .vimeo .play-button {
+            width: 90px;
+            height: 60px;
+            background-color: #333;
+            box-shadow: 0 0 30px rgba( 0,0,0,0.6 );
+            z-index: 1;
+            opacity: 0.8;
+            border-radius: 6px;
+        }
+        .vimeo .play-button:before {
+            content: "";
+            border-style: solid;
+            border-width: 15px 0 15px 26.0px;
+            border-color: transparent transparent transparent #fff;
+        }
+        .vimeo img,
+        .vimeo .play-button {
+            cursor: pointer;
+        }
+        .vimeo img,
+        .vimeo iframe,
+        .vimeo .play-button,
+        .vimeo .play-button:before {
+            position: absolute;
+        }
+        .vimeo .play-button,
+        .vimeo .play-button:before {
+            top: 50%;
+            left: 50%;
+            transform: translate3d( -50%, -50%, 0 );
+        }
+        .vimeo iframe {
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+    </style>
+    <div class="vimeo">
+        <div class="play-button"></div>
+    </div>
+</template>
+<script>
+(function(window, document, undefined) {
+
+    // Refers to the "importer", which is index.html
+    var thatDoc = document;
+
+    // Refers to the "importee", which is vimeo-embed.html
+    var thisDoc = (thatDoc._currentScript || thatDoc.currentScript).ownerDocument;
+
+    // Gets content from <template>.
+    var template = thisDoc.querySelector( 'template' ).content;
+
+    // Shim Shadow DOM styles if needed
+    if (window.ShadowDOMPolyfill) {
+        WebComponents.ShadowCSS.shimStyling(template, 'vimeo');
+    }
+
+    class VimeoEmbed extends HTMLElement {
+
+        constructor() {
+            super();
+            var shadowRoot =  this.attachShadow({mode:'open'});
+           
+            // Adds a template clone into shadow root.
+            var clone = thatDoc.importNode( template, true );
+            
+            shadowRoot.appendChild( clone );
+
+            var embed = this.getAttribute( "embed" );
+            var video = shadowRoot.querySelector( ".vimeo" );
+
+            this.createAndPlay( embed, video );
+        }
+
+
+        createAndPlay(embedID, videoElem) {
+            videoElem.addEventListener( "click", function() {
+
+                var iframe = document.createElement( "iframe" );
+
+                iframe.setAttribute( "frameborder", "0" );
+                iframe.setAttribute( "allowfullscreen", "" );
+                iframe.setAttribute( "webkitallowfullscreen", "" );
+                iframe.setAttribute( "mozallowfullscreen", "" );
+                iframe.setAttribute( "src", "https://player.vimeo.com/video/" + embedID + "?autoplay=1" );
+                iframe.setAttribute( "width", "640");
+                iframe.setAttribute( "height", "360");
+
+                this.innerHTML = "";
+                this.appendChild( iframe );
+            });
+        }
+    }
+    window.customElements.define('vimeo-embed', VimeoEmbed);
+})(window, document);
+</script>
+*/
+
+
+/* --------------------------------------------------- */
+    
+/* --------------------------------------------------- */
 
 /*******************************************************
  * 
  *******************************************************/
 
-/*******************************************************
- * 
- *******************************************************/
-
-
-/*******************************************************
- * 
- *******************************************************/
+/* --------------------------------------------------- */
+    
+/* --------------------------------------------------- */
