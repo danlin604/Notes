@@ -4583,8 +4583,36 @@ console.log(square.area);
 
 
 /*******************************************************
-* 
+* Standard Deviation
 *******************************************************/
+
+/* standard deviation */
+let orders = [ 3, 5, 7, 8, 5, 25, 8, 4 ]
+
+let arrayAverage = arr => arr.reduce((sum, x) => x + sum, 0) / arr.length
+
+// mean
+let averageOrders =
+  arrayAverage(orders)
+//console.log(averageOrders) // 8.125
+
+// distance from mean
+let differences =
+ orders.map(x => x - averageOrders).map(x => x * x)
+//console.log(differences) // [ 26.265625, 9.765625, 1.265625, 0.015625, 9.765625, 284.765625, 0.015625, 17.015625 ]
+
+// variance
+let averageDifference = arrayAverage(differences)
+//console.log(averageDifference) // 43.609375
+
+let standardDeviation = 
+  Math.sqrt(averageDifference)
+//console.log(standardDeviation) //6.603739470936145
+
+let isOutlier =
+  orders.map(x => x - averageOrders - standardDeviation > 0)
+//console.log(isOutlier) // [ false, false, false, false, false, true, false, false ]
+
 
 /*******************************************************
 * 
