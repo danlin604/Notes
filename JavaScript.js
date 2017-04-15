@@ -4615,12 +4615,34 @@ let isOutlier =
 
 
 /*******************************************************
-* 
+* append() prepend() using replace(old, new)
 *******************************************************/
 
+Simple reusable HTML append using helper strings.
+
+// helper.js
+var HTMLheaderName = '<h1 id="name">%data%</h1>';
+var HTMLheaderRole = '<span>%data%</span><hr>';
+
+// builder.js
+let formattedName = HTMLheaderName.replace('%data%', 'Danny');
+let formattedRole = HTMLheaderRole.replace('%data%', 'Developer');
+
+$("#header").prepend(formattedRole);
+$("#header").prepend(formattedName);
+
+
+
+
+
+
 /*******************************************************
-* 
+* Hide Element
 *******************************************************/
+
+Check if element exist, else there will be errors.
+
+document.getElementById( 'elemtId' ).style.display = 'none';
 
 /*******************************************************
 * 

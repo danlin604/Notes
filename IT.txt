@@ -1,0 +1,11 @@
+ping google.ca -n 50
+
+	ping google
+
+ping 192.168.100.1 -n 50
+
+	ping modem
+
+ipconfig
+
+	IP
