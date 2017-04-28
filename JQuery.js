@@ -252,29 +252,206 @@ ul.remove();
 
 .append()
 
+	// Insert content, specified by the parameter, to the end of each element in the set of matched elements.
+
+	$( ".inner" ).append( "<p>Test</p>" );
+
 .prepend()
 
 .insertBefore()	// add sibling
 
 .insertAfter()	// add sibling
 
+/*
+	#family2' should be a sibling of and come after '#family1'. 
+	'#bruce' should be the only immediate child of '#family2'. 
+	'#bruce' should have two <div>s as children, '#madison' and '#hunter'.
+*/
+$('<div id="family2"><h1>Family2</h1></div>').insertAfter('#family1');
+
+var family2;
+family2 = $('#family2');
+family2.append('<div id="bruce"><h2>Bruce</h2></div>');
+
+var bruce;
+bruce = $('#bruce');
+bruce.append('<div id="madison"><h3>Madison</h3></div>');
+bruce.append('<div id="hunter"><h3>Hunter</h3></div>');
+
+// Alternative 
+
+var family1, family2, bruce, madison, hunter;
+
+family1 = $('family1');
+family2 = $('<div id="bruce"><h2>Bruce</h2></div>') // create DOM element
+...
+family2.insertAfter(family1);
+
+
+
+
+
+/* -------------------------------------------------- */
+	.each()
+/* -------------------------------------------------- */
+
+// Iterate over a jQuery object, executing a function for each matched element.
+
+$('.example').each(function() {
+	$(this).text(); // return text of each element
+})
+
+/* Example: 
+use jQuery's each() method to iterate through the <p>s,
+calculate the length of each one, and add each length to the end of each <p>.
+*/
+
+$('p').each(function() {
+	var text;
+	text = $(this).text();
+
+	var length;
+	length = text.length;
+
+	text += length;
+	$(this).text(text);
+})
+
+// Alternative
+
+function numberAdder() {
+	var text, number;
+
+	text = $(this).text();
+
+	number = text.length;
+
+	$(this).text(text + " " + number);
+}
+
+$('p').each(numberAdder);
+
+
 
 
 /* -------------------------------------------------- */
-	
+	jQuery object to run on document.ready
 /* -------------------------------------------------- */
 
-/* -------------------------------------------------- */
-	
-/* -------------------------------------------------- */
+// You could include your script at the bottom of the <body>, but that would mean that the download could potentially start later in the load process, slowing down the initial page render.
+
+function someFunction() {
+    // Do interesting things
+}
+$(someFunction)
+
+// or
+
+$(function(){
+    // Do interesting things
+})
+
+// Now, you can include your script in the <head> and it won't run until the DOM has been built and the elements that you want to manipulate are on the page.
+
+
 
 /* -------------------------------------------------- */
-	
+	monitorEvents( elementToWatch ); Google Chrome
 /* -------------------------------------------------- */
 
+// This function can only be used on the Chrome console. It will not work inside a JavaScript file.
+
+mouseout
+mouseover
+mousemove
+
+
+
+
 /* -------------------------------------------------- */
-	
+	jQuery Event Listener
 /* -------------------------------------------------- */
+
+1. the target element to listen to
+2. the event we want to react to
+3. the action to take in response
+
+$( '#my-input' ).on( 'keypress', function() {
+	// do something
+});
+
+
+
+// Remove button and show success message
+$('#my-button').on('click', function() {
+    $(this).remove();				// remove button
+    $('body').addClass('success');    
+});
+
+// show event
+$( 'article' ).on( 'click', function( evt ) {
+    console.log( evt );
+});
+
+// event target
+$( 'article' ).on( 'click', function( evt ) {
+    $( evt.target ).css( 'background', 'red' );
+});
+
+	// The target property holds the page element that is the target of the event.
+
+// prevent default action
+$( '#myAnchor' ).on( 'click', function( evt ) {
+    evt.preventDefault();
+    console.log( 'You clicked a link!' );
+});
+
+
+Convenience Methods
+
+	target.keyup(...)
+	target.mouseover(...)
+	target.change(...)
+	target.click(...)
+	target.mouseenter(...)
+	target.mouseleave(...)
+
+
+Event Delegation
+
+	// We'll listen to events that hit a parent element, and pay attention to the target of those events.
+
+	$( '.container' ).on( 'click', 'article', function() { … });
+
+		// This code tells jQuery to watch the .container element for clicks, and then if there are any, check if the click event's target is an article element.
+
+
+
+
+/* Example
+<ul id="rooms">
+    <li>Room 1</li>
+    <li>Room 2</li>
+            .
+            .
+            .
+    <li>Room 999</li>
+    <li>Room 1000</li>
+</ul>
+*/
+
+/* bad */
+$( '#rooms li' ).on( 'click', function() {
+    ...
+});
+
+	// The above code would set up an event listener for each 1,000 event listeners - one for each list item...that's 1,000 event listeners!
+
+/* better */
+$( '#rooms' ).on( 'click', 'li', function() {
+    ...
+});
+
 
 /* -------------------------------------------------- */
 	
