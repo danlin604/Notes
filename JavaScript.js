@@ -4644,10 +4644,185 @@ Check if element exist, else there will be errors.
 
 document.getElementById( 'elemtId' ).style.display = 'none';
 
+
+
+
+
+
+/*******************************************************
+* Lexical Scope & Memory Scope
+*******************************************************/
+
+x = 3; // automatic global scope, no var
+
+if() { var x = 3; } // unscoped
+
+function() { var x = 3; } // scoped
+
+
+
+
+// Example: saga.js
+var hero = aHero();
+var newSaga = function() {
+    var foil = aFoil();
+    var saga = function() {
+        var deed = aDeed();
+        console.log(hero+deed+foil);
+    };
+    saga(); // new instance of saga()
+    saga(); // new instance of saga()
+};
+newSaga(); // new instance of newSaga()
+newSaga(); // new instance of newSaga()
+
+
+
+// Example: Array Literals
+var makeArray = function() {
+    return [];
+};
+var array1 = makeArray();
+var array2 = makeArray();
+console.log(array1 === array2); // false
+
+
+// They are not equal. They are created by the same LINE of code, but in different instances!
+
+
+
+
+/*******************************************************
+* What is 'this' bound to?
+*******************************************************/
+
+obj.fn(3,4);
+
+    // 'this' is bound to obj
+
+
+// Example
+var fn = function(one, two) {
+    console.log(this, one, two);
+};
+var r={}, g={}, b={}, y={};
+r.method = fn;
+
+r.method(g,b);              // r{}      ,   g{}   ,   b{}
+fn(g,b);                    // <global> ,   g{}   ,   b{}
+fn.call(r,g,b)              // r{}      ,   g{}   ,   b{}
+r.method.call(y,g,b);       // y{}      ,   g{}   ,   b{}
+setTimeout(fn, 1000);       // <global> ,   undefined , undefined
+setTimeout(r.method, 1000); // <global> ,   undefined , undefined
+new r.method(g, b);         // {}       ,   g{}   ,   b{}
+
+//setTimeout
+var setTimeout = function(cb, ms) {
+    waitSomehow(ms);
+    cb();
+};
+
+
+
+
+
+/*******************************************************
+* Prototype Chains
+*******************************************************/
+
+Make one object behave as if it has all properties of anotehr object.
+
+var gold = {a:1};
+log(gold.a); // 1
+log(gold.z); // undefined
+
+// Delegation
+var rose = Object.create(gold);
+log(rose.a); // 1
+
+    // The lookup falls through, up the chain, to the prototype object
+
+
+Object Prototype
+
+    // Top level object that eventually all objects delegates to.
+
+{
+    toString: {f},
+    hasOwnProperty: {f},
+    constructor: Object,
+    ...
+}
+
+Array Prototype // Delegates to the Object Prototype
+{
+    slice: {f},
+    toString: {f},
+    constructor: Array,
+    ...
+}    
+
+    // Since the Array has a .constructor property, there is no need to fall through to Object Prototype for the .constructor property.
+
+
 /*******************************************************
 * 
 *******************************************************/
 
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
 
 
 
