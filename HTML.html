@@ -269,8 +269,29 @@ HTML Imports
 
 
 /* -------------------------------------------------- */
-    
+    Canvas
 /* -------------------------------------------------- */
+
+Sceen coordinate system
+
+Images are loaded asynchronously
+
+
+<canvas id="c" width="200" height="200"></canvas>
+
+<script>
+	var c = document.querySelector("#c");
+	var ctx = c.getContext("2d");
+	
+	var image = new Image();
+
+	image.onload = function() {
+		console.log("Loaded image");
+		ctx.drawImage(image, 0, 0, c.width, c.height);
+	}
+
+	image.src = "picture.png";
+</script>
 
 
 /* -------------------------------------------------- */

@@ -4765,42 +4765,912 @@ Array Prototype // Delegates to the Object Prototype
     // Since the Array has a .constructor property, there is no need to fall through to Object Prototype for the .constructor property.
 
 
-/*******************************************************
-* 
-*******************************************************/
+// Decorator code vs Classes
+var carlike = function(obj, loc) {    
+    obj.loc = loc;
+    obj.move = function() {
+        obj.loc++;
+    };
+    return obj;
+};
+
+var amy = carlike({}, 1);
+amy.move();
+
+// Make into class
+var carlike = function(obj, loc) {    
+    var obj = {loc: loc};
+    obj.move = function() {
+        obj.loc++;
+    };
+    return obj;
+};
+
+/*
+Class is the notion of a category of things you want to build and all the entailed code that supports that category.
+
+The constructor is the function you used to produce an instance of that class.
+*/
+
+Note: We do not want multiple instances of a function.
+
+// Better
+var carlike = function(obj, loc) {    
+    var obj = {loc: loc};
+    obj.move = move;
+    return obj;
+};
+
+var move = function() {
+    this.loc++;
+};
+
+var ben = Car(9);
+ben.move(); // 'this' is bound to Ben
+
+
+// multiple methods
+// We moved out method out of the global scope by Car.method instead of var
+var carlike = function(loc) {    
+    var obj = {loc: loc};
+    extend(obj, Car.methods); // non-native function, see implementation
+    return obj;
+};
+Car.methods = {
+    move: function() {
+        this.loc++;
+    },
+    on: function() {...},
+    off: function() {...}
+};
+
+
+
+// Delegation Relationships
+var carlike = function(obj) {    
+    var obj = Object.create(Car.methods); 
+    obj.loc = loc;
+    return obj;
+};
+Car.methods = {
+    move: function() {
+        this.loc++;
+    }
+};
+
+// Prototypal Pattern:
+
+    // A function that allows you to make instances
+
+    // A line in that function that generates the new object
+
+    // A delegation in that object to some prototype object
+
+    // Some logic to augment the object with property that makes it unique from other objects of the same class
+
+This pattern is native!
+
+var carlike = function(obj) {    
+    var obj = Object.create(Car.prototype); 
+    obj.loc = loc;
+    return obj;
+};
+Car.prototype.move = function() {
+    this.loc++;
+};
+
+//.prototype vs .method 
+
+    // Differences are purely cosmetic
+
+    // .prototype comes with .constructor
+
+        Car.prototype.constructor 
+
+            // points back to the function it is attached to
+
+            // Car links to prototype...
+
+            // prototype.constructor links back to Car
+
+            // Can figure out which constructor function built the object
+
+                Car.protytpe.constructor // Car
+
+                Amy.constructor // Fail lookup, delegate to Car
+
+
+
+
+// instanceof operator
+
+// Example 1
+
+    console.log(amy instanceof Car); // true
+
+
+// Example 2
+
+    var Dog = function() {
+        return {bark: 'woof'};
+    };
+    var fido = Dog();
+    console.log(fido instanceof Dog); // false
+
+// Dog.prototype cannot be found anywhere in fido's prototype chain
+
 
 /*******************************************************
-* 
+* Pseudo-Classical Pattern
 *******************************************************/
+
+/* Old */
+var carlike = function(obj) {
+    // this = Object.create(Car.prototype);    
+    var obj = Object.create(Car.prototype); // repetitive
+    obj.loc = loc;
+    return obj; // repetitive
+    // return this;
+};
+Car.prototype.move = function() {
+    this.loc++;
+};
+
+var amy = Car(1); // Previous
+amy.move();
+var ben = new Car(9); // inserts the extra operations this...create & return
+ben.move();
+
+
+/* Pseudo-Classical */
+var Car = function(loc) {
+    this.loc = loc;
+};
+Car.prototype.move = function() {
+    this.loc++;
+};
+
+var ben = new Car(9);
+ben.move();
+
+
+/* functional classes */
+var Car = function(loc) {
+    obj = {loc: loc};
+    obj.move = function() {
+        obj.loc++;
+    };
+    return obj;
+}
+
+
+
+Classes
+
+    Functional
+
+    Prototypal
+
+    Pseudo-Classical
+
+Sub-classing
+
+    Code sharing technique
 
 /*******************************************************
-* 
+* functional subclasses
 *******************************************************/
+
+// superclass ctor function
+var Car = function() {
+    var obj = {loc: loc};
+    obj.move = function() {
+        obj.loc++;
+    };
+    return obj;
+}
+
+// subclass ctor function
+var Van = function(loc) {
+    var obj = Car(loc);
+    obj.grab = function() { /*...*/ };
+    return obj;
+}
+
+// subclass ctor function
+var Cop = function(loc) {
+    var obj = Car(loc);
+    obj.call = function() { /*...*/ };
+    return obj;
+}
+
 
 /*******************************************************
-* 
+* Pseudoclassical subclasses
 *******************************************************/
+
+// superclass
+var Car = function(loc) {
+    this.loc = loc;
+};
+Car.prototype.move = function() {
+    this.loc++;
+};
+
+// subclass
+var Van = function(loc) {
+    Car.call(this, loc); // binds Car's this to Van's instance
+};
+Van.prototype = Object.create(Car.prototype); // delegate Van to Car
+Van.prototype.constructor = Van; // reassign a ctor for Van
+Van.prototype.grab = function() { /*...*/ };
+
+
+var zed = new Car(3);
+zed.move();
+
+var amy = new Van(9); 
+amy.move(); // no access to move
+amy.grab();
+
 
 /*******************************************************
-* 
+* Canvas
 *******************************************************/
+
+/*
+<canvas id="c" width="200" height="200"></canvas>
+
+<script>
+    var c = document.querySelector("#c");
+    var ctx = c.getContext("2d");
+    
+    var image = new Image();
+
+    image.onload = function() {
+        console.log("Loaded image");
+        ctx.drawImage(image, 0, 0, c.width, c.height);
+    }
+
+    image.src = "picture.png";
+</script>
+*/
+
+// Draw line-by-line
+ctx.beginPath();
+ctx.moveTo(10, 10);
+ctx.lineTo(50, 50);
+ctx.fill(); 
+ctx.stroke();
+
+ctx.fillStyle = "blue";
+ctx.strokeStyle = "#33CC33";
+ctx.fill();
+
+ctx.fillText("Hello", 50, 10);
+ctx.strokeText("Hello", 50, 10);
+
+
+// Meme Generator
+/*
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>MemeMaker-Simple</title>
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <style>
+    #image-container {
+      display: flex;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+   
+    
+  </script>
+
+  <div>
+    <input type="file" id="file" />  
+  </div>
+  <div id="image-container">
+    <canvas width="500" height="500"></canvas>
+    <div>
+      <span>Top Line:</span><br/>
+      <input id="topLineText" type="text"><br/>
+      <span>Bottom Line:</span><br/>
+      <input id="bottomLineText" type="text"><br/>
+      <button id="saveBtn">Save</button>
+    </div>
+  </div>
+  <script>
+    function textChangeListener (evt) {
+      var id = evt.target.id;
+      var text = evt.target.value;
+      
+      if (id == "topLineText") {
+        window.topLineText = text;
+      } else {
+        window.bottomLineText = text;
+      }
+      
+      redrawMeme(window.imageSrc, window.topLineText, window.bottomLineText);
+    }
+    
+    function redrawMeme(image, topLine, bottomLine) {
+      // Get Canvas2DContext
+      var canvas = document.querySelector('canvas');
+      var ctx = canvas.getContext("2d");
+      if (image != null)
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+      
+      // Text attributes
+      ctx.font = '30pt Impact';
+      ctx.textAlign = 'center';
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 3;
+      ctx.fillStyle = 'white';
+      
+      if (topLine != null) {
+        ctx.fillText(topLine, canvas.width / 2, 40);
+        ctx.strokeText(topLine, canvas.width / 2, 40);
+      }
+      
+      if (bottomLine != null) {
+        ctx.fillText(bottomLine, canvas.width / 2, canvas.height - 20);
+        ctx.strokeText(bottomLine, canvas.width / 2, canvas.height - 20);
+      }
+    }
+    
+    function saveFile() {
+      window.open(document.querySelector('canvas').toDataURL());
+    }
+    
+    function handleFileSelect(evt) {
+      var canvasWidth = 500;
+      var canvasHeight = 500;
+      var file = evt.target.files[0];
+      
+      
+      
+      var reader = new FileReader();
+      reader.onload = function(fileObject) {
+        var data = fileObject.target.result;
+        
+        // Create an image object
+        var image = new Image();
+        image.onload = function() {
+          
+          window.imageSrc = this;
+          redrawMeme(window.imageSrc, null, null);
+        }
+        
+        // Set image data to background image.
+        image.src = data;
+        console.log(fileObject.target.result);
+      };
+      reader.readAsDataURL(file)
+    }
+    
+    window.topLineText = "";
+    window.bottomLineText = "";
+    var input1 = document.getElementById('topLineText');
+    var input2 = document.getElementById('bottomLineText');
+    input1.oninput = textChangeListener;
+    input2.oninput = textChangeListener;
+    document.getElementById('file').addEventListener('change', handleFileSelect, false);
+    document.querySelector('button').addEventListener('click', saveFile, false);
+  </script>
+
+</body>
+</html>
+*/
+
 
 /*******************************************************
-* 
+* Canvas 2D Image Data
 *******************************************************/
+
+ImageData
+    
+    width
+
+    height
+
+    data (Uint8ClampedArray)
+
+        Unsigned
+        8-bit (0-255)
+
+createImageData
+
+getImageData
+
+putImageData
+
+
+
+// Inverts the pixels in an image
+var c = getCanvas();
+c.width = 960;
+c.height = 540;
+var ctx = c.getContext('2d');
+
+function doIt() {
+  var imageData = ctx.getImageData(0,0, 960, 540);
+  var length = imageData.data.length / 4;
+  for (var i = 0; i < length; i++){
+      imageData.data[i * 4 + 0] = 255 - imageData.data[i * 4 + 0];   //Red
+      imageData.data[i * 4 + 1] = 255 - imageData.data[i * 4 + 1];   //Green
+      imageData.data[i * 4 + 2] = 255 - imageData.data[i * 4 + 2];   //Blue
+  }
+  // Comment this line to see original image
+  ctx.putImageData(imageData, 0, 0);
+}
+
+var image = new Image();
+image.onload = function() {
+  ctx.drawImage(image, 0, 0);
+  doIt();
+}
+image.src = 'images/image-1200.png';
+
+
+
+
+// example code from mr doob : http://mrdoob.com/lab/javascript/requestanimationframe/
+var canvas, context;
+init();
+animate();
+function init() {
+    canvas = getCanvas();
+    context = canvas.getContext( '2d' );
+}
+function animate() {
+    requestAnimationFrame( animate );
+    draw();
+}
+function draw() {
+    var time = new Date().getTime() * 0.002;
+    var x = Math.sin( time ) * 96 + 38;
+    var y = Math.cos( time * 0.9 ) * 96 + 38;
+
+    context.fillStyle = 'rgb(245,245,245)';
+    context.fillRect( 0, 0, 255, 255 );
+    context.fillStyle = 'rgb(255,0,0)';
+    context.beginPath();
+    context.arc( x, y, 10, 0, Math.PI * 2, true );
+    context.closePath();
+    context.fill();
+}
+
 
 /*******************************************************
-* 
+* Frames
 *******************************************************/
+
+~16 ms for each frame to achieve 60 Hz (60 fps).
+
+    Realistically you have 10 ms
+
+
+
+Get Request to Server 
+
+    Responds in HTML
+
+Browser parses HTML
+
+    DOM Tree
+
+    CSS
+
+Recalculate Styles
+
+    Combine DOM and CSS
+
+    Creates Render Tree
+
+
+
+
+// Cont.
+
+Layout
+    
+    Turn CSS into boxes, web layout model
+
+    // Example: Width of parent cascades to child... down the tree
+
+Vector to Raster
+
+    Translate shape to individual pixels
+
+    Build from draw calls // paint
+
+    Image Decode + Resize
+
+    Composite Layers
+
+        // layer management
+
+        opacity & transform only trigger conposition, paint & layout not needed
+
+/*
+All of this [layout & translation] happens on CPU. 
+
+Layers and tiles will be uploaded to the GPU. GPU will be instructed to put the pictures up on screen.
+*/    
+
+
+
+
+
+
+// Frame Pipeline
+
+JavaScript          -> Style -> Layout -> Paint -> Composite
+CSS Animations
+Web Animation API
+
+/* 
+Different Style affect which part of the pipeline we touch. Therefore, it affects the performance of our app
+*/
+
+
+// Example: Flexbox
+
+    Style is known, no changes
+
+    Style is applied through layout 
+
+    Browser has to paint the elements of their new positions on page
+
+    ...and composite them together
+
+
+// https://csstriggers.com/
+
+margin-left // layout, paint, composite
+color // paint, composite
+transform // composite
+
+
+
+
 
 /*******************************************************
-* 
+* App Life Cycle
 *******************************************************/
+
+RAIL 
+
+    Response (100ms)
+
+        Reacts to user input without delay
+
+    Animation (<16ms)
+
+        10-12ms to achieve 60fps
+
+    Idle (50ms)
+
+        Idle time
+
+        Work in 50ms chunks
+
+    Load (1s or 1000ms)
+
+        Load quickly
+
+        Download and render critical resources
+
+
+// Quiz: What tasks should you handle during post-load idle state?
+
+Image Assets, Videos, Comment Section
+
+    // Basic function and texts should be loaded beforehand
+
 
 
 /*******************************************************
-* 
+* requestAnimationFrame
 *******************************************************/
+
+1000ms / 60 = 16ms (minus overhead = 10ms)
+
+js animation should be 3-4ms at most because:
+
+    style
+    layer
+    compositing 
+
+schedule order:
+
+    js -> style -> layout -> paint -> compositing
+
+    
+Older:
+
+    setTimeout
+    setInterval
+
+    Issue: js engine pays no attention to the rendering pipeline when scheduling these. Not a good fit for animations.
+
+Template:
+
+function animate() {
+    // Do something super rad.
+    requestAnimationFrame(animate);
+}
+
+requestanimationframe(animate);
+
+// IE9 does not support requestAnimationFrame, polyfill required, uses setTimer
+// polyfill: https://gist.github.com/paulirish/1579671
+
+
+
+/*******************************************************
+* Web Workers
+*******************************************************/
+// https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers
+
+/*
+Web Workers is a simple means for web content to run scripts in background threads. The worker thread can perform tasks without interfering with the user interface. In addition, they can perform I/O using XMLHttpRequest (although the responseXML and channel attributes are always null). Once created, a worker can send messages to the JavaScript code that created it by posting messages to an event handler specified by that code (and vice versa.) This article provides a detailed introduction to using web workers.
+*/
+
+
+Main Thread
+
+    Worker Thread
+
+Threads can send messages inbetween, but their work are independent.
+
+var worker = new Worker('worker.js');
+
+Communication:
+
+    //main
+    postMessage(data)
+
+    //worker
+    doWork(data)
+
+    //worker
+    postMessage(processedData)
+
+    //main
+    useData(processedData)
+
+*******************************************************
+
+// Spawning a dedicated worker
+var myWorker = new Worker('worker.js');
+
+
+
+
+// Sending messages to anf from a dedicated worker
+
+// main.js
+first.onchange = function() {
+  myWorker.postMessage([first.value,second.value]);
+  console.log('Message posted to worker');
+}
+
+second.onchange = function() {
+  myWorker.postMessage([first.value,second.value]);
+  console.log('Message posted to worker');
+}
+
+myWorker.onmessage = function(e) {
+  result.textContent = e.data;
+  console.log('Message received from worker');
+}
+
+// worker.js
+onmessage = function(e) {
+  console.log('Message received from main script');
+  var workerResult = 'Result: ' + (e.data[0] * e.data[1]);
+  console.log('Posting message back to main script');
+  postMessage(workerResult);
+}
+
+
+
+
+// Terminating a worker
+// main.js
+myWorker.terminate();
+
+// worker.js
+close();
+
+
+
+
+// Handling Errors
+/*
+When a runtime error occurs in the worker, its onerror event handler is called. It receives an event named error which implements the ErrorEvent interface.
+
+The event doesn't bubble and is cancelable; to prevent the default action from taking place, the worker can call the error event's preventDefault() method.
+
+message
+    A human-readable error message.
+
+filename
+    The name of the script file in which the error occurred.
+
+lineno
+    The line number of the script file on which the error occurred.
+*/
+
+
+
+
+
+
+
+
+*******************************************************
+
+// Example
+/* index.html
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <title>Web Workers example</title>
+    <link href='http://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <p class="header"><img class="udacity" src="http://udacity.github.io/60fps/images/udacity_logo.svg" alt="Udacity Logo"><a href="http://udacity.com/ud860" target="_blank">60FPS</a> quiz by <a href="http://twitter.com/cwpittman" target="_blank">Cameron Pittman</a></p>
+    
+    <div class="container">
+      <div class="half" id="time-animation">
+        <h2>Jank Timer</h2>
+      </div>
+      <div class="half" id="image-manipulator">
+        <h2>Image Manipulator</h2>
+        <input type="file" id="imageLoader" name="imageLoader"/>
+        <button id="invert">Invert</button>
+        <button id="chroma">Chroma</button>
+        <button id="greyscale">Greyscale</button>
+        <button id="vibrant">Vibrant</button>
+        <button id="revert">Revert to Original</button>
+        <canvas id="image"></canvas>
+      </div>
+    </div>
+
+    <script src="scripts/time-animator.js"></script>
+    <script src="scripts/image-app-improved.js"></script>
+  </body>
+</html>
+*/
+
+// worker-improved.js
+importScripts('imageManips-improved.js');
+
+this.onmessage = function(e) {
+  var imageData = e.data.imageData;
+  var type = e.data.type;
+
+  try {
+    length = imageData.data.length / 4;
+    var manipulatePixel = getManipFunc(type);
+    for (i = j = 0, ref = length; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
+      r = imageData.data[i * 4 + 0];
+      g = imageData.data[i * 4 + 1];
+      b = imageData.data[i * 4 + 2];
+      a = imageData.data[i * 4 + 3];
+      pixel = manipulatePixel(r, g, b, a);
+      imageData.data[i * 4 + 0] = pixel[0];
+      imageData.data[i * 4 + 1] = pixel[1];
+      imageData.data[i * 4 + 2] = pixel[2];
+      imageData.data[i * 4 + 3] = pixel[3];
+    }
+    postMessage(imageData);
+  } catch (e) {
+    function ManipulationException(message) {
+      this.name = "ManipulationException";
+      this.message = message;
+    };
+    throw new ManipulationException('Image manipulation error');
+    postMessage(undefined);
+  }
+}
+
+// image-worker
+(function() {
+  // http://stackoverflow.com/questions/10906734/how-to-upload-image-into-html5-canvas
+  var original;
+  var imageLoader = document.querySelector('#imageLoader');
+  imageLoader.addEventListener('change', handleImage, false);
+  var canvas = document.querySelector('#image');
+  var ctx = canvas.getContext('2d');
+
+  var imageWorker = new Worker('scripts/worker-improved.js');
+
+  function handleImage(e){
+    var reader = new FileReader();
+    reader.onload = function(event){
+      var img = new Image();
+      img.onload = function(){
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img,0,0);
+        original = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      }
+      img.src = event.target.result;
+    }
+    reader.readAsDataURL(e.target.files[0]);
+  }
+  
+  // greys out the buttons while manipulation is happening
+  // un-greys out the buttons when the manipulation is done
+  function toggleButtonsAbledness() {
+    var buttons = document.querySelectorAll('button');
+    for (var i = 0; i < buttons.length; i++) {
+      if (buttons[i].hasAttribute('disabled')) {
+        buttons[i].removeAttribute('disabled')
+      } else {
+        buttons[i].setAttribute('disabled', null);
+      }
+    };
+  }
+
+  function manipulateImage(type) {
+    var a, b, g, i, imageData, j, length, pixel, r, ref;
+    imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    toggleButtonsAbledness();
+    imageWorker.postMessage({'imageData': imageData, 'type': type});
+
+    imageWorker.onmessage = function(e) {
+      toggleButtonsAbledness();
+      var image = e.data;
+      if (image) return ctx.putImageData(e.data, 0, 0);
+      console.log("No manipulated image returned.")
+    }
+
+    imageWorker.onerror = function(error) {
+      function WorkerException(message) {
+        this.name = "WorkerException";
+        this.message = message;
+      };
+      throw new WorkerException('Worker error.');
+    };
+  };
+
+  function revertImage() {
+    return ctx.putImageData(original, 0, 0);
+  }
+
+  document.querySelector('#invert').onclick = function() {
+    manipulateImage("invert");
+  };
+  document.querySelector('#chroma').onclick = function() {
+    manipulateImage("chroma");
+  };
+  document.querySelector('#greyscale').onclick = function() {
+    manipulateImage("greyscale");
+  };
+  document.querySelector('#vibrant').onclick = function() {
+    manipulateImage("vibrant");
+  };
+  document.querySelector('#revert').onclick = function() {
+    revertImage();
+  };
+})();
+
+
+
 
 /*******************************************************
 * 
