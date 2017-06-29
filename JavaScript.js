@@ -5343,6 +5343,60 @@ transform // composite
 
 
 
+// Forced Synchronous Layout (FSL)
+
+    Caused by calling layout inside JS followed by style.
+
+    Layout -> Style
+
+// FSL Example
+
+divs.forEach(function(elem, index, arr) {
+    if(windows.scrollY < 200) { // layout
+        elem.style.opacity = 0.5; // style
+    }
+})
+
+// Better
+
+    JS -> Style -> Layout
+
+// Example
+
+var newWidth = container.offsetWidth;
+divs.forEach(function(elem, index, arr) {
+    elem.style.width = newWidth;
+})
+
+
+
+
+
+// Stopping FSL Strategy
+
+// FSL
+divs.forEach(function(elem, index, arr) {
+    if (elem.offsetHeight < 500) {
+        elemn.style.maxHeight = '100vh';
+    }
+})
+
+// Better
+if (elem.offsetHeight < 500) {
+    divs.forEach(function(elem, index, arr) {
+        elem.style.maxHeight = '100vh';
+    })
+}
+
+
+
+
+Big performance boost from proper pipeline!
+
+
+
+
+
 
 /*******************************************************
 * App Life Cycle
@@ -5673,12 +5727,50 @@ this.onmessage = function(e) {
 
 
 /*******************************************************
-* 
+* Class keyword - Object Creation in JavaScript
 *******************************************************/
 
+class Mammal {
+    constructor(sound) {
+        this._sound = sound
+    }
+
+    talk() {
+        return this._sound
+    }
+}
+
+class Dog extends Mammal {
+    constructor() {
+        super('woof!') // calls ctor of Mammal
+    }
+}
+
+let fluffykins = new Mammal()
+fluffykins.talk() // woof!
+
+Dog.protottype.talk.bind({
+    _sound: 'ROAR'
+})() // ROAR
+
+
+/*
+JS does not have private members, underscore is used to denote private.
+
+Classes do not actually exist, it is a function.
+*/
+
+
 /*******************************************************
-* 
+* Managing Layers
 *******************************************************/
+
+// hack for older browsers
+transform: translateZ(0);
+
+// new
+will-change: transform;
+
 
 /*******************************************************
 * 

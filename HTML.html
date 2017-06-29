@@ -295,13 +295,55 @@ Images are loaded asynchronously
 
 
 /* -------------------------------------------------- */
-    
+    Async JavaScript
 /* -------------------------------------------------- */
 
+<script src="analytics.js" async></script>
+
+	Does not block DOM construction!
+
+	Does not block CSSOM!
+
+	We use async when JS does not affect the critical rendering path.
+
+Alternative is to use the onload event.
+
+
 
 /* -------------------------------------------------- */
-    
+    General Strategies and CRP Diagrams
 /* -------------------------------------------------- */
+
+Minify, Compress, Cache
+
+	HTML, CSS, JavaScript
+
+Minimizer use of render blocking resources (CSS)	
+
+	Use mmedia queries on <link> to unblock rendering
+
+	Inline CSS
+
+Minimize use of parser blocking resources (JS)
+
+	Defer JavaScript execution
+
+	Use async attribute on <script>
+
+
+
+
+Buckets:
+
+	Reduce the amount of data sent, minimize bytes
+
+	Reduce critical resources (CSS & JS)
+
+	Shorten CRP length
+
+		
+
+
 
 
 /* -------------------------------------------------- */

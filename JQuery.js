@@ -454,6 +454,146 @@ $( '#rooms' ).on( 'click', 'li', function() {
 
 
 /* -------------------------------------------------- */
+	jQuery.ajax()
+/* -------------------------------------------------- */
+
+Perform an asynchronous HTTP (Ajax) request.
+
+jQuery.ajax( url [, settings ] )
+
+	url
+		Type: String
+		A string containing the URL to which the request is sent.
+
+	settings
+		Type: PlainObject
+		A set of key/value pairs that configure the Ajax request. All settings are optional. A default can be set for any option with $.ajaxSetup(). See jQuery.ajax( settings ) below for a complete list of all settings.
+
+$.ajax({
+  accepts: {
+    mycustomtype: 'application/x-some-custom-type'
+  },
+ 
+  // Instructions for how to deserialize a `mycustomtype`
+  converters: {
+    'text mycustomtype': function(result) {
+      // Do Stuff
+      return newresult;
+    }
+  },
+ 
+  // Expect a `mycustomtype` back from server
+  dataType: 'mycustomtype'
+});
+
+
+$.ajax({
+  url: "test.html",
+  context: document.body
+}).done(function() {
+  $( this ).addClass( "done" );
+});
+
+
+
+
+/* -------------------------------------------------- */
+	jQuery.getJSON()
+/* -------------------------------------------------- */
+
+Load JSON-encoded data from the server using a GET HTTP request.
+
+jQuery.getJSON( url [, data ] [, success ] )
+
+	url
+		Type: String
+		A string containing the URL to which the request is sent.
+
+	data
+		Type: PlainObject or String
+		A plain object or string that is sent to the server with the request.
+
+	success
+		Type: Function( PlainObject data, String textStatus, jqXHR jqXHR )
+		A callback function that is executed if the request succeeds.
+
+$.ajax({
+  dataType: "json",
+  url: url,
+  data: data,
+  success: success
+});
+
+$.getJSON( "ajax/test.json", function( data ) {
+  var items = [];
+  $.each( data, function( key, val ) {
+    items.push( "<li id='" + key + "'>" + val + "</li>" );
+  });
+ 
+  $( "<ul/>", {
+    "class": "my-new-list",
+    html: items.join( "" )
+  }).appendTo( "body" );
+});
+
+{
+  "one": "Singular sensation",
+  "two": "Beady little eyes",
+  "three": "Little birds pitch by my doorstep"
+}
+
+
+
+
+/* -------------------------------------------------- */
+	.error()
+/* -------------------------------------------------- */
+
+.error( handler )
+
+	Bind an event handler to the "error" JavaScript event.
+
+	handler
+		Type: Function( Event eventObject )
+		A function to execute when the event is triggered.
+
+.error( [eventData ], handler )
+
+	eventData
+		Type: Anything
+		An object containing data that will be passed to the event handler.
+	
+	handler
+		Type: Function( Event eventObject )
+		A function to execute each time the event is triggered.
+
+$( "#book" )
+  .error(function() {
+    alert( "Handler for .error() called." )
+  })
+  .attr( "src", "missing.png" );
+
+
+// If missing.png is missing, it is replaced by replacement.png
+$( "img" )
+  .error(function() {
+    $( this ).attr( "src", "replacement.png" );
+  })
+  .attr( "src", "missing.png" );
+
+/* -------------------------------------------------- */
+	
+/* -------------------------------------------------- */
+
+/* -------------------------------------------------- */
+	
+/* -------------------------------------------------- */
+
+/* -------------------------------------------------- */
+	
+/* -------------------------------------------------- */
+
+/* -------------------------------------------------- */
 	
 /* -------------------------------------------------- */
 

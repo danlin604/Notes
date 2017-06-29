@@ -78,8 +78,68 @@ Computers are imprecise
 
 
 /* -------------------------------------------------- */
-	
+	DevOps
 /* -------------------------------------------------- */
+
+ A set of practices that emphasize the collaboration and communication of both software developers and information technology (IT) professionals while automating the process of software delivery and infrastructure changes.
+
+
+Collaboration:
+
+	Development
+	QA
+	IT Operations
+
+
+DevOps Toolchain:
+
+	Code
+		Code development and review, version control tools, code merging;
+
+	Build
+		Continuous integration tools, build status;
+
+	Test
+		Continuous testing tools that provide feedback on business risks;
+
+	Package
+		Artifact repository, application pre-deployment staging;
+
+	Release
+		Change management, release approvals, release automation;
+
+	Configure
+		Infrastructure configuration and management, Infrastructure as Code tools;
+
+	Monitor
+		Applications performance monitoring, end–user experience.
+
+
+Culture
+
+	Operations
+		seeks organizational stability;
+	
+	Developers
+		seek change;
+	
+	Testers
+		seek risk reduction
+
+
+Client Feedback
+
+	Reduce rework
+
+		Shorter testing cycle
+
+	Reduce overhead
+
+		Automation
+
+			Developer to reduce overhead of QA through automation
+
+	*Lean thinking
 
 
 /* -------------------------------------------------- */
