@@ -3046,40 +3046,1035 @@ The java.io package contains nearly every class you might ever need to perform i
 	Standard Error − This is used to output the error data produced by the users program and usually a computer screen is used for standard error stream and represented as System.err.
 
 
+// InputStreamReader to read standard input stream until the user types a "q"
+import java.io.*;
+public class ReadConsole {
+
+   public static void main(String args[]) throws IOException {
+      InputStreamReader cin = null;
+
+      try {
+         cin = new InputStreamReader(System.in);
+         System.out.println("Enter characters, 'q' to quit.");
+         char c;
+         do {
+            c = (char) cin.read();
+            System.out.print(c);
+         } while(c != 'q');
+      }finally {
+         if (cin != null) {
+            cin.close();
+         }
+      }
+   }
+}
+/*
+$javac ReadConsole.java
+$java ReadConsole
+Enter characters, 'q' to quit.
+1
+1
+e
+e
+q
+q
+*/
+
+
+/* -------------------------------------------------------- */
+	Reading and Writing Files
+/* -------------------------------------------------------- */
+
+A stream can be defined as a sequence of data. The InputStream is used to read data from a source and the OutputStream is used for writing data to a destination.
+
+The two important streams are FileInputStream and FileOutputStream.
+
+
+// FileInputStream
+
+	This stream is used for reading data from the files. Objects can be created using the keyword new and there are several types of constructors available.
+
+	InputStream f = new FileInputStream("C:/java/hello");
+
+	// OR
+
+	File f = new File("C:/java/hello");
+	InputStream f = new FileInputStream(f);
+
+
+// methods for InputStream
+
+	public void close() throws IOException{}
+
+		This method closes the file output stream. Releases any system resources associated with the file. Throws an IOException.
+
+
+	protected void finalize()throws IOException {}
+
+		This method cleans up the connection to the file. Ensures that the close method of this file output stream is called when there are no more references to this stream. Throws an IOException.
+
+
+	public int read(int r)throws IOException{}
+
+		This method reads the specified byte of data from the InputStream. Returns an int. Returns the next byte of data and -1 will be returned if its the end of the file.
+
+
+	public int read(byte[] r) throws IOException{}
+
+		This method reads r.length bytes from the input stream into an array. Returns the total number of bytes read. If it is the end of the file, -1 will be returned.
+
+
+	public int available() throws IOException{}
+
+		Gives the number of bytes that can be read from this file input stream. Returns an int.
+
+
+// Other important streams
+
+	ByteArrayInputStream
+
+	DataInputStream
+
+
+
+// FileOutputStream
+
+	FileOutputStream is used to create a file and write data into it. The stream would create a file, if it doesnt already exist, before opening it for output.
+
+	// ctor
+	OutputStream f = new FileOutputStream("C:/java/hello") 
+
+	// OR
+	File f = new File("C:/java/hello");
+	OutputStream f = new FileOutputStream(f);
+
+
+// OutputStream methods
+
+	public void close() throws IOException{}
+
+		This method closes the file output stream. Releases any system resources associated with the file. Throws an IOException.
+
+
+	protected void finalize()throws IOException {}
+
+		This method cleans up the connection to the file. Ensures that the close method of this file output stream is called when there are no more references to this stream. Throws an IOException.
+
+
+	public void write(int w)throws IOException{}
+
+		This methods writes the specified byte to the output stream.
+
+
+	public void write(byte[] w)
+
+		Writes w.length bytes from the mentioned byte array to the OutputStream.
+
+
+// Other important streams
+
+	ByteArrayOutputStream
+
+	DataOutputStream
+
+
+// Example of InputStream and OutputStream
+
+import java.io.*;
+public class fileStreamTest {
+
+   public static void main(String args[]) {
+   
+      try {
+         byte bWrite [] = {11,21,3,40,5};
+         OutputStream os = new FileOutputStream("test.txt");
+         for(int x = 0; x < bWrite.length ; x++) {
+            os.write( bWrite[x] );   // writes the bytes
+         }
+         os.close();
+     
+         InputStream is = new FileInputStream("test.txt");
+         int size = is.available();
+
+         for(int i = 0; i < size; i++) {
+            System.out.print((char)is.read() + "  ");
+         }
+         is.close();
+      }catch(IOException e) {
+         System.out.print("Exception");
+      }	
+   }
+}
+
+
+// File navigation and IO
+
+	File Class
+
+	FileReader Class
+
+	FileWriter Class
+
+
+// Directories
+
+	A directory is a File which can contain a list of other files and directories. You use File object to create directories, to list down files available in a directory.
+
+// Creating Directories
+
+	mkdir() 
+
+		method creates a directory, returning true on success and false on failure. Failure indicates that the path specified in the File object already exists, or that the directory cannot be created because the entire path does not exist yet.
+
+	mkdirs() 
+
+		method creates both a directory and all the parents of the directory.	
+
+// Example
+
+import java.io.File;
+public class CreateDir {
+
+   public static void main(String args[]) {
+      String dirname = "/tmp/user/java/bin";
+      File d = new File(dirname);
+      
+      // Create directory now.
+      d.mkdirs();
+   }
+}
+// creates "/tmp/user/java/bin" directory
+
+	// Note − Java automatically takes care of path separators on UNIX and Windows as per conventions. If you use a forward slash (/) on a Windows version of Java, the path will still resolve correctly.
+
+
+
+// List directories
+
+	You can use list( ) method provided by File object to list down all the files and directories available in a directory as follows −
+
+// Example
+import java.io.File;
+public class ReadDir {
+
+   public static void main(String[] args) {
+      File file = null;
+      String[] paths;
+  
+      try {      
+         // create new file object
+         file = new File("/tmp");
+
+         // array of files and directory
+         paths = file.list();
+
+         // for each name in the path array
+         for(String path:paths) {
+            // prints filename and directory name
+            System.out.println(path);
+         }
+      }catch(Exception e) {
+         // if any error occurs
+         e.printStackTrace();
+      }
+   }
+}
+/*
+test1.txt
+test2.txt
+ReadDir.java
+ReadDir.class
+*/
+
+
+
+/* -------------------------------------------------------- */
+	Exceptions
+/* -------------------------------------------------------- */
+
+java.lang.Exception
+
+An exception (or exceptional event) is a problem that arises during the execution of a program. When an Exception occurs the normal flow of the program is disrupted and the program/Application terminates abnormally, which is not recommended, therefore, these exceptions are to be handled.
+
+
+Checked exceptions
+
+	A checked exception is an exception that occurs at the compile time, these are also called as compile time exceptions. These exceptions cannot simply be ignored at the time of compilation, the programmer should take care of (handle) these exceptions.
+
+
+Unchecked exceptions
+
+	An unchecked exception is an exception that occurs at the time of execution. These are also called as Runtime Exceptions. These include programming bugs, such as logic errors or improper use of an API. Runtime exceptions are ignored at the time of compilation.
+
+
+Errors
+
+	These are not exceptions at all, but problems that arise beyond the control of the user or the programmer. Errors are typically ignored in your code because you can rarely do anything about an error. For example, if a stack overflow occurs, an error will arise. They are also ignored at the time of compilation.
+
+
+// Exception hierarchy
+
+	// The exception class is a subclass of the Throwable class. Other than the exception class there is another subclass called Error which is derived from the Throwable class.
+
+	// Errors are abnormal conditions that happen in case of severe failures, these are not handled by the Java programs. Errors are generated to indicate errors generated by the runtime environment. Example: JVM is out of memory. Normally, programs cannot recover from errors.
+
+	// The Exception class has two main subclasses: IOException class and RuntimeException Class.
+
+
+
+// Exception methods
+
+	public String getMessage()
+
+		Returns a detailed message about the exception that has occurred. This message is initialized in the Throwable constructor.
+
+
+	public Throwable getCause()
+
+		Returns the cause of the exception as represented by a Throwable object.
+
+
+	public String toString()
+
+		// Returns the name of the class concatenated with the result of getMessage().
+
+
+	public void printStackTrace()
+
+		Prints the result of toString() along with the stack trace to System.err, the error output stream.
+
+
+	public StackTraceElement [] getStackTrace()
+
+		Returns an array containing each element on the stack trace. The element at index 0 represents the top of the call stack, and the last element in the array represents the method at the bottom of the call stack.
+
+
+	public Throwable fillInStackTrace()
+
+		Fills the stack trace of this Throwable object with the current stack trace, adding to any previous information in the stack trace.	
+
+
+
+// Catching exceptions
+
+	A method catches an exception using a combination of the try and catch keywords. A try/catch block is placed around the code that might generate an exception. Code within a try/catch block is referred to as protected code, and the syntax for using try/catch looks like the following −
+
+
+try {
+   // Protected code
+}catch(ExceptionName e1) {
+   // Catch block
+}finally{
+   // Required code	
+}
+
+
+// Excample
+// File Name : ExcepTest.java
+import java.io.*;
+
+public class ExcepTest {
+
+   public static void main(String args[]) {
+      try {
+         int a[] = new int[2];
+         System.out.println("Access element three :" + a[3]);
+      }catch(ArrayIndexOutOfBoundsException e) {
+         System.out.println("Exception thrown  :" + e);
+      }
+      System.out.println("Out of the block");
+   }
+}
+
+
+// Mutiple catch blocks
+try {
+   // Protected code
+}catch(ExceptionType1 e1) {
+   // Catch block
+}catch(ExceptionType2 e2) {
+   // Catch block
+}catch(ExceptionType3 e3) {
+   // Catch block
+}
+
+// Example
+try {
+   file = new FileInputStream(fileName);
+   x = (byte) file.read();
+}catch(IOException i) {
+   i.printStackTrace();
+   return -1;
+}catch(FileNotFoundException f) // Not valid! {
+   f.printStackTrace();
+   return -1;
+}
+
+
+
+// Catching multiple type of exceptions
+catch (IOException|FileNotFoundException ex) {
+   logger.log(ex);
+   throw ex;
+}
+
+
+
+// Throws/Throw keywords
+
+	If a method does not handle a checked exception, the method must declare it using the throws keyword. The throws keyword appears at the end of a methods signature.
+
+	Throws is used to postpone the handling of a checked exception and throw is used to invoke an exception explicitly.
+
+
+	// Example
 	import java.io.*;
-	public class ReadConsole {
+	public class className {
 
-	   public static void main(String args[]) throws IOException {
-	      InputStreamReader cin = null;
+	   public void deposit(double amount) throws RemoteException {
+	      // Method implementation
+	      throw new RemoteException();
+	   }
+	   // Remainder of class definition
+	}
 
-	      try {
-	         cin = new InputStreamReader(System.in);
-	         System.out.println("Enter characters, 'q' to quit.");
-	         char c;
-	         do {
-	            c = (char) cin.read();
-	            System.out.print(c);
-	         } while(c != 'q');
-	      }finally {
-	         if (cin != null) {
-	            cin.close();
-	         }
-	      }
+
+	// Throw multiple
+	import java.io.*;
+	public class className {
+
+	   public void withdraw(double amount) throws RemoteException, InsufficientFundsException {
+	      // Method implementation
+	   }
+	   // Remainder of class definition
+	}
+
+
+
+// Finally block
+
+	The finally block follows a try block or a catch block. A finally block of code always executes, irrespective of occurrence of an Exception.
+
+	Using a finally block allows you to run any cleanup-type statements that you want to execute, no matter what happens in the protected code.
+
+try {
+   // Protected code
+}catch(ExceptionType1 e1) {
+   // Catch block
+}catch(ExceptionType2 e2) {
+   // Catch block
+}catch(ExceptionType3 e3) {
+   // Catch block
+}finally {
+   // The finally block always executes.
+}
+
+
+// Note
+
+	A catch clause cannot exist without a try statement.
+
+	It is not compulsory to have finally clauses whenever a try/catch block is present.
+
+	The try block cannot be present without either catch clause or finally clause.
+
+	Any code cannot be present in between the try, catch, finally blocks.
+
+
+
+// Try-with-resources
+
+	Generally, when we use any resources like streams, connections, etc. we have to close them explicitly using finally block. In the following program, we are reading data from a file using FileReader and we are closing it using finally block.
+
+// Original
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class ReadData_Demo {
+
+   public static void main(String args[]) {
+      FileReader fr = null;		
+      try {
+         File file = new File("file.txt");
+         fr = new FileReader(file); char [] a = new char[50];
+         fr.read(a);   // reads the content to the array
+         for(char c : a)
+         System.out.print(c);   // prints the characters one by one
+      }catch(IOException e) {
+         e.printStackTrace();
+      }finally {
+         try {
+            fr.close();
+         }catch(IOException ex) {		
+            ex.printStackTrace();
+         }
+      }
+   }
+}
+
+
+
+// try-with-resources
+
+	// also referred as automatic resource management, is a new exception handling mechanism that was introduced in Java 7, which automatically closes the resources used within the try catch block.
+
+// Syntax
+try(FileReader fr = new FileReader("file path")) {
+   // use the resource
+   }catch() {
+      // body of catch 
+   }
+}
+
+// Better
+import java.io.FileReader;
+import java.io.IOException;
+
+public class Try_withDemo {
+
+   public static void main(String args[]) {
+      try(FileReader fr = new FileReader("E://file.txt")) {
+         char [] a = new char[50];
+         fr.read(a);   // reads the contentto the array
+         for(char c : a)
+         System.out.print(c);   // prints the characters one by one
+      }catch(IOException e) {
+         e.printStackTrace();
+      }
+   }
+}
+
+
+// Keep in mind when working with try-with-resources
+
+/*
+	To use a class with try-with-resources statement it should implement AutoCloseable interface and the close() method of it gets invoked automatically at runtime.
+
+	You can declare more than one class in try-with-resources statement.
+
+	While you declare multiple classes in the try block of try-with-resources statement these classes are closed in reverse order.
+
+	Except the declaration of resources within the parenthesis everything is the same as normal try/catch block of a try block.
+
+	The resource declared in try gets instantiated just before the start of the try-block.
+
+	The resource declared at the try block is implicitly declared as final.
+*/
+
+
+
+// User-defined exceptions
+
+	All exceptions must be a child of Throwable.
+
+	If you want to write a checked exception that is automatically enforced by the Handle or Declare Rule, you need to extend the Exception class.
+
+	If you want to write a runtime exception, you need to extend the RuntimeException class.
+
+	// Syntax
+
+		class MyException extends Exception {
+		}
+
+
+	You just need to extend the predefined Exception class to create your own Exception. These are considered to be checked exceptions. The following InsufficientFundsException class is a user-defined exception that extends the Exception class, making it a checked exception. An exception class is like any other class, containing useful fields and methods.
+
+
+// Example
+
+	// File Name InsufficientFundsException.java
+	import java.io.*;
+
+	public class InsufficientFundsException extends Exception {
+	   private double amount;
+	   
+	   public InsufficientFundsException(double amount) {
+	      this.amount = amount;
+	   }
+	   
+	   public double getAmount() {
+	      return amount;
 	   }
 	}
 
-/* -------------------------------------------------------- */
+	// File Name CheckingAccount.java
+	import java.io.*;
+
+	public class CheckingAccount {
+	   private double balance;
+	   private int number;
+	   
+	   public CheckingAccount(int number) {
+	      this.number = number;
+	   }
+	   
+	   public void deposit(double amount) {
+	      balance += amount;
+	   }
+	   
+	   public void withdraw(double amount) throws InsufficientFundsException {
+	      if(amount <= balance) {
+	         balance -= amount;
+	      }else {
+	         double needs = amount - balance;
+	         throw new InsufficientFundsException(needs);
+	      }
+	   }
+	   
+	   public double getBalance() {
+	      return balance;
+	   }
+	   
+	   public int getNumber() {
+	      return number;
+	   }
+	}
+
+	// File Name BankDemo.java
+	public class BankDemo {
+
+	   public static void main(String [] args) {
+	      CheckingAccount c = new CheckingAccount(101);
+	      System.out.println("Depositing $500...");
+	      c.deposit(500.00);
+	      
+	      try {
+	         System.out.println("\nWithdrawing $100...");
+	         c.withdraw(100.00);
+	         System.out.println("\nWithdrawing $600...");
+	         c.withdraw(600.00);
+	      }catch(InsufficientFundsException e) {
+	         System.out.println("Sorry, but you are short $" + e.getAmount());
+	         e.printStackTrace();
+	      }
+	   }
+	}
+	/* Output:
+	Depositing $500...
+
+	Withdrawing $100...
+
+	Withdrawing $600...
+	Sorry, but you are short $200.0
+	InsufficientFundsException
+	         at CheckingAccount.withdraw(CheckingAccount.java:25)
+	         at BankDemo.main(BankDemo.java:13)
+	*/
+
+
+
+// Common exceptions
+
+	VM Exceptions − These are exceptions/errors that are exclusively or logically thrown by the JVM. Examples: NullPointerException, ArrayIndexOutOfBoundsException, ClassCastException.
+
+	Programmatic Exceptions − These exceptions are thrown explicitly by the application or the API programmers. Examples: IllegalArgumentException, IllegalStateException.    
+
+
 
 /* -------------------------------------------------------- */
+	Inner classes
 /* -------------------------------------------------------- */
 
-/* -------------------------------------------------------- */
-/* -------------------------------------------------------- */
+// Nested classes
+
+	In Java, just like methods, variables of a class too can have another class as its member. Writing a class within another is allowed in Java. The class written within is called the nested class, and the class that holds the inner class is called the outer class.
+
+// Syntax
+
+class Outer_Demo {
+   class Nested_Demo {
+   }
+}
+
+
+Non-static nested classes
+
+	These are the non-static members of a class.
+
+
+Static nested classes
+
+	These are the static members of a class.
+
+
+
+// Example of private class
+
+	class Outer_Demo {
+	   int num;
+	   
+	   // inner class
+	   private class Inner_Demo {
+	      public void print() {
+	         System.out.println("This is an inner class");
+	      }
+	   }
+	   
+	   // Accessing he inner class from the method within
+	   void display_Inner() {
+	      Inner_Demo inner = new Inner_Demo();
+	      inner.print();
+	   }
+	}
+	   
+	public class My_class {
+
+	   public static void main(String args[]) {
+	      // Instantiating the outer class 
+	      Outer_Demo outer = new Outer_Demo();
+	      
+	      // Accessing the display_Inner() method.
+	      outer.display_Inner();
+	   }
+	}
+	// This is an inner class.
+
+
+
+// Method-local inner class
+
+	In Java, we can write a class within a method and this will be a local type. Like local variables, the scope of the inner class is restricted within the method.
+
+	// Example
+	public class Outerclass {
+	   // instance method of the outer class 
+	   void my_Method() {
+	      int num = 23;
+
+	      // method-local inner class
+	      class MethodInner_Demo {
+	         public void print() {
+	            System.out.println("This is method inner class "+num);	   
+	         }   
+	      } // end of inner class
+		   
+	      // Accessing the inner class
+	      MethodInner_Demo inner = new MethodInner_Demo();
+	      inner.print();
+	   }
+	   
+	   public static void main(String args[]) {
+	      Outerclass outer = new Outerclass();
+	      outer.my_Method();	   	   
+	   }
+	}
+	// This is method inner class 23
+
+
+
+// Anonymous inner class
+
+	An inner class declared without a class name is known as an anonymous inner class. In case of anonymous inner classes, we declare and instantiate them at the same time. Generally, they are used whenever you need to override the method of a class or an interface.
+
+	// Example
+	abstract class AnonymousInner {
+	   public abstract void mymethod();
+	}
+
+	public class Outer_class {
+
+	   public static void main(String args[]) {
+	      AnonymousInner inner = new AnonymousInner() {
+	         public void mymethod() {
+	            System.out.println("This is an example of anonymous inner class");
+	         }
+	      };
+	      inner.mymethod();	
+	   }
+	}
+
+
+
+// Anonymous Inner Class as Argument
+
+	Generally, if a method accepts an object of an interface, an abstract class, or a concrete class, then we can implement the interface, extend the abstract class, and pass the object to the method. If it is a class, then we can directly pass it to the method.
+
+	But in all the three cases, you can pass an anonymous inner class to the method. Here is the syntax of passing an anonymous inner class as a method argument −
+
+	obj.my_Method(new My_Class() {
+	   public void Do() {
+	      .....
+	      .....
+	   }
+	});
+
+	// Example
+
+		// interface
+		interface Message {
+		   String greet();	
+		}
+
+		public class My_class {
+		   // method which accepts the object of interface Message
+		   public void displayMessage(Message m) {
+		      System.out.println(m.greet() +
+		         ", This is an example of anonymous inner class as an argument");	   
+		   }
+
+		   public static void main(String args[]) {
+		      // Instantiating the class
+		      My_class obj = new My_class();
+				
+		      // Passing an anonymous inner class as an argument
+		      obj.displayMessage(new Message() {
+		         public String greet() {
+		            return "Hello";  		   
+		         }
+		      });
+		   }
+		}
+		//Hello This is an example of anonymous inner class as an argument
+
+
+
+// Static nested class
+
+	A static inner class is a nested class which is a static member of the outer class. It can be accessed without instantiating the outer class, using other static members.
+
+	class MyOuter {
+	   static class Nested_Demo {
+	   }
+	}
+
+	// Example
+
+		public class Outer {
+		   static class Nested_Demo {
+		      public void my_method() {
+		         System.out.println("This is my nested class");
+		      }
+		   }
+		   
+		   public static void main(String args[]) {
+		      Outer.Nested_Demo nested = new Outer.Nested_Demo();	 
+		      nested.my_method();
+		   }
+		}
+		// This is my nested class
+
+
 
 /* -------------------------------------------------------- */
+	Inheritance
 /* -------------------------------------------------------- */
 
-/* -------------------------------------------------------- */
+	Inheritance can be defined as the process where one class acquires the properties (methods and fields) of another. With the use of inheritance the information is made manageable in a hierarchical order.
+
+	The class which inherits the properties of other is known as subclass (derived class, child class) and the class whose properties are inherited is known as superclass (base class, parent class).
+
+
+// extends keyword
+
+	extends is the keyword used to inherit the properties of a class.
+
+	class Super {
+	}
+	class Sub extends Super {
+	}
+
+
+// Example
+
+	class Calculation {
+	   int z;
+		
+	   public void addition(int x, int y) {
+	      z = x + y;
+	      System.out.println("The sum of the given numbers:"+z);
+	   }
+		
+	   public void Subtraction(int x, int y) {
+	      z = x - y;
+	      System.out.println("The difference between the given numbers:"+z);
+	   }
+	}
+
+	public class My_Calculation extends Calculation {
+	   public void multiplication(int x, int y) {
+	      z = x * y;
+	      System.out.println("The product of the given numbers:"+z);
+	   }
+		
+	   public static void main(String args[]) {
+	      int a = 20, b = 10;
+	      My_Calculation demo = new My_Calculation();
+	      demo.addition(a, b);
+	      demo.Subtraction(a, b);
+	      demo.multiplication(a, b);
+	   }
+	}
+	/*
+	The sum of the given numbers:30
+	The difference between the given numbers:10
+	The product of the given numbers:200
+	*/
+
+		// In the given program, when an object to My_Calculation class is created, a copy of the contents of the superclass is made within it. That is why, using the object of the subclass you can access the members of a superclass.
+
+
+// Note
+
+	A subclass inherits all the members (fields, methods, and nested classes) from its superclass. Constructors are not members, so they are not inherited by subclasses, but the constructor of the superclass can be invoked from the subclass.
+
+
+
+// super keyword
+
+	It is used to differentiate the members of superclass from the members of subclass, if they have same names.
+
+	It is used to invoke the superclass constructor from subclass.
+
+
+// Example
+
+	class Super_class {
+	   int num = 20;
+
+	   // display method of superclass
+	   public void display() {
+	      System.out.println("This is the display method of superclass");
+	   }
+	}
+
+	public class Sub_class extends Super_class {
+	   int num = 10;
+
+	   // display method of sub class
+	   public void display() {
+	      System.out.println("This is the display method of subclass");
+	   }
+
+	   public void my_method() {
+	      // Instantiating subclass
+	      Sub_class sub = new Sub_class();
+
+	      // Invoking the display() method of sub class
+	      sub.display();
+
+	      // Invoking the display() method of superclass
+	      super.display();
+
+	      // printing the value of variable num of subclass
+	      System.out.println("value of the variable named num in sub class:"+ sub.num);
+
+	      // printing the value of variable num of superclass
+	      System.out.println("value of the variable named num in super class:"+ super.num);
+	   }
+
+	   public static void main(String args[]) {
+	      Sub_class obj = new Sub_class();
+	      obj.my_method();
+	   }
+	}
+
+
+// Invoking superclass ctor
+
+	// If a class is inheriting the properties of another class, the subclass automatically acquires the default constructor of the superclass. But if you want to call a parameterized constructor of the superclass, you need to use the super keyword as shown below.
+
+	super(values);
+
+// Example
+
+	class Superclass {
+	   int age;
+
+	   Superclass(int age) {
+	      this.age = age; 		 
+	   }
+
+	   public void getAge() {
+	      System.out.println("The value of the variable named age in super class is: " +age);
+	   }
+	}
+
+	public class Subclass extends Superclass {
+	   Subclass(int age) {
+	      super(age);
+	   }
+
+	   public static void main(String argd[]) {
+	      Subclass s = new Subclass(24);
+	      s.getAge();
+	   }
+	}
+	// The value of the variable named age in super class is: 24
+
+
+// IS-A Relationship
+
+	IS-A is a way of saying: This object is a type of that object. 
+
+public class Animal {
+}
+
+public class Mammal extends Animal {
+}
+
+public class Reptile extends Animal {
+}
+
+public class Dog extends Mammal {
+}
+
+
+Animal is the superclass of Mammal class.
+Animal is the superclass of Reptile class.
+Mammal and Reptile are subclasses of Animal class.
+Dog is the subclass of both Mammal and Animal classes.
+
+
+Mammal IS-A Animal
+Reptile IS-A Animal
+Dog IS-A Mammal
+Hence: Dog IS-A Animal as well
+
+
+//Example
+
+	class Animal {
+	}
+
+	class Mammal extends Animal {
+	}
+
+	class Reptile extends Animal {
+	}
+
+	public class Dog extends Mammal {
+
+	   public static void main(String args[]) {
+	      Animal a = new Animal();
+	      Mammal m = new Mammal();
+	      Dog d = new Dog();
+
+	      System.out.println(m instanceof Animal);
+	      System.out.println(d instanceof Mammal);
+	      System.out.println(d instanceof Animal);
+	   }
+	} 
+
+
+
+// implements keyword
+
+	Generally, the implements keyword is used with classes to inherit the properties of an interface. Interfaces can never be extended by a class.
+
+	public interface Animal {
+	}
+
+	public class Mammal implements Animal {
+	}
+
+	public class Dog extends Mammal {
+	}
+
+
+
+	
+
 /* -------------------------------------------------------- */
 
 /* -------------------------------------------------------- */
