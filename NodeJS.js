@@ -41,17 +41,274 @@ Node.js = Runtime Environment + JavaScript Library
 
     It is not advisable to use Node.js for CPU intensive applications.
 
-/* -------------------------------------------------------- */
-    
-/* -------------------------------------------------------- */
+
+// Node.js important components
+
+    Import required modules − We use the require directive to load Node.js modules.
+
+    Create server − A server which will listen to clients requests similar to Apache HTTP Server.
+
+    Read request and return response − The server created in an earlier step will read the HTTP request made by the client which can be a browser or a console and return the response.
+
+
+// Creating Node.js Application
+
+
+    // Use require directive to load HTTP module and store the HTTP instance
+
+        var http = require("http");
+
+
+    // Create server
+
+        http.createServer(function (request, response) {
+           // Send the HTTP header 
+           // HTTP Status: 200 : OK
+           // Content Type: text/plain
+           response.writeHead(200, {'Content-Type': 'text/plain'});
+           
+           // Send the response body as "Hello World"
+           response.end('Hello World\n');
+        }).listen(8081);
+
+        // Console will print the message
+        console.log('Server running at http://127.0.0.1:8081/');
+
+            // The above code is enough to create an HTTP server which listens, i.e., waits for a request over 8081 port on the local machine.
+
+
+    // Testing request and response
+
+        // main.js
+        var http = require("http");
+
+        http.createServer(function (request, response) {
+
+           // Send the HTTP header 
+           // HTTP Status: 200 : OK
+           // Content Type: text/plain
+           response.writeHead(200, {'Content-Type': 'text/plain'});
+           
+           // Send the response body as "Hello World"
+           response.end('Hello World\n');
+        }).listen(8081);
+
+        // Console will print the message
+        console.log('Server running at http://127.0.0.1:8081/');
+
+
+    // Execute main.js to start server
+
+        $ node main.js
+        // Server running at http://127.0.0.1.8081/
+
+
+    // Verify page http://127.0.0.1:8081/
+
+        HTTP server up and running
+
+
 
 /* -------------------------------------------------------- */
-    
+    REPL    
 /* -------------------------------------------------------- */
 
+REPL stands for Read Eval Print Loop and it represents a computer environment like a Windows console or Unix/Linux shell where a command is entered and the system responds with an output in an interactive mode.
+
+Read − Reads users input, parses the input into JavaScript data-structure, and stores in memory.
+
+Eval − Takes and evaluates the data structure.
+
+Print − Prints the result.
+
+Loop − Loops the above command until the user presses ctrl-c twice.
+
+
+// Starting REPL
+
+    // simple
+
+        $ node
+        > 1 + 3
+        4
+        > 1 + ( 2 * 3 ) - 4
+        3
+        >
+
+    // complex
+
+        $ node
+        > var x = 0
+        undefined
+        > do {
+        ... x++;
+        ... console.log("x: " + x);
+        ... } while ( x < 5 );
+        x: 1
+        x: 2
+        x: 3
+        x: 4
+        x: 5
+        undefined
+        >
+
+
+// REPL Commands
+
+    ctrl + c − terminate the current command.
+
+    ctrl + c twice − terminate the Node REPL.
+
+    ctrl + d − terminate the Node REPL.
+
+    Up/Down Keys − see command history and modify previous commands.
+
+    tab Keys − list of current commands.
+
+    .help − list of all commands.
+
+    .break − exit from multiline expression.
+
+    .clear − exit from multiline expression.
+
+    .save filename − save the current Node REPL session to a file.
+
+    .load filename − load file content in current Node REPL session.
+
+
+// Stopping REPL
+
+    $ node
+    >
+    (^C again to quit)
+    >
+
 /* -------------------------------------------------------- */
-    
+    Node Package Manager (NPM)
 /* -------------------------------------------------------- */
+
+/*
+Online repositories for node.js packages/modules which are searchable on search.nodejs.org
+
+Command line utility to install Node.js packages, do version management and dependency management of Node.js packages.
+*/
+
+// Check all modules installed
+
+    // local
+    $ npm ls
+
+    // global
+    $ npm ls -g
+
+
+// package.json
+
+    package.json is present in the root directory of any Node application/module and is used to define the properties of a package.
+
+    // attributes
+
+        name − name of the package
+
+        version − version of the package
+
+        description − description of the package
+
+        homepage − homepage of the package
+
+        author − author of the package
+
+        contributors − name of the contributors to the package
+
+        dependencies − list of dependencies. NPM automatically installs all the dependencies mentioned here in the node_module folder of the package.
+
+        repository − repository type and URL of the package
+
+        main − entry point of the package
+
+        keywords − keywords    
+
+
+// Uninstalling a module
+
+    Use the following command to uninstall a Node.js module.
+
+    $ npm uninstall module
+    $ npm ls
+
+// Updating a module
+
+    Update package.json and change the version of the dependency to be updated and run the following command.
+
+    $ npm update module 
+
+// Search a module
+
+    Search a package name using NPM.
+
+    $ npm search module
+
+
+// Create a module
+
+    Creating a module requires package.json to be generated. Lets generate package.json using NPM, which will generate the basic skeleton of the package.json.
+
+    $ npm init
+    This utility will walk you through creating a package.json file.
+    It only covers the most common items, and tries to guess sane defaults.
+
+    See 'npm help json' for definitive documentation on these fields
+    and exactly what they do.
+
+    Use 'npm install <pkg> --save' afterwards to install a package and
+    save it as a dependency in the package.json file.
+
+    Press ^C at any time to quit.
+    name: (webmaster)
+
+    You will need to provide all the required information about your module. You can take help from the above-mentioned package.json file to understand the meanings of various information demanded. Once package.json is generated, use the following command to register yourself with NPM repository site using a valid email address.
+
+    $ npm adduser
+    Username: mcmohd
+    Password:
+    Email: (this IS public) mcmohd@gmail.com
+
+    $ npm publish
+
+    // If everything is fine with your module, then it will be published in the repository and will be accessible to install using NPM like any other Node.js module.
+
+
+/* -------------------------------------------------------- */
+    Callback concept
+/* -------------------------------------------------------- */
+
+/*
+Callback is an asynchronous equivalent for a function. A callback function is called at the completion of a given task. Node makes heavy use of callbacks. All the APIs of Node are written in such a way that they support callbacks.
+
+For example, a function to read a file may start reading file and return the control to the execution environment immediately so that the next instruction can be executed. Once file I/O is complete, it will call the callback function while passing the callback function, the content of the file as a parameter. So there is no blocking or wait for File I/O. This makes Node.js highly scalable, as it can process a high number of requests without waiting for any function to return results.
+*/
+
+// Blocking code example
+
+    var fs = require("fs");
+
+    var data = fs.readFileSync('input.txt');
+
+    console.log(data.toString());
+    console.log("Program Ended");
+
+// None-Blocking code example
+
+    var fs = require("fs");
+
+    fs.readFile('input.txt', function (err, data) {
+       if (err) return console.error(err);
+       console.log(data.toString());
+    });
+
+    console.log("Program Ended");
+
+
 
 /* -------------------------------------------------------- */
     

@@ -5773,8 +5773,155 @@ will-change: transform;
 
 
 /*******************************************************
-* 
+* twoSum
 *******************************************************/
+
+/*
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+Example:
+Given nums = [2, 7, 11, 15], target = 9,
+
+Because nums[0] + nums[1] = 2 + 7 = 9,
+return [0, 1].
+*/
+
+
+const twoSum = function(nums, target) {    
+    let map = new Map()
+
+    for (let i = 0; i < nums.length; i++) {
+        if (map.has(nums[i])) {
+            return [map.get(nums[i]), i]
+        }
+        map.set( ( target - nums[i] ), i ) // required : index
+    }
+    throw new Error('No match.')
+}
+
+/*******************************************************
+* Merge Tree
+*******************************************************/
+Given two binary trees and imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not.
+
+You need to merge them into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of new tree.
+
+Example 1:
+Input: 
+    Tree 1                     Tree 2                  
+          1                         2                             
+         / \                       / \                            
+        3   2                     1   3                        
+       /                           \   \                      
+      5                             4   7                  
+Output: 
+Merged tree:
+         3
+        / \
+       4   5
+      / \   \ 
+     5   4   7
+Note: The merging process must start from the root nodes of both trees.
+
+
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} t1
+ * @param {TreeNode} t2
+ * @return {TreeNode}
+ */
+var mergeTrees = function(t1, t2) {
+    if (!t1 && !t2) { return null }
+    if (!t1) { return t2 }
+    if (!t2) { return t1 }
+
+    let node = new TreeNode(t1.val+t2.val)
+    node.left = mergeTrees(t1.left, t2.left)
+    node.right = mergeTrees(t1.right, t2.right)
+
+    return node
+};
+
+/*******************************************************
+* FizzBuzz
+*******************************************************/
+
+Write a program that outputs the string representation of numbers from 1 to n.
+
+But for multiples of three it should output “Fizz” instead of the number and for the multiples of five output “Buzz”. For numbers which are multiples of both three and five output “FizzBuzz”.
+
+Example:
+
+n = 15,
+
+Return:
+[
+    "1",
+    "2",
+    "Fizz",
+    "4",
+    "Buzz",
+    "Fizz",
+    "7",
+    "8",
+    "Fizz",
+    "Buzz",
+    "11",
+    "Fizz",
+    "13",
+    "14",
+    "FizzBuzz"
+]
+
+/**
+ * @param {number} n
+ * @return {string[]}
+ */
+var fizzBuzz = function(n) {
+    let output = []
+    for (let i = 1; i <= n; i++) {
+        let s = ''
+        if ( (i % 3) === 0) { s+= 'Fizz' }
+        if ( (i % 5) === 0) { s+= 'Buzz' }
+        if ( s.length < 1) { s += i }
+        output.push(s)
+    }
+    return output
+};
+
+/*******************************************************
+*   Number Complement
+*******************************************************/
+
+Given a positive integer, output its complement number. The complement strategy is to flip the bits of its binary representation.
+
+Note:
+The given integer is guaranteed to fit within the range of a 32-bit signed integer.
+You could assume no leading zero bit in the integer’s binary representation.
+
+Input: 5
+Output: 2
+Explanation: The binary representation of 5 is 101 (no leading zero bits), and its complement is 010, so you need to output 2.
+
+/**
+ * @param {number} num
+ * @return {number}
+ */
+var findComplement = function(num) {
+  var len = num.toString(2).length;
+  var b = (~num) >>> 0;
+  return parseInt(b.toString(2).slice(-len),2);
+};
+
 
 
 /*******************************************************
@@ -5787,6 +5934,26 @@ will-change: transform;
 *******************************************************/
 
 
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
+
+
+/*******************************************************
+* 
+*******************************************************/
+
+/*******************************************************
+* 
+*******************************************************/
 
 
 

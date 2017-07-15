@@ -10,10 +10,10 @@
 	//echo 'User display name: ' . $current_user->display_name . "\n";
 	//echo 'User ID: ' . $current_user->ID . "\n";
 
-	$servername = "us-cdbr-azure-west-c.cloudapp.net";
-	$username = "b3ac9e1aa2d624";
-	$password = "adb6310a";
-	$dbname = "vsocc";
+	$servername = "";
+	$username = "";
+	$password = "";
+	$dbname = "";
 
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -49,10 +49,10 @@
 	$email = $current_user->user_email;
 
 	//Database Information
-	$servername = "us-cdbr-azure-west-c.cloudapp.net";
-	$username = "b3ac9e1aa2d624";
-	$password = "adb6310a";
-	$dbname = "vsocc";
+	$servername = "";
+	$username = "";
+	$password = "";
+	$dbname = "";
 
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -95,10 +95,10 @@
 
 
 	//Database Information
-	$servername = "us-cdbr-azure-west-c.cloudapp.net";
-	$username = "b3ac9e1aa2d624";
-	$password = "adb6310a";
-	$dbname = "vsocc";
+	$servername = "";
+	$username = "";
+	$password = "";
+	$dbname = "";
 
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);
@@ -154,10 +154,10 @@
 	$email = $current_user->user_email;
 
 	//Database Information
-	$servername = "us-cdbr-azure-west-c.cloudapp.net";
-	$username = "b3ac9e1aa2d624";
-	$password = "adb6310a";
-	$dbname = "vsocc";
+	$servername = "";
+	$username = "";
+	$password = "";
+	$dbname = "";
 
 	// Create connection
 	$conn = new mysqli($servername, $username, $password, $dbname);

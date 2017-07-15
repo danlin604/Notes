@@ -4073,11 +4073,2493 @@ Hence: Dog IS-A Animal as well
 
 
 
+// instanceof keyword
+
+	interface Animal{}
+	class Mammal implements Animal{}
+
+	public class Dog extends Mammal {
+
+	   public static void main(String args[]) {
+	      Mammal m = new Mammal();
+	      Dog d = new Dog();
+
+	      System.out.println(m instanceof Animal); // true
+	      System.out.println(d instanceof Mammal); // true
+	      System.out.println(d instanceof Animal); // true
+	   }
+	}	
+
+
+
+// HAS-A relationship
+
+This determines whether a certain class HAS-A certain thing. This relationship helps to reduce duplication of code as well as bugs.
+
+// Example
+
+	public class Vehicle{}
+	public class Speed{}
+
+	public class Van extends Vehicle {
+	   private Speed sp;
+	} 
+
+	This shows that class Van HAS-A Speed. By having a separate class for Speed, we do not have to put the entire code that belongs to speed inside the Van class, which makes it possible to reuse the Speed class in multiple applications.
+
+
+// Note
+
+	A very important fact to remember is that Java does not support multiple inheritance. This means that a class cannot extend more than one class.	
+
+
+
+/* -------------------------------------------------------- */
+	Overriding
+/* -------------------------------------------------------- */
+
+If a class inherits a method from its superclass, then there is a chance to override the method provided that it is not marked final.
+
+The benefit of overriding is: ability to define a behavior that's specific to the subclass type, which means a subclass can implement a parent class method based on its requirement.
+
+// Example
+
+	class Animal {
+	   public void move() {
+	      System.out.println("Animals can move");
+	   }
+	}
+
+	class Dog extends Animal {
+	   public void move() {
+	      System.out.println("Dogs can walk and run");
+	   }
+	}
+
+	public class TestDog {
+
+	   public static void main(String args[]) {
+	      Animal a = new Animal();   // Animal reference and object
+	      Animal b = new Dog();   // Animal reference but Dog object
+
+	      a.move();   // runs the method in Animal class
+	      b.move();   // runs the method in Dog class
+	   }
+	}
+	/*
+	Animals can move
+	Dogs can walk and run	
+	*/
+
+	In the above example, you can see that even though b is a type of Animal it runs the move method in the Dog class. The reason for this is: In compile time, the check is made on the reference type. However, in the runtime, JVM figures out the object type and would run the method that belongs to that particular object.
+
+	Therefore, in the above example, the program will compile properly since Animal class has the method move. Then, at the runtime, it runs the method specific for that object.
+
+
+// Error example
+
+	class Animal {
+	   public void move() {
+	      System.out.println("Animals can move");
+	   }
+	}
+
+	class Dog extends Animal {
+	   public void move() {
+	      System.out.println("Dogs can walk and run");
+	   }
+	   public void bark() {
+	      System.out.println("Dogs can bark");
+	   }
+	}
+
+	public class TestDog {
+
+	   public static void main(String args[]) {
+	      Animal a = new Animal();   // Animal reference and object
+	      Animal b = new Dog();   // Animal reference but Dog object
+
+	      a.move();   // runs the method in Animal class
+	      b.move();   // runs the method in Dog class
+	      b.bark();   // error
+	   }
+	}
+	/*
+	TestDog.java:26: error: cannot find symbol
+	      b.bark();
+	       ^
+	  symbol:   method bark()
+	  location: variable b of type Animal
+	1 error
+	*/
+
+	This program will throw a compile time error since bs reference type Animal doesnt have a method by the name of bark.
+
+
+
+// Rules for method overriding
+
+	The argument list should be exactly the same as that of the overridden method.
+
+	The return type should be the same or a subtype of the return type declared in the original overridden method in the superclass.
+
+	The access level cannot be more restrictive than the overridden methods access level. For example: If the superclass method is declared public then the overridding method in the sub class cannot be either private or protected.
+
+	Instance methods can be overridden only if they are inherited by the subclass.
+
+	A method declared final cannot be overridden.
+
+	A method declared static cannot be overridden but can be re-declared.
+
+	If a method cannot be inherited, then it cannot be overridden.
+
+	A subclass within the same package as the instance's superclass can override any superclass method that is not declared private or final.
+
+	A subclass in a different package can only override the non-final methods declared public or protected.
+
+	An overriding method can throw any uncheck exceptions, regardless of whether the overridden method throws exceptions or not. However, the overriding method should not throw checked exceptions that are new or broader than the ones declared by the overridden method. The overriding method can throw narrower or fewer exceptions than the overridden method.
+
+	Constructors cannot be overridden.	
+
+// Note
+
+	When invoking a superclass version of an overridden method the super keyword is used.
+
+
+
+/* -------------------------------------------------------- */
+	Polymorphism
+/* -------------------------------------------------------- */
+
+Any Java object that can pass more than one IS-A test is considered to be polymorphic. In Java, all Java objects are polymorphic since any object will pass the IS-A test for their own type and for the class Object.
+
+
+// Example
+
+	public interface Vegetarian{}
+	public class Animal{}
+	public class Deer extends Animal implements Vegetarian{}
+
+	Now, the Deer class is considered to be polymorphic since this has multiple inheritance. Following are true for the above examples −
+
+	A Deer IS-A Animal
+	A Deer IS-A Vegetarian
+	A Deer IS-A Deer
+	A Deer IS-A Object
+
+	Deer d = new Deer();
+	Animal a = d;
+	Vegetarian v = d;
+	Object o = d;
+	// All the reference variables d, a, v, o refer to the same Deer object in the heap.
+
+
+// Virtual Methods
+
+	An overridden method is essentially hidden in the parent class, and is not invoked unless the child class uses the super keyword within the overriding method.
+
+	// Basics
+
+	Here, we instantiate two Salary objects. One using a Salary reference s, and the other using an Employee reference e.
+
+	While invoking s.mailCheck(), the compiler sees mailCheck() in the Salary class at compile time, and the JVM invokes mailCheck() in the Salary class at run time.
+
+	mailCheck() on e is quite different because e is an Employee reference. When the compiler sees e.mailCheck(), the compiler sees the mailCheck() method in the Employee class.
+
+	Here, at compile time, the compiler used mailCheck() in Employee to validate this statement. At run time, however, the JVM invokes mailCheck() in the Salary class.
+
+	This behavior is referred to as virtual method invocation, and these methods are referred to as virtual methods. An overridden method is invoked at run time, no matter what data type the reference is that was used in the source code at compile time.
+
+
+
+/* -------------------------------------------------------- */
+	Abstraction
+/* -------------------------------------------------------- */
+
+Abstraction is a process of hiding the implementation details from the user, only the functionality will be provided to the user. In other words, the user will have the information on what the object does instead of how it does it.
+
+Abstract classes may or may not contain abstract methods, i.e., methods without body ( public void get(); )
+
+But, if a class has at least one abstract method, then the class must be declared abstract.
+
+If a class is declared abstract, it cannot be instantiated.
+
+To use an abstract class, you have to inherit it from another class, provide implementations to the abstract methods in it.
+
+If you inherit an abstract class, you have to provide implementations to all the abstract methods in it.
+
+
+// Example
+
+	/* File name : Employee.java */
+	public abstract class Employee {
+	   private String name;
+	   private String address;
+	   private int number;
+
+	   public Employee(String name, String address, int number) {
+	      System.out.println("Constructing an Employee");
+	      this.name = name;
+	      this.address = address;
+	      this.number = number;
+	   }
+	   
+	   public double computePay() {
+	     System.out.println("Inside Employee computePay");
+	     return 0.0;
+	   }
+	   
+	   public void mailCheck() {
+	      System.out.println("Mailing a check to " + this.name + " " + this.address);
+	   }
+
+	   public String toString() {
+	      return name + " " + address + " " + number;
+	   }
+
+	   public String getName() {
+	      return name;
+	   }
+	 
+	   public String getAddress() {
+	      return address;
+	   }
+	   
+	   public void setAddress(String newAddress) {
+	      address = newAddress;
+	   }
+	 
+	   public int getNumber() {
+	      return number;
+	   }
+	}
+
+
+// Inheriting the Abstract class
+
+	/* File name : Salary.java */
+	public class Salary extends Employee {
+	   private double salary;   // Annual salary
+	   
+	   public Salary(String name, String address, int number, double salary) {
+	      super(name, address, number);
+	      setSalary(salary);
+	   }
+	   
+	   public void mailCheck() {
+	      System.out.println("Within mailCheck of Salary class ");
+	      System.out.println("Mailing check to " + getName() + " with salary " + salary);
+	   }
+	 
+	   public double getSalary() {
+	      return salary;
+	   }
+	   
+	   public void setSalary(double newSalary) {
+	      if(newSalary >= 0.0) {
+	         salary = newSalary;
+	      }
+	   }
+	   
+	   public double computePay() {
+	      System.out.println("Computing salary pay for " + getName());
+	      return salary/52;
+	   }
+	}
+
+	// You cannot instantiate the Employee class, but you can instantiate the Salary Class, and using this instance you can access all the three fields and seven methods of Employee class as shown below.
+
+	/* File name : AbstractDemo.java */
+	public class AbstractDemo {
+
+	   public static void main(String [] args) {
+	      Salary s = new Salary("Mohd Mohtashim", "Ambehta, UP", 3, 3600.00);
+	      Employee e = new Salary("John Adams", "Boston, MA", 2, 2400.00);
+	      System.out.println("Call mailCheck using Salary reference --");
+	      s.mailCheck();
+	      System.out.println("\n Call mailCheck using Employee reference--");
+	      e.mailCheck();
+	   }
+	}
+
+
+
+// Abstract methods
+
+	If you want a class to contain a particular method but you want the actual implementation of that method to be determined by child classes, you can declare the method in the parent class as an abstract.
+
+	abstract keyword is used to declare the method as abstract.
+
+	You have to place the abstract keyword before the method name in the method declaration.
+
+	An abstract method contains a method signature, but no method body.
+
+	Instead of curly braces, an abstract method will have a semoi colon (;) at the end.
+
+// Example
+
+	public abstract class Employee {
+	   private String name;
+	   private String address;
+	   private int number;
+	   
+	   public abstract double computePay();
+	   // Remainder of class definition
+	}
+
+
+Declaring a method as abstract has two consequences −
+
+	The class containing it must be declared as abstract.
+
+	Any class inheriting the current class must either override the abstract method or declare itself as abstract.
+
+Note − Eventually, a descendant class has to implement the abstract method; otherwise, you would have a hierarchy of abstract classes that cannot be instantiated.
+
+
+
+/* -------------------------------------------------------- */
+	Encapsulation
+/* -------------------------------------------------------- */
+
+Encapsulation in Java is a mechanism of wrapping the data (variables) and code acting on the data (methods) together as a single unit. In encapsulation, the variables of a class will be hidden from other classes, and can be accessed only through the methods of their current class. Therefore, it is also known as data hiding.
+
+Declare the variables of a class as private.
+
+Provide public setter and getter methods to modify and view the variables values.
+
+// Benefits
+
+	The fields of a class can be made read-only or write-only.
+
+	A class can have total control over what is stored in its fields.
+
+	The users of a class do not know how the class stores its data. A class can change the data type of a field and users of the class do not need to change any of their code.
+
+
+/* -------------------------------------------------------- */
+	Interfaces
+/* -------------------------------------------------------- */
+
+An interface is a reference type in Java. It is similar to class. It is a collection of abstract methods. A class implements an interface, thereby inheriting the abstract methods of the interface.
+
+Writing an interface is similar to writing a class. But a class describes the attributes and behaviors of an object. And an interface contains behaviors that a class implements.
+
+Unless the class that implements the interface is abstract, all the methods of the interface need to be defined in the class.
+
+
+// Interface
+
+	An interface can contain any number of methods.
+
+	An interface is written in a file with a .java extension, with the name of the interface matching the name of the file.
+
+	The byte code of an interface appears in a .class file.
+
+	Interfaces appear in packages, and their corresponding bytecode file must be in a directory structure that matches the package name.
+
+
+// Interface VS Class
+
+	You cannot instantiate an interface.
+
+	An interface does not contain any constructors.
+
+	All of the methods in an interface are abstract.
+
+	An interface cannot contain instance fields. The only fields that can appear in an interface must be declared both static and final.
+
+	An interface is not extended by a class; it is implemented by a class.
+
+	An interface can extend multiple interfaces.
+
+
+// Declaring Interfaces
+
+	/* File name : NameOfInterface.java */
+	import java.lang.*;
+	// Any number of import statements
+
+	public interface NameOfInterface {
+	   // Any number of final, static fields
+	   // Any number of abstract method declarations\
+	}
+
+// Properties
+
+	An interface is implicitly abstract. You do not need to use the abstract keyword while declaring an interface.
+
+	Each method in an interface is also implicitly abstract, so the abstract keyword is not needed.
+
+	Methods in an interface are implicitly public.
+
+// Example
+
+	/* File name : Animal.java */
+	interface Animal {
+	   public void eat();
+	   public void travel();
+	}
+
+// Implementing Interfaces
+
+	/* File name : MammalInt.java */
+	public class MammalInt implements Animal {
+
+	   public void eat() {
+	      System.out.println("Mammal eats");
+	   }
+
+	   public void travel() {
+	      System.out.println("Mammal travels");
+	   } 
+
+	   public int noOfLegs() {
+	      return 0;
+	   }
+
+	   public static void main(String args[]) {
+	      MammalInt m = new MammalInt();
+	      m.eat();
+	      m.travel();
+	   }
+	}
+
+// Extending interfaces
+
+	An interface can extend another interface in the same way that a class can extend another class.
+
+	// Filename: Sports.java
+	public interface Sports {
+	   public void setHomeTeam(String name);
+	   public void setVisitingTeam(String name);
+	}
+
+	// Filename: Football.java
+	public interface Football extends Sports {
+	   public void homeTeamScored(int points);
+	   public void visitingTeamScored(int points);
+	   public void endOfQuarter(int quarter);
+	}
+
+	// Filename: Hockey.java
+	public interface Hockey extends Sports {
+	   public void homeGoalScored();
+	   public void visitingGoalScored();
+	   public void endOfPeriod(int period);
+	   public void overtimePeriod(int ot);
+	}
+
+
+// Note
+
+	An interface can extend multiple interfaces!
+
+	public interface Hockey extends Sports, Event
+
+
+
+// Tagging interfaces
+
+	package java.util;
+	public interface EventListener
+	{}
+
+
+	Creates a common parent
+
+		As with the EventListener interface, which is extended by dozens of other interfaces in the Java API, you can use a tagging interface to create a common parent among a group of interfaces. For example, when an interface extends EventListener, the JVM knows that this particular interface is going to be used in an event delegation scenario.
+
+	Adds a data type to a class
+
+		This situation is where the term, tagging comes from. A class that implements a tagging interface does not need to define any methods (since the interface does not have any), but the class becomes an interface type through polymorphism.
+
+
+
+/* -------------------------------------------------------- */
+	Packages
+/* -------------------------------------------------------- */
+
+Packages are used in Java in order to prevent naming conflicts, to control access, to make searching/locating and usage of classes, interfaces, enumerations and annotations easier, etc.
+
+A Package can be defined as a grouping of related types (classes, interfaces, enumerations and annotations ) providing access protection and namespace management.
+
+java.lang − bundles the fundamental classes
+
+java.io − classes for input , output functions are bundled in this package
+
+Programmers can define their own packages to bundle group of classes/interfaces, etc. It is a good practice to group related classes implemented by you so that a programmer can easily determine that the classes, interfaces, enumerations, and annotations are related.
+
+
+
+// Creating a package
+
+	While creating a package, you should choose a name for the package and include a package statement along with that name at the top of every source file that contains the classes, interfaces, enumerations, and annotation types that you want to include in the package.
+
+	The package statement should be the first line in the source file. There can be only one package statement in each source file, and it applies to all types in the file.
+
+	If a package statement is not used then the class, interfaces, enumerations, and annotation types will be placed in the current default package.
+
+
+	// Compile Java program with package statements, use -d option
+	javac -d Destination_folder file_name.java
+
+
+// Example
+
+	/* File name : Animal.java */
+	package animals;
+
+	interface Animal {
+	   public void eat();
+	   public void travel();
+	}
+
+
+	package animals;
+	/* File name : MammalInt.java */
+
+	public class MammalInt implements Animal {
+
+	   public void eat() {
+	      System.out.println("Mammal eats");
+	   }
+
+	   public void travel() {
+	      System.out.println("Mammal travels");
+	   } 
+
+	   public int noOfLegs() {
+	      return 0;
+	   }
+
+	   public static void main(String args[]) {
+	      MammalInt m = new MammalInt();
+	      m.eat();
+	      m.travel();
+	   }
+	}
+
+
+// Compile 
+
+	$ javac -d . Animal.java 
+	$ javac -d . MammalInt.java
+
+
+// Import keyword
+
+	If a class wants to use another class in the same package, the package name need not be used. Classes in the same package find each other without any special syntax.
+
+// Example
+
+	// If in the same package
+	package payroll;
+	public class Boss {
+	   public void payEmployee(Employee e) {
+	      e.mailCheck();
+	   }
+	}
+
+	// If in different package
+	import payroll.Employee;
+
+
+// Directory structure of packages
+
+	The name of the package becomes a part of the name of the class, as we just discussed in the previous section.
+
+	The name of the package must match the directory structure where the corresponding bytecode resides.	
+
+// Example
+
+	The company had a com.apple.computers package that contained a Dell.
+
+	....\com\apple\computers\Dell.java
+
+// You can arrange your source and class directories separately
+
+	<path-one>\sources\com\apple\computers\Dell.java // Source
+
+	<path-two>\classes\com\apple\computers\Dell.class // CLASSPATH
+
+	//	By doing this, it is possible to give access to the classes directory to other programmers without revealing your sources. You also need to manage source and class files in this manner so that the compiler and the Java Virtual Machine (JVM) can find all the types your program uses.
+
+// Set CLASSPATH System
+
+	// Display CLASSPATH variable
+	In Windows → C:\> set CLASSPATH
+	In UNIX → % echo $CLASSPATH
+
+	// Delete current contents of the CLASSPATH variable
+	In Windows → C:\> set CLASSPATH =
+	In UNIX → % unset CLASSPATH; export CLASSPATH
+
+	// Set CLASSPATH variable
+	In Windows → set CLASSPATH = C:\users\jack\java\classes
+	In UNIX → % CLASSPATH = /home/jack/java/classes; export CLASSPATH
+
+
+
+/* -------------------------------------------------------- */
+	Data Structures
+/* -------------------------------------------------------- */
+
+Enumeration
+BitSet
+Vector
+Stack
+Dictionary
+Hashtable
+Properties
+
+
+
+// Enumeration
+
+	The Enumeration interface defines the methods by which you can enumerate (obtain one at a time) the elements in a collection of objects.
+
+	This legacy interface has been superceded by Iterator. Although not deprecated, Enumeration is considered obsolete for new code. However, it is used by several methods defined by the legacy classes such as Vector and Properties, is used by several other API classes, and is currently in widespread use in application code.
+
+	boolean hasMoreElements( )
+
+		When implemented, it must return true while there are still more elements to extract, and false when all the elements have been enumerated.
+
+	Object nextElement( )
+
+		This returns the next object in the enumeration as a generic Object reference.
+
+	// Example
+	import java.util.Vector;
+	import java.util.Enumeration;
+
+	public class EnumerationTester {
+
+	   public static void main(String args[]) {
+	      Enumeration days;
+	      Vector dayNames = new Vector();
+	      
+	      dayNames.add("Sunday");
+	      dayNames.add("Monday");
+	      dayNames.add("Tuesday");
+	      dayNames.add("Wednesday");
+	      dayNames.add("Thursday");
+	      dayNames.add("Friday");
+	      dayNames.add("Saturday");
+	      days = dayNames.elements();
+	      
+	      while (days.hasMoreElements()) {
+	         System.out.println(days.nextElement()); 
+	      }
+	   }
+	}
+
+
+// BitSet
+
+	The BitSet class creates a special type of array that holds bit values. The BitSet array can increase in size as needed. This makes it similar to a vector of bits. This is a legacy class but it has been completely re-engineered in Java 2, version 1.4.
+
+	// ctor
+	BitSet( )
+
+		This constructor creates a default object.
+
+	BitSet(int size)
+
+		This constructor allows you to specify its initial size, i.e., the number of bits that it can hold. All bits are initialized to zero.	
+
+	// methods
+
+	void and(BitSet bitSet)
+
+		ANDs the contents of the invoking BitSet object with those specified by bitSet. The result is placed into the invoking object.
+
 	
+	void andNot(BitSet bitSet)
+
+		For each 1 bit in bitSet, the corresponding bit in the invoking BitSet is cleared.
+
+	
+	int cardinality( )
+
+		Returns the number of set bits in the invoking object.
+
+	
+	void clear( )
+
+		Zeros all bits.
+
+	
+	void clear(int index)
+
+		Zeros the bit specified by index.
+
+	
+	void clear(int startIndex, int endIndex)
+
+		Zeros the bits from startIndex to endIndex.
+
+	
+	Object clone( )
+
+		Duplicates the invoking BitSet object.
+
+	
+	boolean equals(Object bitSet)
+
+		Returns true if the invoking bit set is equivalent to the one passed in bitSet. Otherwise, the method returns false.
+
+	
+	void flip(int index)
+
+		Reverses the bit specified by the index.
+
+	
+	void flip(int startIndex, int endIndex)
+
+		Reverses the bits from startIndex to endIndex.
+
+	
+	boolean get(int index)
+
+		Returns the current state of the bit at the specified index.
+
+	
+	BitSet get(int startIndex, int endIndex)
+
+		Returns a BitSet that consists of the bits from startIndex to endIndex. The invoking object is not changed.
+
+	
+	int hashCode( )
+
+		Returns the hash code for the invoking object.
+
+	
+	boolean intersects(BitSet bitSet)
+
+		Returns true if at least one pair of corresponding bits within the invoking object and bitSet are 1.
+
+	
+	boolean isEmpty( )
+
+		Returns true if all bits in the invoking object are zero.
+
+	
+	int length( )
+
+		Returns the number of bits required to hold the contents of the invoking BitSet. This value is determined by the location of the last 1 bit.
+
+	
+	int nextClearBit(int startIndex)
+
+		Returns the index of the next cleared bit, (that is, the next zero bit), starting from the index specified by startIndex.
+
+	
+	int nextSetBit(int startIndex)
+
+		Returns the index of the next set bit (that is, the next 1 bit), starting from the index specified by startIndex. If no bit is set, -1 is returned.
+
+	
+	void or(BitSet bitSet)
+
+		ORs the contents of the invoking BitSet object with that specified by bitSet. The result is placed into the invoking object.
+
+	
+	void set(int index)
+
+		Sets the bit specified by index.
+
+	
+	void set(int index, boolean v)
+
+		Sets the bit specified by index to the value passed in v. True sets the bit, false clears the bit.
+
+	
+	void set(int startIndex, int endIndex)
+
+		Sets the bits from startIndex to endIndex.
+
+	
+	void set(int startIndex, int endIndex, boolean v)
+
+		Sets the bits from startIndex to endIndex, to the value passed in v. true sets the bits, false clears the bits.
+
+	
+	int size( )
+
+		Returns the number of bits in the invoking BitSet object.
+
+	
+	String toString( )
+
+		Returns the string equivalent of the invoking BitSet object.
+
+	
+	void xor(BitSet bitSet)
+
+		XORs the contents of the invoking BitSet object with that specified by bitSet. The result is placed into the invoking object.
+
+
+	// Example
+	import java.util.BitSet;
+	public class BitSetDemo {
+
+	  public static void main(String args[]) {
+	      BitSet bits1 = new BitSet(16);
+	      BitSet bits2 = new BitSet(16);
+	      
+	      // set some bits
+	      for(int i = 0; i < 16; i++) {
+	         if((i % 2) == 0) bits1.set(i);
+	         if((i % 5) != 0) bits2.set(i);
+	      }
+	     
+	      System.out.println("Initial pattern in bits1: ");
+	      System.out.println(bits1);
+	      System.out.println("\nInitial pattern in bits2: ");
+	      System.out.println(bits2);
+
+	      // AND bits
+	      bits2.and(bits1);
+	      System.out.println("\nbits2 AND bits1: ");
+	      System.out.println(bits2);
+
+	      // OR bits
+	      bits2.or(bits1);
+	      System.out.println("\nbits2 OR bits1: ");
+	      System.out.println(bits2);
+
+	      // XOR bits
+	      bits2.xor(bits1);
+	      System.out.println("\nbits2 XOR bits1: ");
+	      System.out.println(bits2);
+	   }
+	}
+	/*
+	Initial pattern in bits1:
+	{0, 2, 4, 6, 8, 10, 12, 14}
+
+	Initial pattern in bits2:
+	{1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14}
+
+	bits2 AND bits1:
+	{2, 4, 6, 8, 12, 14}
+
+	bits2 OR bits1:
+	{0, 2, 4, 6, 8, 10, 12, 14}
+
+	bits2 XOR bits1:
+	{}
+	*/
+
+
+// Vector
+
+	Vector implements a dynamic array. It is similar to ArrayList, but with two differences −
+
+	Vector is synchronized.
+
+	Vector contains many legacy methods that are not part of the collections framework.
+
+	Vector proves to be very useful if you dont know the size of the array in advance or you just need one that can change sizes over the lifetime of a program.
+
+	// Constructors
+	Vector( )
+
+		This constructor creates a default vector, which has an initial size of 10.
+
+	
+	Vector(int size)
+
+		This constructor accepts an argument that equals to the required size, and creates a vector whose initial capacity is specified by size.
+
+	
+	Vector(int size, int incr)
+
+		This constructor creates a vector whose initial capacity is specified by size and whose increment is specified by incr. The increment specifies the number of elements to allocate each time that a vector is resized upward.
+
+	
+	Vector(Collection c)
+
+		This constructor creates a vector that contains the elements of collection c;
+
+	// Methods
+	void add(int index, Object element)
+
+		Inserts the specified element at the specified position in this Vector.
+
+
+	boolean add(Object o)
+
+		Appends the specified element to the end of this Vector.
+
+	
+	boolean addAll(Collection c)
+
+		Appends all of the elements in the specified Collection to the end of this Vector, in the order that they are returned by the specified Collection's Iterator.
+
+	
+	boolean addAll(int index, Collection c)
+
+		Inserts all of the elements in in the specified Collection into this Vector at the specified position.
+
+	
+	void addElement(Object obj)
+
+		Adds the specified component to the end of this vector, increasing its size by one.
+
+	
+	int capacity()
+
+		Returns the current capacity of this vector.
+
+	
+	void clear()
+
+		Removes all of the elements from this vector.
+
+	
+	Object clone()
+
+		Returns a clone of this vector.
+
+	
+	boolean contains(Object elem)
+
+		Tests if the specified object is a component in this vector.
+
+	
+	boolean containsAll(Collection c)
+
+		Returns true if this vector contains all of the elements in the specified Collection.
+
+	
+	void copyInto(Object[] anArray)
+
+		Copies the components of this vector into the specified array.
+
+	
+	Object elementAt(int index)
+
+		Returns the component at the specified index.
+
+	
+	Enumeration elements()
+
+		Returns an enumeration of the components of this vector.
+
+	
+	void ensureCapacity(int minCapacity)
+
+		Increases the capacity of this vector, if necessary, to ensure that it can hold at least the number of components specified by the minimum capacity argument.
+
+	
+	boolean equals(Object o)
+
+		Compares the specified Object with this vector for equality.
+
+	
+	Object firstElement()
+
+		Returns the first component (the item at index 0) of this vector.
+
+	
+	Object get(int index)
+
+		Returns the element at the specified position in this vector.
+
+	
+	int hashCode()
+
+		Returns the hash code value for this vector.
+
+	
+	int indexOf(Object elem)
+
+		Searches for the first occurence of the given argument, testing for equality using the equals method.
+
+	
+	int indexOf(Object elem, int index)
+
+		Searches for the first occurence of the given argument, beginning the search at index, and testing for equality using the equals method.
+
+	
+	void insertElementAt(Object obj, int index)
+
+		Inserts the specified object as a component in this vector at the specified index.
+
+	
+	boolean isEmpty()
+
+		Tests if this vector has no components.
+
+	
+	Object lastElement()
+
+		Returns the last component of the vector.
+
+	
+	int lastIndexOf(Object elem)
+
+		Returns the index of the last occurrence of the specified object in this vector.
+
+	
+	int lastIndexOf(Object elem, int index)
+
+		Searches backwards for the specified object, starting from the specified index, and returns an index to it.
+
+	
+	Object remove(int index)
+
+		Removes the element at the specified position in this vector.
+
+	
+	boolean remove(Object o)
+
+		Removes the first occurrence of the specified element in this vector, If the vector does not contain the element, it is unchanged.
+
+	
+	boolean removeAll(Collection c)
+
+		Removes from this vector all of its elements that are contained in the specified Collection.
+
+	
+	void removeAllElements()
+
+		Removes all components from this vector and sets its size to zero.
+
+	
+	boolean removeElement(Object obj)
+
+		Removes the first (lowest-indexed) occurrence of the argument from this vector.
+
+	
+	void removeElementAt(int index)
+
+		removeElementAt(int index).
+
+	
+	protected void removeRange(int fromIndex, int toIndex)
+
+		Removes from this List all of the elements whose index is between fromIndex, inclusive and toIndex, exclusive.
+
+	
+	boolean retainAll(Collection c)
+
+		Retains only the elements in this vector that are contained in the specified Collection.
+
+	
+	Object set(int index, Object element)
+
+		Replaces the element at the specified position in this vector with the specified element.
+
+	
+	void setElementAt(Object obj, int index)
+
+		Sets the component at the specified index of this vector to be the specified object.
+
+	
+	void setSize(int newSize)
+
+		Sets the size of this vector.
+
+	
+	int size()
+
+		Returns the number of components in this vector.
+
+	
+	List subList(int fromIndex, int toIndex)
+
+		Returns a view of the portion of this List between fromIndex, inclusive, and toIndex, exclusive.
+
+	
+	Object[] toArray()
+
+		Returns an array containing all of the elements in this vector in the correct order.
+
+	
+	Object[] toArray(Object[] a)
+
+		Returns an array containing all of the elements in this vector in the correct order; the runtime type of the returned array is that of the specified array.
+
+	
+	String toString()
+
+		Returns a string representation of this vector, containing the String representation of each element.
+
+	
+	void trimToSize()
+
+		Trims the capacity of this vector to be the vector's current size;
+
+
+	// Example
+	import java.util.*;
+	public class VectorDemo {
+
+	   public static void main(String args[]) {
+	      // initial size is 3, increment is 2
+	      Vector v = new Vector(3, 2);
+	      System.out.println("Initial size: " + v.size());
+	      System.out.println("Initial capacity: " + v.capacity());
+	      
+	      v.addElement(new Integer(1));
+	      v.addElement(new Integer(2));
+	      v.addElement(new Integer(3));
+	      v.addElement(new Integer(4));
+	      System.out.println("Capacity after four additions: " + v.capacity());
+
+	      v.addElement(new Double(5.45));
+	      System.out.println("Current capacity: " + v.capacity());
+	      
+	      v.addElement(new Double(6.08));
+	      v.addElement(new Integer(7));
+	      System.out.println("Current capacity: " + v.capacity());
+	      
+	      v.addElement(new Float(9.4));
+	      v.addElement(new Integer(10));
+	      System.out.println("Current capacity: " + v.capacity());
+	      
+	      v.addElement(new Integer(11));
+	      v.addElement(new Integer(12));
+	      System.out.println("First element: " + (Integer)v.firstElement());
+	      System.out.println("Last element: " + (Integer)v.lastElement());
+	      
+	      if(v.contains(new Integer(3)))
+	         System.out.println("Vector contains 3.");
+	         
+	      // enumerate the elements in the vector.
+	      Enumeration vEnum = v.elements();
+	      System.out.println("\nElements in vector:");
+	      
+	      while(vEnum.hasMoreElements())
+	         System.out.print(vEnum.nextElement() + " ");
+	      System.out.println();
+	   }
+	}
+	/*
+	Initial size: 0
+	Initial capacity: 3
+	Capacity after four additions: 5
+	Current capacity: 5
+	Current capacity: 7
+	Current capacity: 9
+	First element: 1
+	Last element: 12
+	Vector contains 3.
+
+	Elements in vector:
+	1 2 3 4 5.45 6.08 7 9.4 10 11 12
+	*/
+
+
+
+// Stack
+
+	Stack is a subclass of Vector that implements a standard last-in, first-out stack.
+
+	Stack only defines the default constructor, which creates an empty stack. Stack includes all the methods defined by Vector, and adds several of its own.
+
+	// Methods
+
+	boolean empty()
+
+		Tests if this stack is empty. Returns true if the stack is empty, and returns false if the stack contains elements.
+
+	
+	Object peek( )
+
+		Returns the element on the top of the stack, but does not remove it.
+
+
+	Object pop( )
+
+		Returns the element on the top of the stack, removing it in the process.
+
+	
+	Object push(Object element)
+
+		Pushes the element onto the stack. Element is also returned.
+
+	
+	int search(Object element)
+
+		Searches for element in the stack. If found, its offset from the top of the stack is returned. Otherwise, .1 is returned.
+
+	// Example
+	import java.util.*;
+	public class StackDemo {
+
+	   static void showpush(Stack st, int a) {
+	      st.push(new Integer(a));
+	      System.out.println("push(" + a + ")");
+	      System.out.println("stack: " + st);
+	   }
+
+	   static void showpop(Stack st) {
+	      System.out.print("pop -> ");
+	      Integer a = (Integer) st.pop();
+	      System.out.println(a);
+	      System.out.println("stack: " + st);
+	   }
+
+	   public static void main(String args[]) {
+	      Stack st = new Stack();
+	      System.out.println("stack: " + st);
+	      showpush(st, 42);
+	      showpush(st, 66);
+	      showpush(st, 99);
+	      showpop(st);
+	      showpop(st);
+	      showpop(st);
+	      try {
+	         showpop(st);
+	      }catch (EmptyStackException e) {
+	         System.out.println("empty stack");
+	      }
+	   }
+	}
+	/*
+	stack: [ ]
+	push(42)
+	stack: [42]
+	push(66)
+	stack: [42, 66]
+	push(99)
+	stack: [42, 66, 99]
+	pop -> 99
+	stack: [42, 66]
+	pop -> 66
+	stack: [42]
+	pop -> 42
+	stack: [ ]
+	pop -> empty stack
+	*/
+
+
+// Dictionary
+
+	NOTE!!! The Dictionary class is obsolete. You should implement the Map interface to obtain key/value storage functionality.
+
+	Dictionary is an abstract class that represents a key/value storage repository and operates much like Map.
+
+	Given a key and value, you can store the value in a Dictionary object. Once the value is stored, you can retrieve it by using its key. Thus, like a map, a dictionary can be thought of as a list of key/value pairs.
+
+	// Methods
+
+	Enumeration elements( )
+
+		Returns an enumeration of the values contained in the dictionary.
+
+	
+	Object get(Object key)
+
+		Returns the object that contains the value associated with the key. If the key is not in the dictionary, a null object is returned.
+
+
+	boolean isEmpty( )
+
+		Returns true if the dictionary is empty, and returns false if it contains at least one key.
+
+	
+	Enumeration keys( )
+
+		Returns an enumeration of the keys contained in the dictionary.
+
+	
+	Object put(Object key, Object value)
+
+		Inserts a key and its value into the dictionary. Returns null if the key is not already in the dictionary; returns the previous value associated with the key if the key is already in the dictionary.
+
+	
+	Object remove(Object key)
+
+		Removes the key and its value. Returns the value associated with the key. If the key is not in the dictionary, a null is returned.
+
+	
+	int size( )
+
+		Returns the number of entries in the dictionary;
+
+
+// Hashtable
+
+	Hashtable was part of the original java.util and is a concrete implementation of a Dictionary.
+
+	However, Java 2 re-engineered Hashtable so that it also implements the Map interface. Thus, Hashtable is now integrated into the collections framework. It is similar to HashMap, but is synchronized.
+
+	Like HashMap, Hashtable stores key/value pairs in a hash table. When using a Hashtable, you specify an object that is used as a key, and the value that you want linked to that key. The key is then hashed, and the resulting hash code is used as the index at which the value is stored within the table.
+
+	// Constructor
+	Hashtable( )
+
+		This is the default constructor of the hash table it instantiates the Hashtable class.
+
+	
+	Hashtable(int size)
+
+		This constructor accepts an integer parameter and creates a hash table that has an initial size specified by integer value size.
+
+	
+	Hashtable(int size, float fillRatio)
+
+		This creates a hash table that has an initial size specified by size and a fill ratio specified by fillRatio. This ratio must be between 0.0 and 1.0, and it determines how full the hash table can be before it is resized upward.
+
+	
+	Hashtable(Map < ? extends K, ? extends V > t)
+
+		This constructs a Hashtable with the given mappings.
+
+
+	// Methods
+	void clear( )
+
+		Resets and empties the hash table.
+
+	
+	Object clone( )
+
+		Returns a duplicate of the invoking object.
+
+	
+	boolean contains(Object value)
+
+		Returns true if some value equal to the value exists within the hash table. Returns false if the value isn't found.
+
+	
+	boolean containsKey(Object key)
+
+		Returns true if some key equal to the key exists within the hash table. Returns false if the key isn't found.
+
+	
+	boolean containsValue(Object value)
+
+		Returns true if some value equal to the value exists within the hash table. Returns false if the value isn't found.
+
+	
+	Enumeration elements( )
+
+		Returns an enumeration of the values contained in the hash table.
+
+	
+	Object get(Object key)
+
+		Returns the object that contains the value associated with the key. If the key is not in the hash table, a null object is returned.
+
+	
+	boolean isEmpty( )
+
+		Returns true if the hash table is empty; returns false if it contains at least one key.
+
+	
+	Enumeration keys( )
+
+		Returns an enumeration of the keys contained in the hash table.
+
+	
+	Object put(Object key, Object value)
+
+		Inserts a key and a value into the hash table. Returns null if the key isn't already in the hash table; returns the previous value associated with the key if the key is already in the hash table.
+
+	
+	void rehash( )
+
+		Increases the size of the hash table and rehashes all of its keys.
+
+	
+	Object remove(Object key)
+
+		Removes the key and its value. Returns the value associated with the key. If the key is not in the hash table, a null object is returned.
+
+	
+	int size( )
+
+		Returns the number of entries in the hash table.
+
+	
+	String toString( )
+
+		Returns the string equivalent of a hash table.
+
+
+	// Example
+	import java.util.*;
+	public class HashTableDemo {
+
+	   public static void main(String args[]) {
+	      // Create a hash map
+	      Hashtable balance = new Hashtable();
+	      Enumeration names;
+	      String str;
+	      double bal;
+
+	      balance.put("Zara", new Double(3434.34));
+	      balance.put("Mahnaz", new Double(123.22));
+	      balance.put("Ayan", new Double(1378.00));
+	      balance.put("Daisy", new Double(99.22));
+	      balance.put("Qadir", new Double(-19.08));
+
+	      // Show all balances in hash table.
+	      names = balance.keys();
+	      
+	      while(names.hasMoreElements()) {
+	         str = (String) names.nextElement();
+	         System.out.println(str + ": " + balance.get(str));
+	      }        
+	      System.out.println();
+	      
+	      // Deposit 1,000 into Zara's account
+	      bal = ((Double)balance.get("Zara")).doubleValue();
+	      balance.put("Zara", new Double(bal + 1000));
+	      System.out.println("Zara's new balance: " + balance.get("Zara"));
+	   }
+	}
+	/*
+	Qadir: -19.08
+	Zara: 3434.34
+	Mahnaz: 123.22
+	Daisy: 99.22
+	Ayan: 1378.0
+
+	Zara's new balance: 4434.34
+	*/
+
+
+// Properties
+
+	Properties is a subclass of Hashtable. It is used to maintain lists of values in which the key is a String and the value is also a String.
+
+	The Properties class is used by many other Java classes. For example, it is the type of object returned by System.getProperties( ) when obtaining environmental values.
+
+	// Constructor
+	Properties( )
+
+		This constructor creates a Properties object that has no default values.
+
+	
+	Properties(Properties propDefault)
+
+		Creates an object that uses propDefault for its default values. In both cases, the property list is empty.
+
+
+	// Methods
+	String getProperty(String key)
+
+		Returns the value associated with the key. A null object is returned if the key is neither in the list nor in the default property list.
+
+		
+	String getProperty(String key, String defaultProperty)
+
+		Returns the value associated with the key; defaultProperty is returned if the key is neither in the list nor in the default property list.
+
+	
+	void list(PrintStream streamOut)
+
+		Sends the property list to the output stream linked to streamOut.
+
+	
+	void list(PrintWriter streamOut)
+
+		Sends the property list to the output stream linked to streamOut.
+
+	
+	void load(InputStream streamIn) throws IOException
+
+		Inputs a property list from the input stream linked to streamIn.
+
+	
+	Enumeration propertyNames( )
+
+		Returns an enumeration of the keys. This includes those keys found in the default property list, too.
+
+	
+	Object setProperty(String key, String value)
+
+		Associates value with the key. Returns the previous value associated with the key, or returns null if no such association exists.
+
+	
+	void store(OutputStream streamOut, String description)
+
+		After writing the string specified by description, the property list is written to the output stream linked to streamOut.
+
+
+	// Example
+	import java.util.*;
+	public class PropDemo {
+
+	   public static void main(String args[]) {
+	      Properties capitals = new Properties();
+	      Set states;
+	      String str;
+	      
+	      capitals.put("Illinois", "Springfield");
+	      capitals.put("Missouri", "Jefferson City");
+	      capitals.put("Washington", "Olympia");
+	      capitals.put("California", "Sacramento");
+	      capitals.put("Indiana", "Indianapolis");
+
+	      // Show all states and capitals in hashtable.
+	      states = capitals.keySet();   // get set-view of keys
+	      Iterator itr = states.iterator();
+	      
+	      while(itr.hasNext()) {
+	         str = (String) itr.next();
+	         System.out.println("The capital of " + str + " is " + 
+	            capitals.getProperty(str) + ".");
+	      }     
+	      System.out.println();
+
+	      // look for state not in list -- specify default
+	      str = capitals.getProperty("Florida", "Not Found");
+	      System.out.println("The capital of Florida is " + str + ".");
+	   }
+	}
+	/*
+	The capital of Missouri is Jefferson City.
+	The capital of Illinois is Springfield.
+	The capital of Indiana is Indianapolis.
+	The capital of California is Sacramento.
+	The capital of Washington is Olympia.
+
+	The capital of Florida is Not Found.
+	*/
+
+
 
 /* -------------------------------------------------------- */
+	Collections Framework
+/* -------------------------------------------------------- */
+
+Prior to Java 2, Java provided ad hoc classes such as Dictionary, Vector, Stack, and Properties to store and manipulate groups of objects. Although these classes were quite useful, they lacked a central, unifying theme. Thus, the way that you used Vector was different from the way that you used Properties.
+
+The collections framework was designed to meet several goals, such as −
+
+	The framework had to be high-performance. The implementations for the fundamental collections (dynamic arrays, linked lists, trees, and hashtables) were to be highly efficient;
+
+	The framework had to allow different types of collections to work in a similar manner and with a high degree of interoperability.
+
+	The framework had to extend and/or adapt a collection easily.
+
+Towards this end, the entire collections framework is designed around a set of standard interfaces. Several standard implementations such as LinkedList, HashSet, and TreeSet, of these interfaces are provided that you may use as-is and you may also implement your own collection, if you choose.
+
+// All collections framework contains the following
+
+	Interfaces
+
+		These are abstract data types that represent collections. Interfaces allow collections to be manipulated independently of the details of their representation. In object-oriented languages, interfaces generally form a hierarchy.
+
+	Implementations, i.e., Classes
+
+		These are the concrete implementations of the collection interfaces. In essence, they are reusable data structures.
+
+	Algorithms
+
+		These are the methods that perform useful computations, such as searching and sorting, on objects that implement collection interfaces. The algorithms are said to be polymorphic: that is, the same method can be used on many different implementations of the appropriate collection interface.
+
+
+// Interfaces
+
+	The Collection Interface
+
+		This enables you to work with groups of objects; it is at the top of the collections hierarchy.
+
+	The List Interface
+	
+		This extends Collection and an instance of List stores an ordered collection of elements.
+
+	The Set
+	
+		This extends Collection to handle sets, which must contain unique elements.
+
+	The SortedSet
+	
+		This extends Set to handle sorted sets.
+
+	The Map
+	
+		This maps unique keys to values.
+
+	The Map.Entry
+	
+		This describes an element (a key/value pair) in a map. This is an inner class of Map.
+
+	The SortedMap
+	
+		This extends Map so that the keys are maintained in an ascending order.
+
+	The Enumeration
+	
+		This is legacy interface defines the methods by which you can enumerate (obtain one at a time) the elements in a collection of objects. This legacy interface has been superceded by Iterator;
+
+
+// Collection classes
+
+	AbstractCollection
+
+		Implements most of the Collection interface.
+
+	
+	AbstractList
+
+		Extends AbstractCollection and implements most of the List interface.
+
+	
+	AbstractSequentialList
+
+		Extends AbstractList for use by a collection that uses sequential rather than random access of its elements.
+
+	LinkedList
+	
+		Implements a linked list by extending AbstractSequentialList.
+
+	ArrayList
+	
+		Implements a dynamic array by extending AbstractList.
+
+	
+	AbstractSet
+
+		Extends AbstractCollection and implements most of the Set interface.
+
+	HashSet
+	
+		Extends AbstractSet for use with a hash table.
+
+	LinkedHashSet
+	
+		Extends HashSet to allow insertion-order iterations.
+
+	TreeSet
+	
+		Implements a set stored in a tree. Extends AbstractSet.
+
+	
+	AbstractMap
+
+		Implements most of the Map interface.
+
+	HashMap
+	
+		Extends AbstractMap to use a hash table.
+
+	TreeMap
+	
+		Extends AbstractMap to use a tree.
+
+	WeakHashMap
+	
+		Extends AbstractMap to use a hash table with weak keys.
+
+	LinkedHashMap
+	
+		Extends HashMap to allow insertion-order iterations.
+
+	IdentityHashMap
+	
+		Extends AbstractMap and uses reference equality when comparing documents.
+
+
+// Iterator
+
+	ArrayList al = new ArrayList();
+	Iterator itr = al.iterator();
+	itr.hasNext();
+	itr.next();
+
+// Comparator
+
+	Both TreeSet and TreeMap store elements in a sorted order. However, it is the comparator that defines precisely what sorted order means.
+
+	This interface lets us sort a given collection any number of different ways. Also this interface can be used to sort any instances of any class (even classes we cannot modify).
+
+	int compare(Object obj1, Object obj2)
+
+		obj1 and obj2 are the objects to be compared. This method returns zero if the objects are equal. It returns a positive value if obj1 is greater than obj2. Otherwise, a negative value is returned.
+
+		By overriding compare( ), you can alter the way that objects are ordered. For example, to sort in a reverse order, you can create a comparator that reverses the outcome of a comparison
+
+
 
 /* -------------------------------------------------------- */
+	Generics
+/* -------------------------------------------------------- */
+
+Java Generic methods and generic classes enable programmers to specify, with a single method declaration, a set of related methods, or with a single class declaration, a set of related types, respectively.
+
+Generics also provide compile-time type safety that allows programmers to catch invalid types at compile time.
+
+Using Java Generic concept, we might write a generic method for sorting an array of objects, then invoke the generic method with Integer arrays, Double arrays, String arrays and so on, to sort the array elements
+
+// Generic methods
+
+	All generic method declarations have a type parameter section delimited by angle brackets (< and >) that precedes the method's return type ( < E > in the next example).
+
+	Each type parameter section contains one or more type parameters separated by commas. A type parameter, also known as a type variable, is an identifier that specifies a generic type name.
+
+	The type parameters can be used to declare the return type and act as placeholders for the types of the arguments passed to the generic method, which are known as actual type arguments.
+
+	A generic method's body is declared like that of any other method. Note that type parameters can represent only reference types, not primitive types (like int, double and char).
+
+// Example
+
+	public class GenericMethodTest {
+	   // generic method printArray
+	   public static < E > void printArray( E[] inputArray ) {
+	      // Display array elements
+	      for(E element : inputArray) {
+	         System.out.printf("%s ", element);
+	      }
+	      System.out.println();
+	   }
+
+	   public static void main(String args[]) {
+	      // Create arrays of Integer, Double and Character
+	      Integer[] intArray = { 1, 2, 3, 4, 5 };
+	      Double[] doubleArray = { 1.1, 2.2, 3.3, 4.4 };
+	      Character[] charArray = { 'H', 'E', 'L', 'L', 'O' };
+
+	      System.out.println("Array integerArray contains:");
+	      printArray(intArray);   // pass an Integer array
+
+	      System.out.println("\nArray doubleArray contains:");
+	      printArray(doubleArray);   // pass a Double array
+
+	      System.out.println("\nArray characterArray contains:");
+	      printArray(charArray);   // pass a Character array
+	   }
+	}
+
+
+
+// Bounded Type Parameters
+
+	There may be times when you will want to restrict the kinds of types that are allowed to be passed to a type parameter. For example, a method that operates on numbers might only want to accept instances of Number or its subclasses. This is what bounded type parameters are for.
+
+// Example
+
+	public class MaximumTest {
+	   // determines the largest of three Comparable objects
+	   
+	   public static <T extends Comparable<T>> T maximum(T x, T y, T z) {
+	      T max = x;   // assume x is initially the largest
+	      
+	      if(y.compareTo(max) > 0) {
+	         max = y;   // y is the largest so far
+	      }
+	      
+	      if(z.compareTo(max) > 0) {
+	         max = z;   // z is the largest now                 
+	      }
+	      return max;   // returns the largest object   
+	   }
+	   
+	   public static void main(String args[]) {
+	      System.out.printf("Max of %d, %d and %d is %d\n\n", 
+	         3, 4, 5, maximum( 3, 4, 5 ));
+
+	      System.out.printf("Max of %.1f,%.1f and %.1f is %.1f\n\n",
+	         6.6, 8.8, 7.7, maximum( 6.6, 8.8, 7.7 ));
+
+	      System.out.printf("Max of %s, %s and %s is %s\n","pear",
+	         "apple", "orange", maximum("pear", "apple", "orange"));
+	   }
+	}
+
+
+
+// Generic classes
+
+A generic class declaration looks like a non-generic class declaration, except that the class name is followed by a type parameter section.
+
+As with generic methods, the type parameter section of a generic class can have one or more type parameters separated by commas. These classes are known as parameterized classes or parameterized types because they accept one or more parameters.
+
+
+// Example
+
+	public class Box<T> {
+	   private T t;
+
+	   public void add(T t) {
+	      this.t = t;
+	   }
+
+	   public T get() {
+	      return t;
+	   }
+
+	   public static void main(String[] args) {
+	      Box<Integer> integerBox = new Box<Integer>();
+	      Box<String> stringBox = new Box<String>();
+	    
+	      integerBox.add(new Integer(10));
+	      stringBox.add(new String("Hello World"));
+
+	      System.out.printf("Integer Value :%d\n\n", integerBox.get());
+	      System.out.printf("String Value :%s\n", stringBox.get());
+	   }
+	}
+
+
+
+/* -------------------------------------------------------- */
+	Serialization
+/* -------------------------------------------------------- */
+
+Java provides a mechanism, called object serialization where an object can be represented as a sequence of bytes that includes the object's data as well as information about the object's type and the types of data stored in the object.
+
+After a serialized object has been written into a file, it can be read from the file and deserialized that is, the type information and bytes that represent the object and its data can be used to recreate the object in memory.
+
+Most impressive is that the entire process is JVM independent, meaning an object can be serialized on one platform and deserialized on an entirely different platform.
+
+Classes ObjectInputStream and ObjectOutputStream are high-level streams that contain the methods for serializing and deserializing an object.
+
+
+// serialize
+
+	// public final void writeObject(Object x) throws IOException
+
+// deserialize
+
+	// public final Object readObject() throws IOException, ClassNotFoundException
+
+
+// Example
+
+	public class Employee implements java.io.Serializable {
+	   public String name;
+	   public String address;
+	   public transient int SSN;
+	   public int number;
+	   
+	   public void mailCheck() {
+	      System.out.println("Mailing a check to " + name + " " + address);
+	   }
+	}
+
+
+	// Serializing an object
+	import java.io.*;
+	public class SerializeDemo {
+
+	   public static void main(String [] args) {
+	      Employee e = new Employee();
+	      e.name = "Reyan Ali";
+	      e.address = "Phokka Kuan, Ambehta Peer";
+	      e.SSN = 11122333;
+	      e.number = 101;
+	      
+	      try {
+	         FileOutputStream fileOut =
+	         new FileOutputStream("/tmp/employee.ser");
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(e);
+	         out.close();
+	         fileOut.close();
+	         System.out.printf("Serialized data is saved in /tmp/employee.ser");
+	      }catch(IOException i) {
+	         i.printStackTrace();
+	      }
+	   }
+	}		
+
+
+	// Deserializing an object
+	import java.io.*;
+	public class DeserializeDemo {
+
+	   public static void main(String [] args) {
+	      Employee e = null;
+	      try {
+	         FileInputStream fileIn = new FileInputStream("/tmp/employee.ser");
+	         ObjectInputStream in = new ObjectInputStream(fileIn);
+	         e = (Employee) in.readObject();
+	         in.close();
+	         fileIn.close();
+	      }catch(IOException i) {
+	         i.printStackTrace();
+	         return;
+	      }catch(ClassNotFoundException c) {
+	         System.out.println("Employee class not found");
+	         c.printStackTrace();
+	         return;
+	      }
+	      
+	      System.out.println("Deserialized Employee...");
+	      System.out.println("Name: " + e.name);
+	      System.out.println("Address: " + e.address);
+	      System.out.println("SSN: " + e.SSN);
+	      System.out.println("Number: " + e.number);
+	   }
+	}
+
+
+// Note
+
+	The try/catch block tries to catch a ClassNotFoundException, which is declared by the readObject() method. For a JVM to be able to deserialize an object, it must be able to find the bytecode for the class. If the JVM can't find a class during the deserialization of an object, it throws a ClassNotFoundException.
+
+	Notice that the return value of readObject() is cast to an Employee reference.
+
+	The value of the SSN field was 11122333 when the object was serialized, but because the field is transient, this value was not sent to the output stream. The SSN field of the deserialized Employee object is 0;
+
+
+
+/* -------------------------------------------------------- */
+	Networking
+/* -------------------------------------------------------- */
+
+The term network programming refers to writing programs that execute across multiple devices (computers), in which the devices are all connected to each other using a network.
+
+The java.net package of the J2SE APIs contains a collection of classes and interfaces that provide the low-level communication details, allowing you to write programs that focus on solving the problem at hand;
+
+// java.net package
+
+	TCP − TCP stands for Transmission Control Protocol, which allows for reliable communication between two applications. TCP is typically used over the Internet Protocol, which is referred to as TCP/IP.
+
+	UDP − UDP stands for User Datagram Protocol, a connection-less protocol that allows for packets of data to be transmitted between applications.
+
+
+// Socket Programming
+
+Sockets provide the communication mechanism between two computers using TCP. A client program creates a socket on its end of the communication and attempts to connect that socket to a server.
+
+When the connection is made, the server creates a socket object on its end of the communication. The client and the server can now communicate by writing to and reading from the socket.
+
+The java.net.Socket class represents a socket, and the java.net.ServerSocket class provides a mechanism for the server program to listen for clients and establish connections with them.
+
+// Establishing TCP connection between two computers
+
+	The server instantiates a ServerSocket object, denoting which port number communication is to occur on.
+
+	The server invokes the accept() method of the ServerSocket class. This method waits until a client connects to the server on the given port.
+
+	After the server is waiting, a client instantiates a Socket object, specifying the server name and the port number to connect to.
+
+	The constructor of the Socket class attempts to connect the client to the specified server and the port number. If communication is established, the client now has a Socket object capable of communicating with the server.
+
+	On the server side, the accept() method returns a reference to a new socket on the server that is connected to the client's socket.
+
+	After the connections are established, communication can occur using I/O streams. Each socket has both an OutputStream and an InputStream. The client's OutputStream is connected to the server's InputStream, and the client's InputStream is connected to the server's OutputStream.
+
+	TCP is a two-way communication protocol, hence data can be sent across both streams at the same time.
+
+
+// ServerSocket constructors
+
+	java.net.ServerSocket
+
+
+	public ServerSocket(int port) throws IOException
+
+		Attempts to create a server socket bound to the specified port. An exception occurs if the port is already bound by another application.
+
+		
+	public ServerSocket(int port, int backlog) throws IOException
+
+		Similar to the previous constructor, the backlog parameter specifies how many incoming clients to store in a wait queue.
+
+	
+	public ServerSocket(int port, int backlog, InetAddress address) throws IOException
+
+		Similar to the previous constructor, the InetAddress parameter specifies the local IP address to bind to. The InetAddress is used for servers that may have multiple IP addresses, allowing the server to specify which of its IP addresses to accept client requests on.
+
+	
+	public ServerSocket() throws IOException
+
+		Creates an unbound server socket. When using this constructor, use the bind() method when you are ready to bind the server socket.
+
+
+// ServerSocket Methods
+
+	public int getLocalPort()
+
+		Returns the port that the server socket is listening on. This method is useful if you passed in 0 as the port number in a constructor and let the server find a port for you.
+
+	
+	public Socket accept() throws IOException
+
+		Waits for an incoming client. This method blocks until either a client connects to the server on the specified port or the socket times out, assuming that the time-out value has been set using the setSoTimeout() method. Otherwise, this method blocks indefinitely.
+
+	
+	public void setSoTimeout(int timeout)
+
+		Sets the time-out value for how long the server socket waits for a client during the accept().
+
+	
+	public void bind(SocketAddress host, int backlog)
+
+		Binds the socket to the specified server and port in the SocketAddress object. Use this method if you have instantiated the ServerSocket using the no-argument constructor.		
+
+
+// Socket constructor
+
+	java.net.Socket
+
+	public Socket(String host, int port) throws UnknownHostException, IOException.
+
+		This method attempts to connect to the specified server at the specified port. If this constructor does not throw an exception, the connection is successful and the client is connected to the server.
+
+	
+	public Socket(InetAddress host, int port) throws IOException
+
+		This method is identical to the previous constructor, except that the host is denoted by an InetAddress object.
+
+	
+	public Socket(String host, int port, InetAddress localAddress, int localPort) throws IOException.
+
+		Connects to the specified host and port, creating a socket on the local host at the specified address and port.
+
+	
+	public Socket(InetAddress host, int port, InetAddress localAddress, int localPort) throws IOException.
+
+		This method is identical to the previous constructor, except that the host is denoted by an InetAddress object instead of a String.
+
+	
+	public Socket()
+
+		Creates an unconnected socket. Use the connect() method to connect this socket to a server.	
+
+
+// Socket methods
+
+	
+	public void connect(SocketAddress host, int timeout) throws IOException
+
+		This method connects the socket to the specified host. This method is needed only when you instantiate the Socket using the no-argument constructor.
+
+	
+	public InetAddress getInetAddress()
+
+		This method returns the address of the other computer that this socket is connected to.
+
+	
+	public int getPort()
+
+		Returns the port the socket is bound to on the remote machine.
+
+	
+	public int getLocalPort()
+
+		Returns the port the socket is bound to on the local machine.
+
+	
+	public SocketAddress getRemoteSocketAddress()
+
+		Returns the address of the remote socket.
+
+	
+	public InputStream getInputStream() throws IOException
+
+		Returns the input stream of the socket. The input stream is connected to the output stream of the remote socket.
+
+	
+	public OutputStream getOutputStream() throws IOException
+
+		Returns the output stream of the socket. The output stream is connected to the input stream of the remote socket.
+
+	
+	public void close() throws IOException
+
+		Closes the socket, which makes this Socket object no longer capable of connecting again to any server.
+
+
+// InetAddress Class Methods
+
+	Internet Protocol address
+
+	static InetAddress getByAddress(byte[] addr)
+
+		Returns an InetAddress object given the raw IP address.
+
+	
+	static InetAddress getByAddress(String host, byte[] addr)
+
+		Creates an InetAddress based on the provided host name and IP address.
+
+	
+	static InetAddress getByName(String host)
+
+		Determines the IP address of a host, given the host's name.
+
+	
+	String getHostAddress()
+
+		Returns the IP address string in textual presentation.
+
+	
+	String getHostName()
+
+		Gets the host name for this IP address.
+
+	
+	static InetAddress InetAddress getLocalHost()
+
+		Returns the local host.
+
+	
+	String toString()
+
+		Converts this IP address to a String.
+
+
+
+// Socket Client example
+
+	// File Name GreetingClient.java
+	import java.net.*;
+	import java.io.*;
+
+	public class GreetingClient {
+
+	   public static void main(String [] args) {
+	      String serverName = args[0];
+	      int port = Integer.parseInt(args[1]);
+	      try {
+	         System.out.println("Connecting to " + serverName + " on port " + port);
+	         Socket client = new Socket(serverName, port);
+	         
+	         System.out.println("Just connected to " + client.getRemoteSocketAddress());
+	         OutputStream outToServer = client.getOutputStream();
+	         DataOutputStream out = new DataOutputStream(outToServer);
+	         
+	         out.writeUTF("Hello from " + client.getLocalSocketAddress());
+	         InputStream inFromServer = client.getInputStream();
+	         DataInputStream in = new DataInputStream(inFromServer);
+	         
+	         System.out.println("Server says " + in.readUTF());
+	         client.close();
+	      }catch(IOException e) {
+	         e.printStackTrace();
+	      }
+	   }
+	}
+
+// Socket Server example
+
+	// File Name GreetingServer.java
+	import java.net.*;
+	import java.io.*;
+
+	public class GreetingServer extends Thread {
+	   private ServerSocket serverSocket;
+	   
+	   public GreetingServer(int port) throws IOException {
+	      serverSocket = new ServerSocket(port);
+	      serverSocket.setSoTimeout(10000);
+	   }
+
+	   public void run() {
+	      while(true) {
+	         try {
+	            System.out.println("Waiting for client on port " + 
+	               serverSocket.getLocalPort() + "...");
+	            Socket server = serverSocket.accept();
+	            
+	            System.out.println("Just connected to " + server.getRemoteSocketAddress());
+	            DataInputStream in = new DataInputStream(server.getInputStream());
+	            
+	            System.out.println(in.readUTF());
+	            DataOutputStream out = new DataOutputStream(server.getOutputStream());
+	            out.writeUTF("Thank you for connecting to " + server.getLocalSocketAddress()
+	               + "\nGoodbye!");
+	            server.close();
+	            
+	         }catch(SocketTimeoutException s) {
+	            System.out.println("Socket timed out!");
+	            break;
+	         }catch(IOException e) {
+	            e.printStackTrace();
+	            break;
+	         }
+	      }
+	   }
+	   
+	   public static void main(String [] args) {
+	      int port = Integer.parseInt(args[0]);
+	      try {
+	         Thread t = new GreetingServer(port);
+	         t.start();
+	      }catch(IOException e) {
+	         e.printStackTrace();
+	      }
+	   }
+	}
+
+
+
+
+/* -------------------------------------------------------- */
+	Multithreading
+/* -------------------------------------------------------- */
+
+Java is a multi-threaded programming language which means we can develop multi-threaded program using Java. A multi-threaded program contains two or more parts that can run concurrently and each part can handle a different task at the same time making optimal use of the available resources specially when your computer has multiple CPUs.
+
+By definition, multitasking is when multiple processes share common processing resources such as a CPU. Multi-threading extends the idea of multitasking into applications where you can subdivide specific operations within a single application into individual threads. Each of the threads can run in parallel. The OS divides processing time not only among different applications, but also among each thread within an application.
+
+
+// Life Cycle of a Thread
+
+	New − A new thread begins its life cycle in the new state. It remains in this state until the program starts the thread. It is also referred to as a born thread.
+
+	Runnable − After a newly born thread is started, the thread becomes runnable. A thread in this state is considered to be executing its task.
+
+	Waiting − Sometimes, a thread transitions to the waiting state while the thread waits for another thread to perform a task. A thread transitions back to the runnable state only when another thread signals the waiting thread to continue executing.
+
+	Timed Waiting − A runnable thread can enter the timed waiting state for a specified interval of time. A thread in this state transitions back to the runnable state when that time interval expires or when the event it is waiting for occurs.
+
+	Terminated (Dead) − A runnable thread enters the terminated state when it completes its task or otherwise terminates.
+
+
+// Thread Priorities
+
+	Every Java thread has a priority that helps the operating system determine the order in which threads are scheduled.
+
+	Java thread priorities are in the range between MIN_PRIORITY (a constant of 1) and MAX_PRIORITY (a constant of 10). By default, every thread is given priority NORM_PRIORITY (a constant of 5).
+
+	Threads with higher priority are more important to a program and should be allocated processor time before lower-priority threads. However, thread priorities cannot guarantee the order in which threads execute and are very much platform dependent;
+
+
+// Create a thread by implementing a runnable interface
+
+	class RunnableDemo implements Runnable {
+	   private Thread t;
+	   private String threadName;
+	   
+	   RunnableDemo( String name) {
+	      threadName = name;
+	      System.out.println("Creating " +  threadName );
+	   }
+	   
+	   public void run() {
+	      System.out.println("Running " +  threadName );
+	      try {
+	         for(int i = 4; i > 0; i--) {
+	            System.out.println("Thread: " + threadName + ", " + i);
+	            // Let the thread sleep for a while.
+	            Thread.sleep(50);
+	         }
+	      }catch (InterruptedException e) {
+	         System.out.println("Thread " +  threadName + " interrupted.");
+	      }
+	      System.out.println("Thread " +  threadName + " exiting.");
+	   }
+	   
+	   public void start () {
+	      System.out.println("Starting " +  threadName );
+	      if (t == null) {
+	         t = new Thread (this, threadName);
+	         t.start ();
+	      }
+	   }
+	}
+
+	public class TestThread {
+
+	   public static void main(String args[]) {
+	      RunnableDemo R1 = new RunnableDemo( "Thread-1");
+	      R1.start();
+	      
+	      RunnableDemo R2 = new RunnableDemo( "Thread-2");
+	      R2.start();
+	   }   
+	}
+
+
+
+// Create a thread by extending a thread class
+
+	class ThreadDemo extends Thread {
+	   private Thread t;
+	   private String threadName;
+	   
+	   ThreadDemo( String name) {
+	      threadName = name;
+	      System.out.println("Creating " +  threadName );
+	   }
+	   
+	   public void run() {
+	      System.out.println("Running " +  threadName );
+	      try {
+	         for(int i = 4; i > 0; i--) {
+	            System.out.println("Thread: " + threadName + ", " + i);
+	            // Let the thread sleep for a while.
+	            Thread.sleep(50);
+	         }
+	      }catch (InterruptedException e) {
+	         System.out.println("Thread " +  threadName + " interrupted.");
+	      }
+	      System.out.println("Thread " +  threadName + " exiting.");
+	   }
+	   
+	   public void start () {
+	      System.out.println("Starting " +  threadName );
+	      if (t == null) {
+	         t = new Thread (this, threadName);
+	         t.start ();
+	      }
+	   }
+	}
+
+	public class TestThread {
+
+	   public static void main(String args[]) {
+	      ThreadDemo T1 = new ThreadDemo( "Thread-1");
+	      T1.start();
+	      
+	      ThreadDemo T2 = new ThreadDemo( "Thread-2");
+	      T2.start();
+	   }   
+	}	
+
+
+// Thread class methods
+
+	public void start()
+
+		Starts the thread in a separate path of execution, then invokes the run() method on this Thread object.
+
+	
+	public void run()
+
+		If this Thread object was instantiated using a separate Runnable target, the run() method is invoked on that Runnable object.
+
+	
+	public final void setName(String name)
+
+		Changes the name of the Thread object. There is also a getName() method for retrieving the name.
+
+	
+	public final void setPriority(int priority)
+
+		Sets the priority of this Thread object. The possible values are between 1 and 10.
+
+		
+	public final void setDaemon(boolean on)
+
+		A parameter of true denotes this Thread as a daemon thread.
+
+	
+	public final void join(long millisec)
+
+		The current thread invokes this method on a second thread, causing the current thread to block until the second thread terminates or the specified number of milliseconds passes.
+
+	
+	public void interrupt()
+
+		Interrupts this thread, causing it to continue execution if it was blocked for any reason.
+
+	
+	public final boolean isAlive()
+
+		Returns true if the thread is alive, which is any time after the thread has been started but before it runs to completion;
+
+
+// Static thread class methods, performs operation on the currently running thread
+
+	public static void yield()
+
+		Causes the currently running thread to yield to any other threads of the same priority that are waiting to be scheduled.
+
+	
+	public static void sleep(long millisec)
+
+		Causes the currently running thread to block for at least the specified number of milliseconds.
+
+	
+	public static boolean holdsLock(Object x)
+
+		Returns true if the current thread holds the lock on the given Object.
+
+	
+	public static Thread currentThread()
+
+		Returns a reference to the currently running thread, which is the thread that invokes this method.
+
+	
+	public static void dumpStack()
+
+		Prints the stack trace for the currently running thread, which is useful when debugging a multithreaded application;
+
+
+
+// Example
+
+	// File Name : DisplayMessage.java
+	// Create a thread to implement Runnable
+
+	public class DisplayMessage implements Runnable {
+	   private String message;
+	   
+	   public DisplayMessage(String message) {
+	      this.message = message;
+	   }
+	   
+	   public void run() {
+	      while(true) {
+	         System.out.println(message);
+	      }
+	   }
+	}		
+
+
+	// File Name : GuessANumber.java
+	// Create a thread to extentd Thread
+
+	public class GuessANumber extends Thread {
+	   private int number;
+	   public GuessANumber(int number) {
+	      this.number = number;
+	   }
+	   
+	   public void run() {
+	      int counter = 0;
+	      int guess = 0;
+	      do {
+	         guess = (int) (Math.random() * 100 + 1);
+	         System.out.println(this.getName() + " guesses " + guess);
+	         counter++;
+	      } while(guess != number);
+	      System.out.println("** Correct!" + this.getName() + "in" + counter + "guesses.**");
+	   }
+	}
+
+
+	// File Name : ThreadClassDemo.java
+	public class ThreadClassDemo {
+
+	   public static void main(String [] args) {
+	      Runnable hello = new DisplayMessage("Hello");
+	      Thread thread1 = new Thread(hello);
+	      thread1.setDaemon(true);
+	      thread1.setName("hello");
+	      System.out.println("Starting hello thread...");
+	      thread1.start();
+	      
+	      Runnable bye = new DisplayMessage("Goodbye");
+	      Thread thread2 = new Thread(bye);
+	      thread2.setPriority(Thread.MIN_PRIORITY);
+	      thread2.setDaemon(true);
+	      System.out.println("Starting goodbye thread...");
+	      thread2.start();
+
+	      System.out.println("Starting thread3...");
+	      Thread thread3 = new GuessANumber(27);
+	      thread3.start();
+	      try {
+	         thread3.join();
+	      }catch(InterruptedException e) {
+	         System.out.println("Thread interrupted.");
+	      }
+	      System.out.println("Starting thread4...");
+	      Thread thread4 = new GuessANumber(75);
+	      
+	      thread4.start();
+	      System.out.println("main() is ending...");
+	   }
+	}
+
+
+
 /* -------------------------------------------------------- */
 
 /* -------------------------------------------------------- */
