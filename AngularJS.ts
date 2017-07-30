@@ -767,9 +767,86 @@ export class DirectoryComponent implements OnInit {
   }
 }
 
+
+
 /*******************************************************
-* 
+* Udemy Angular 4
 *******************************************************/
+
+
+// Setup
+
+  npm install -g @angular/cli
+
+  ng --version
+
+  ng new hello-world
+
+  ng serve
+
+
+// file structure
+
+  // e2e // end to end
+
+    end to end tests that simulate real users
+
+  // node modules
+
+    store 3rd party libraries, purely for development
+
+    part of these are bundled for deployment
+
+  // src
+
+    source code for the application
+
+    // app
+
+    // assets
+
+      aethetic assets
+
+    // enviroments
+
+      configs for different enviroments
+
+      // main.ts
+
+        starting point of our app
+
+      // polyfill.ts
+
+      // styles.css
+
+        global styles
+
+  // editorconfig
+  
+    all devs should use the same 
+
+  // karma.confi.js
+
+    test
+
+  // package.json
+
+    dependencies
+
+    devDependencies
+
+  // tsconfig.json
+
+    typescript compiler config
+
+  // tslint.json
+
+    checks your typescript code
+
+    
+
+
+
 
 
 
