@@ -130,7 +130,7 @@ Some features of c++
 
 		public:
 			Stack():size_(0){} //member initializer //precondition
-			void push(int n) {data _[size_++] = n; }
+			void push(int n) {data_[size_++] = n; }
 			void pop() {--size_; }
 			bool full() const{ return size_ == CAPACITY; } //const doesn't change object
 			bool empty() const{ return size_ == 0; }
