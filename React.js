@@ -1061,30 +1061,354 @@ class ControlledNameInput extends React.Component {
   }
 }
 
+/* -------------------------------------------------- */
+  Export / Import
+/* -------------------------------------------------- */
+
+module.exports = {
+  module1,
+  module2,
+}
+
+// There are two different types of export, named and default. You can have multiple named exports per module but only one default export.
+export default module1
+
+exports.module1
+
+export const module1 = {}
+
+import React, { createElement as h } from 'react'
+
+/* -------------------------------------------------- */
+  compose, connect, redux
+/* -------------------------------------------------- */
+
+const enhance = compose(
+  withRouter,
+  withStyles(styles, 'some style'),
+  connect(mapStateToProps, mapDispatchToProps)
+)
+
+export default enhance(MyComponent);
+
+/* -------------------------------------------------- */
+  promisify
+/* -------------------------------------------------- */
+
+// node
+util.promisify
+
+// wrapper example
+function createTicket(ticket) {
+  // 1 - Create a new Promise
+  return new Promise(function (resolve, reject) {
+      // 2 - Copy-paste your code inside this function
+      client.tickets.create(ticket, function (err, req, result) {
+          // 3 - in your async function's callback
+          // replace return by reject (for the errors) and resolve (for the results)
+          if (err) {
+              reject(err);
+          } else {
+              resolve(JSON.stringify(result));
+          }
+      });
+  });
+}
+
+async () => await createTicket `stub`
+
+/* -------------------------------------------------- */
+  Redux
+/* -------------------------------------------------- */
+
+// actions.js
+export function showNotification(text) {
+  return { type: 'SHOW_NOTIFICATION', text }
+}
+export function hideNotification() {
+  return { type: 'HIDE_NOTIFICATION' }
+}
+
+// component.js
+import { showNotification, hideNotification } from '../actions'
+
+this.props.dispatch(showNotification('You just logged in.'))
+setTimeout(() => {
+  this.props.dispatch(hideNotification())
+}, 5000)
+
+// Extracting Async Action Creator
+
+// Reasons
+
+// It forces you to duplicate this logic anywhere you want to show a notification.
+
+// The notifications have no IDs so you’ll have a race condition if you show two notifications fast enough. When the first timeout finishes, it will dispatch HIDE_NOTIFICATION, erroneously hiding the second notification sooner than after the timeout.
+
+// actions.js
+function showNotification(id, text) {
+  return { type: 'SHOW_NOTIFICATION', id, text }
+}
+function hideNotification(id) {
+  return { type: 'HIDE_NOTIFICATION', id }
+}
+
+let nextNotificationId = 0
+export function showNotificationWithTimeout(dispatch, text) {
+  // Assigning IDs to notifications lets reducer ignore HIDE_NOTIFICATION
+  // for the notification that is not currently visible.
+  // Alternatively, we could store the interval ID and call
+  // clearInterval(), but we’d still want to do it in a single place.
+  const id = nextNotificationId++
+  dispatch(showNotification(id, text))
+
+  setTimeout(() => {
+    dispatch(hideNotification(id))
+  }, 5000)
+}
+
+// component.js
+showNotificationWithTimeout(this.props.dispatch, 'You just logged in.')
+
+// otherComponent.js
+showNotificationWithTimeout(this.props.dispatch, 'You just logged out.')
+
+// Why does showNotificationWithTimeout() accept dispatch as the first argument? Because it needs to dispatch actions to the store. Normally a component has access to dispatch but since we want an external function to take control over dispatching, we need to give it control over dispatching.
+
+
+// Thunk Middleware
+
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+
+const store = createStore(
+  reducer,
+  applyMiddleware(thunk)
+)
+
+// It still recognizes plain object actions
+store.dispatch({ type: 'INCREMENT' })
+
+// But with thunk middleware, it also recognizes functions
+store.dispatch(function (dispatch) {
+  // ... which themselves may dispatch many times
+  dispatch({ type: 'INCREMENT' })
+  dispatch({ type: 'INCREMENT' })
+  dispatch({ type: 'INCREMENT' })
+
+  setTimeout(() => {
+    // ... even asynchronously!
+    dispatch({ type: 'DECREMENT' })
+  }, 1000)
+})
+
+// When this middleware is enabled, if you dispatch a function, Redux Thunk middleware will give it dispatch as an argument. It will also “swallow” such actions so don’t worry about your reducers receiving weird function arguments. Your reducers will only receive plain object actions—either emitted directly, or emitted by the functions as we just described.
+
+// it lets us declare showNotificationWithTimeout() as a regular Redux action creator:
+
+// actions.js
+function showNotification(id, text) {
+  return { type: 'SHOW_NOTIFICATION', id, text }
+}
+function hideNotification(id) {
+  return { type: 'HIDE_NOTIFICATION', id }
+}
+
+let nextNotificationId = 0
+export function showNotificationWithTimeout(text) {
+  return function (dispatch) {
+    const id = nextNotificationId++
+    dispatch(showNotification(id, text))
+
+    setTimeout(() => {
+      dispatch(hideNotification(id))
+    }, 5000)
+  }
+}
+
+// Note how the function is almost identical to the one we wrote in the previous section. However it doesn’t accept dispatch as the first argument. Instead it returns a function that accepts dispatch as the first argument.
+
+// component.js
+showNotificationWithTimeout('You just logged in.')(this.props.dispatch)
+
+// If Redux Thunk middleware is enabled, any time you attempt to dispatch a function instead of an action object, the middleware will call that function with dispatch method itself as the first argument.
+
+// component.js
+this.props.dispatch(showNotificationWithTimeout('You just logged in.'))
+
+
+// we can now use them in any place where we would use regular action creators. For example, we can use them with connect():
+
+// actions.js
+
+function showNotification(id, text) {
+  return { type: 'SHOW_NOTIFICATION', id, text }
+}
+function hideNotification(id) {
+  return { type: 'HIDE_NOTIFICATION', id }
+}
+
+let nextNotificationId = 0
+export function showNotificationWithTimeout(text) {
+  return function (dispatch) {
+    const id = nextNotificationId++
+    dispatch(showNotification(id, text))
+
+    setTimeout(() => {
+      dispatch(hideNotification(id))
+    }, 5000)
+  }
+}
+
+// component.js
+
+import { connect } from 'react-redux'
+
+// ...
+
+this.props.showNotificationWithTimeout('You just logged in.')
+
+// ...
+
+export default connect(
+  mapStateToProps,
+  { showNotificationWithTimeout }
+)(MyComponent)
+
+
+// Reading state in thunks
+
+// component.js
+if (this.props.areNotificationsEnabled) {
+  showNotificationWithTimeout(this.props.dispatch, 'You just logged in.')
+}
+
+
+// action.js
+let nextNotificationId = 0
+export function showNotificationWithTimeout(text) {
+  return function (dispatch, getState) {
+    // Unlike in a regular action creator, we can exit early in a thunk
+    // Redux doesn’t care about its return value (or lack of it)
+    if (!getState().areNotificationsEnabled) {
+      return
+    }
+
+    const id = nextNotificationId++
+    dispatch(showNotification(id, text))
+
+    setTimeout(() => {
+      dispatch(hideNotification(id))
+    }, 5000)
+  }
+}
+
+// Don’t abuse this pattern. It is good for bailing out of API calls when there is cached data available, but it is not a very good foundation to build your business logic upon. If you use getState() only to conditionally dispatch different actions, consider putting the business logic into the reducers instead.
+
+/* -------------------------------------------------- */
+  Currying
+/* -------------------------------------------------- */
+
+let dragon =
+  name =>
+    size =>
+      element =>
+        name +
+        size +
+        element
+console.log(dragon('deathwing')('big')('earth'))
+// out: deathwingbigearth
 
 
 
-/* -------------------------------------------------- */
-  
-/* -------------------------------------------------- */
 
 
-/* -------------------------------------------------- */
-  
-/* -------------------------------------------------- */
+const tag = t => contents => `<${t}>${contents}</${t}>`
+tag('b')('this is bold!') // <b>this is bold!</b>
 
-/* -------------------------------------------------- */
-  
-/* -------------------------------------------------- */
+// example:
+const encodeAttribute = (x = '') =>
+  x.replace(/"/g, '&quot;')
+
+const toAttributeString = (x = {}) =>
+  Object.keys(x)
+    .map(attr => `${encodeAttribute(attr)}="${encodeAttribute(x[attr])}"`) 
+    .join(' ')
+
+const tagAttributes = x => (c = '') =>
+  `<${x.tag}${x.attr?' ':''}${toAttributeString(x.attr)}>${c}</${x.tag}>`
+
+const tag = x =>
+  typeof x === 'string'
+    ? tagAttributes({ tag: x })
+: tagAttributes(x)
 
 
-/* -------------------------------------------------- */
-  
-/* -------------------------------------------------- */
+// usage
+const bold = tag('b')
+bold('this is bold!') // <b>this is bold!</b>
+tag('b')('this is bold!') // <b>this is bold!</b>
+tag({ tag: 'div', attr: { 'class': 'title' }})('this is a title!') // <div class="title">this is a title!</div>
 
-/* -------------------------------------------------- */
-  
-/* -------------------------------------------------- */
+
+// practical example:
+const listGroup = tag({ tag: 'ul', attr: { class: 'list-group' }})
+const listGroupItem = tag({ tag: 'li', attr: { class: 'list-group-item' }})
+const listGroupItems = items =>
+  items.map(listGroupItem)
+    .join('')
+
+listGroup()
+// <ul class="list-group"></ul>
+
+listGroupItem('Cras justo')
+// <li class="list-group-item">Cras justo</li>
+
+listGroupItems(['Cras justo', 'Dapibus ac'])
+// <li class='list-group-item'>Cras justo</li>
+// <li class='list-group-item'>Dapibus ac</li>
+
+listGroup(listGroupItems(['Cras justo', 'Dapibus ac']))
+// <ul class='list-group'>
+//   <li class='list-group-item'>Cras justo</li>
+//   <li class='list-group-item'>Dapibus ac</li>
+// </ul>
+
+const listGroupTag = tag({ tag: 'ul', attr: { class: 'list-group' }})
+const listGroup = items => listGroupTag(listGroupItems(items))
+
+// compose
+listGroupTag (listGroupItems (items)) // without
+compose(listGroupTag, listGroupItems)(items) // with
+
+const panelTag = tag({ tag: 'div', attr: { class: 'panel panel-default' }})
+const panelBody = tag({ tag: 'div', attr: { class: 'panel-body' }})
+const basicPanel =
+compose(panelTag, panelBody)
+
+const listGroupPanel =
+  compose(basicPanel, listGroup)
+
+const listGroupPanel =
+  compose(basicPanel, listGroupTag, listGroupItems)
+
+
+// pipe: compose has a companion function pipe
+
+// pseudo code
+const login = pipe(
+  validateInput,
+  getCustomer,
+  getAuthToken
+  loginResponse
+)
+
+// compose / pipe
+const compose = (...functions) => data =>
+  functions.reduceRight((value, func) => func(value), data)
+
+const pipe = (...functions) => data =>
+functions.reduce((value, func) => func(value), data)
 
 
 /* -------------------------------------------------- */
