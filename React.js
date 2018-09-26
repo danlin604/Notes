@@ -1412,10 +1412,143 @@ functions.reduce((value, func) => func(value), data)
 
 
 /* -------------------------------------------------- */
-  
+  Fragments
 /* -------------------------------------------------- */
 
+// Fragments let you group a list of children without adding extra nodes to the DOM.
 
-/* -------------------------------------------------- */
-  
-/* -------------------------------------------------- */
+
+// Usage
+render() {
+  return (
+    <React.Fragment>
+      <ChildA />
+      <ChildB />
+      <ChildC />
+    </React.Fragment>
+  );
+}
+
+// short syntax
+class Columns extends React.Component {
+  render() {
+    return (
+      <>
+        <td>Hello</td>
+        <td>World</td>
+      </>
+    );
+  }
+}
+
+
+
+
+
+/********************************
+ * Portal
+ ********************************/
+
+// Portals provide a first-class way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.
+
+// signature
+ReactDOM.createPortal(child, container)
+
+// usage
+render() {
+  // React mounts a new div and renders the children into it
+  return (
+    <div>
+      {this.props.children}
+    </div>
+  );
+}
+
+render() {
+  // React does *not* create a new div. It renders the children into `domNode`.
+  // `domNode` is any valid DOM node, regardless of its location in the DOM.
+  return ReactDOM.createPortal(
+    this.props.children,
+    domNode
+  );
+}
+
+// Accessing the domNode
+const domNode = document.createElement('div')
+const domNode = document.getElementById('myNode')
+
+// Limit use of portals to when-you-need-it.
+
+/********************************
+ * React + Redux
+ ********************************/
+
+// If previousState matters
+const onClick = () => {
+  this.setState((previousState, currentProps) => {
+    return {
+      show: !previousState.show,
+    }
+  })
+}
+
+// So value is the same, since setState is async
+const onClick = (e) => {
+  this.setState({ value: e.target.value, () => {
+    this.props.onChange(this.state.value)
+  }})
+}
+
+// Dyanmic component types
+const { metatypes } = this.context
+
+<metatypes.text value={'myData'} />
+
+const metatypesEdit = {
+  text: class extends React.Component {
+    render() {
+      return <input type="text" {...this.props} />
+    }
+  }
+}
+
+const metatypesView = {
+  ...
+}
+
+class CardEditor extends React.Component {
+  static childContextTypes = {
+    metatypes: react.PropTypes.object
+  }
+
+  getChildContext() {
+    return { metatypes: metatypesEdit }
+  }
+
+  render() {
+    const { cardData } = this.props
+    const CardComponent = selectCardComponent(cardData)
+
+    return <CardComponent cardData={cardData} />
+  }
+}
+
+// Feature fallback
+<Feature name="new-feature" fallback={<OldFeature />}>
+  <NewFeatureComponent />
+</Feature>
+
+
+
+
+ /********************************
+ *
+ ********************************/
+
+ /********************************
+ *
+ ********************************/
+
+ /********************************
+ *
+ ********************************/
