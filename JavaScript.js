@@ -5922,48 +5922,110 @@ var findComplement = function(num) {
   return parseInt(b.toString(2).slice(-len),2);
 };
 
+ /********************************
+ * Memoization
+ ********************************/
 
+function add(a,b) { return a + b }
+var mAdd = memoize(add)
 
-/*******************************************************
-*
-*******************************************************/
-
-
-/*******************************************************
-* 
-*******************************************************/
-
-
-/*******************************************************
-* 
-*******************************************************/
-
-/*******************************************************
-* 
-*******************************************************/
-
-/*******************************************************
-* 
-*******************************************************/
-
-
-/*******************************************************
-* 
-*******************************************************/
-
-/*******************************************************
-* 
-*******************************************************/
+mAdd(2,3) // -> 5 add() called
+mAdd(1,3) // -> 4 add() called
+mAdd(2,3) // -> 5 add() NOT called
 
 
 
+// --------------------------------
+// Faking jQuery
+// --------------------------------
+
+const $ = (queryString) => document.querySelector(queryString)
 
 
 
+// --------------------------------
+// Compose & Pipe
+// --------------------------------
+
+console.log('[start]')
+
+const fn1 = obj => ({ ...obj, fn1: 1 })
+const fn2 = obj => ({ ...obj, fn2: 2 })
+
+const return1 = fn2(fn1({ entry: 1 }))
+console.log('[return1]', return1)
+
+const pipe = (...fns) => fns.reduce((f, g) => (obj) => g(f(obj)))
 
 
+// Final pipe for input validation
+pipe(
+  (obj) => {
+    console.log('fn1', obj)
+    return { ...obj, ...(!!obj.name || { error: ['NAME_IS_FALSEY'] })} 
+  },
+  (obj) => {
+    // if ((obj || {}).error ) return obj
+    console.log('[fn2]', obj)
+    return { 
+      ...obj,
+      ...(
+        !!obj.password ||
+	obj.error ?
+	  { error: [...obj.error, 'PASSWORD_IS_FALSEY'] } :
+          { error: 'PASSWORD_IS_FALSEY' }
+      )
+    }   
+  },
+  (obj) => console.log('[fn3]', obj)
+)({
+  name: '',
+  password: '',
+})
+
+// --------------------------------
+// Compose & Pipe Reference
+// --------------------------------
+
+// The Complete pipe Code
+
+const inc = num => num + 1
+const dbl = num => num * 2
+const sqr = num => num * num
+
+// Pipe
+const _pipe = (f, g) => (...args) => g(f(...args))
+const pipe = (...fns) => fns.reduce(_pipe)
+
+const incDblSqr = pipe(
+  inc,
+  dbl,
+  sqr
+)
+const result = incDblSqr(2)
+
+console.log(result)
 
 
+// compose Functions Right to Left
+const inc = num => num + 1
+const dbl = num => num * 2
+const sqr = num => num * num
+
+// Pipe
+const _pipe = (f, g) => (...args) => g(f(...args))
+
+//Compose
+const compose = (...fns) => fns.reduceRight(_pipe)
+
+const incDblSqr = compose(
+  sqr,
+  dbl,
+  inc
+)
+const result = incDblSqr(2)
+
+console.log(result)
 
 
 
