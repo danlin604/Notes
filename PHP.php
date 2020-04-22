@@ -1,3 +1,18 @@
+# zend composer commands
+
+## Built-in PHP web server
+
+php -S 0.0.0.0:8080 -t public public/index.php
+
+## Change development mode
+
+composer development-enable
+composer development-status
+composer development-disable
+
+
+
+
 /* -------------------------------------------------- */
 	PHP
 /* -------------------------------------------------- */
