@@ -10,12 +10,434 @@ composer development-enable
 composer development-status
 composer development-disable
 
+## Update autoloading rules
+
+### `config/module.config.php`
+
+```
+<?php
+
+namespace Album;
+
+use Zend\ServiceManager\Factory\InvokableFactory;
+
+return [
+    'controllers' => [
+        'factories' => [
+            Controller\AlbumController::class => InvokableFactory::class,
+        ],
+    ],
+    'view_manager' => [
+        'template_path_stack' => [
+            'album' => __DIR__ . '/../view',
+        ],
+    ],
+];
+```
+
+### `composer.json` in "autoload"
+
+```
+"autoload": {
+    "psr-4": {
+        "Application\\": "module/Application/src/",
+        "New\\": "module/New/src/"
+    }
+},
+```
+
+`composer dump-autoload`
+
+## Routing and Controllers
+
+### the module's `module.config.php`
+
+```
+namespace Album;
+
+use Zend\Router\Http\Segment;
+use Zend\ServiceManager\Factory\InvokableFactory;
+
+return [
+    'controllers' => [
+        'factories' => [
+            Controller\AlbumController::class => InvokableFactory::class,
+        ],
+    ],
+
+    // The following section is new and should be added to your file:
+    'router' => [
+        'routes' => [
+            'album' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/album[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AlbumController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'view_manager' => [
+        'template_path_stack' => [
+            'album' => __DIR__ . '/../view',
+        ],
+    ],
+];
+```
+
+### Create the controller
+
+Create `New/src/Controller/NewController.php`
+
+We are the option to use:
+
+AbstractActionController
+AbstractRestfulController
+
+
+```
+namespace Album\Controller;
+
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+
+class AlbumController extends AbstractActionController
+{
+    public function indexAction()
+    {
+    }
+
+    public function addAction()
+    {
+    }
+
+    public function editAction()
+    {
+    }
+
+    public function deleteAction()
+    {
+    }
+}
+```
+
+## Create a database
+
+### `schema.sql`
+
+```
+CREATE TABLE album (id INTEGER PRIMARY KEY AUTOINCREMENT, artist varchar(100) NOT NULL, title varchar(100) NOT NULL);
+INSERT INTO album (artist, title) VALUES ('The Military Wives', 'In My Dreams');
+INSERT INTO album (artist, title) VALUES ('Adele', '21');
+INSERT INTO album (artist, title) VALUES ('Bruce Springsteen', 'Wrecking Ball (Deluxe)');
+INSERT INTO album (artist, title) VALUES ('Lana Del Rey', 'Born To Die');
+INSERT INTO album (artist, title) VALUES ('Gotye', 'Making Mirrors');
+```
+
+### Run the schema script
+
+`sqlite3 data/zftutorial.db < data/schema.sql`
+
+### Create Models
+
+`Album/src/Model/Album.php` is an entity object.
+
+```
+<?php
+
+namespace Album\Model;
+
+class Album
+{
+    public $id;
+    public $artist;
+    public $title;
+
+    public function exchangeArray(array $data)
+    {
+        $this->id     = !empty($data['id']) ? $data['id'] : null;
+        $this->artist = !empty($data['artist']) ? $data['artist'] : null;
+        $this->title  = !empty($data['title']) ? $data['title'] : null;
+    }
+}
+```
+
+`module/Album/src/Model/AlbumTable.php` to work with the `TableGateway` class.
+
+```
+<?php
+
+namespace Album\Model;
+
+use RuntimeException;
+use Zend\Db\TableGateway\TableGatewayInterface;
+
+class AlbumTable
+{
+    private $tableGateway;
+
+    public function __construct(TableGatewayInterface $tableGateway)
+    {
+        $this->tableGateway = $tableGateway;
+    }
+
+    public function fetchAll()
+    {
+        return $this->tableGateway->select();
+    }
+
+    public function getAlbum($id)
+    {
+        $id = (int) $id;
+        $rowset = $this->tableGateway->select(['id' => $id]);
+        $row = $rowset->current();
+        if (! $row) {
+            throw new RuntimeException(sprintf(
+                'Could not find row with identifier %d',
+                $id
+            ));
+        }
+
+        return $row;
+    }
+
+    public function saveAlbum(Album $album)
+    {
+        $data = [
+            'artist' => $album->artist,
+            'title'  => $album->title,
+        ];
+
+        $id = (int) $album->id;
+
+        if ($id === 0) {
+            $this->tableGateway->insert($data);
+            return;
+        }
+
+        try {
+            $this->getAlbum($id);
+        } catch (RuntimeException $e) {
+            throw new RuntimeException(sprintf(
+                'Cannot update album with identifier %d; does not exist',
+                $id
+            ));
+        }
+
+        $this->tableGateway->update($data, ['id' => $id]);
+    }
+
+    public function deleteAlbum($id)
+    {
+        $this->tableGateway->delete(['id' => (int) $id]);
+    }
+}
+```
+
+## Using ServiceManager to configure table gateway and inject into the AlbumTable
+
+`Album/src/Module.php`
+
+```
+<?php
+
+namespace Album;
+
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+
+class Module implements ConfigProviderInterface
+{
+    public function getConfig()
+    {
+        return include __DIR__ . '/../config/module.config.php';
+    }
+
+    public function getServiceConfig()
+    {
+        return [
+            'factories' => [
+                Model\AlbumTable::class => function($container) {
+                    $tableGateway = $container->get(Model\AlbumTableGateway::class);
+                    return new Model\AlbumTable($tableGateway);
+                },
+                Model\AlbumTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\Album());
+                    return new TableGateway('album', $dbAdapter, null, $resultSetPrototype);
+                },
+            ],
+        ];
+    }
+}
+```
+
+### Update `Global.php`
+
+```
+return [
+  'db' => [
+      'driver' => 'Pdo',
+      'dsn'    => sprintf('sqlite:%s/data/zftutorial.db', realpath(getcwd())),
+  ],
+];
+```
+
+### Define factory for Controller
+
+`Album/src/Module.php`
+
+```
+    public function getControllerConfig()
+    {
+        return [
+            'factories' => [
+                Controller\AlbumController::class => function($container) {
+                    return new Controller\AlbumController(
+                        $container->get(Model\AlbumTable::class)
+                    );
+                },
+            ],
+        ];
+    }
+```
+
+### Update `AlbumController.php`
+
+```
+<?php
+
+namespace Album\Controller;
+
+use Album\Model\AlbumTable;
+use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+
+class AlbumController extends AbstractActionController
+{
+    private $table;
+
+    public function __construct(AlbumTable $table)
+    {
+        $this->table = $table;
+    }
+
+    public function indexAction()
+    {
+    }
+
+    public function addAction()
+    {
+    }
+
+    public function editAction()
+    {
+    }
+
+    public function deleteAction()
+    {
+    }
+}
+```
+
+### Update `module.config.php`
+
+```
+<?php
+
+namespace Album;
+
+use Zend\Router\Http\Segment;
+
+return [
+    'router' => [
+        'routes' => [
+            'album' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/album[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'     => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AlbumController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
+        ],
+    ],
+
+    'view_manager' => [
+        'template_path_stack' => [
+            'album' => __DIR__ . '/../view',
+        ],
+    ],
+];
+```
+
+## Listing Albums
+
+### Update `AlbumController::indexAction()`
+
+```
+public function indexAction()
+{
+    return new ViewModel([
+        'albums' => $this->table->fetchAll(),
+    ]);
+}
+```
+
+### Fill out `index.phtml`
+
+```
+<?php
+// module/Album/view/album/album/index.phtml:
+
+$title = 'My albums';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+<p>
+    <a href="<?= $this->url('album', ['action' => 'add']) ?>">Add new album</a>
+</p>
+
+<table class="table">
+<tr>
+    <th>Title</th>
+    <th>Artist</th>
+    <th>&nbsp;</th>
+</tr>
+<?php foreach ($albums as $album) : ?>
+    <tr>
+        <td><?= $this->escapeHtml($album->title) ?></td>
+        <td><?= $this->escapeHtml($album->artist) ?></td>
+        <td>
+            <a href="<?= $this->url('album', ['action' => 'edit', 'id' => $album->id]) ?>">Edit</a>
+            <a href="<?= $this->url('album', ['action' => 'delete', 'id' => $album->id]) ?>">Delete</a>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>
+```
 
 
 
-/* -------------------------------------------------- */
-	PHP
-/* -------------------------------------------------- */
+---
+# PHP
 
 The PHP Hypertext Preprocessor (PHP) is a programming language that allows web developers to create dynamic content that interacts with databases.
 
